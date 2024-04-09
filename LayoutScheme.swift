@@ -54,11 +54,8 @@ extension LayoutSchemeFlavor {
             false
         }
     }
-    
 }
 
-// This is strictly a "horizontal" spread...
-// It really should only apply to the horizontal paddings...
 enum LayoutSchemeSqueeze {
     case squeezed
     case standard
@@ -66,7 +63,7 @@ enum LayoutSchemeSqueeze {
 
 // There is an assumption here, that everything
 // we express here has an icon + text scheme... In addition to, perhaps, another thing...
-// This is to save repeating work, and make life easy for for for
+// This is to save repeating work, and make life easy for ourselfves.
 
 protocol LayoutScheme {
     static func getNameLabelFont(orientation: Orientation, flavor: LayoutSchemeFlavor) -> UIFont
@@ -217,5 +214,14 @@ extension LayoutScheme {
         }
     }
     
+    static func getNameLabelVerticalSpacing(orientation: Orientation, flavor: LayoutSchemeFlavor) -> Int {
+        if Device.isPhone {
+            return -3
+        }
+        if Device.isPad {
+            return -4
+        }
+        return 0
+    }
     
 }

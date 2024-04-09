@@ -46,6 +46,7 @@ import SwiftUI
             var didModify = false
             
             // Note: This seems slightly insane;
+            // Once we factor in neighbors, we will likely have uneven paddings on right and left...
             
             if consumedWidth < totalWidth && _universalPaddingLeft < universalPaddingLeftStandard {
                 _universalPaddingLeft += 1
@@ -74,7 +75,6 @@ import SwiftUI
             
             _universalPaddingRight += 1
             consumedWidth += 1
-            
         }
         
         universalPaddingLeft = _universalPaddingLeft

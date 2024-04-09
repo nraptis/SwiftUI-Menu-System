@@ -11,7 +11,6 @@ struct MagicalSliderBar: View {
     
     @Environment(MagicalSliderViewModel.self) var magicalSliderViewModel: MagicalSliderViewModel
     
-    
     enum DragState {
         case idle
         case dragging(x: CGFloat)

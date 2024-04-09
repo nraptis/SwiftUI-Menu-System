@@ -51,15 +51,17 @@ struct MagicalTextIconButtonContent: View {
             nameLabelTextWidth = configuration.nameLabelWidthStackedSmall
         }
         
+        let lineHeight = ToolInterfaceTheme.getLineHeight(font: nameLabelFont)
+        let nameLabelWidth = nameLabelTextWidth + nameLabelPaddingLeft + nameLabelPaddingRight
         
         let iconWidth = textIcon.iconWidth
         let iconHeight: Int
         if layoutSchemeFlavor.isStacked {
             if Device.isPad {
                 if numberOfLines == 2 {
-                    iconHeight = 22
+                    iconHeight = 25
                 } else {
-                    iconHeight = 36
+                    iconHeight = 39
                 }
             } else {
                 if numberOfLines == 2 {
@@ -78,6 +80,8 @@ struct MagicalTextIconButtonContent: View {
                                                                     flavor: layoutSchemeFlavor,
                                                                     numberOfLines: numberOfLines)
         
+        let contentHeight = magicalTextIconButtonViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
+        
         return VStack(spacing: 0.0) {
             
 #if INTERFACE_HINTS
@@ -89,47 +93,56 @@ struct MagicalTextIconButtonContent: View {
                 .frame(height: CGFloat(universalPaddingTop))
 #endif
             
-            
+            ZStack {
                 switch layoutSchemeFlavor {
                 case .long:
                     HStack(spacing: 0.0) {
-                        let horizontalHeight = magicalTextIconButtonViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
-                        IconAndTextHorizontal(orientation: orientation,
-                                              line1: line1,
-                                              line2: line2,
-                                              nameLabelTextWidth: nameLabelTextWidth,
-                                              nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                              nameLabelPaddingRight: nameLabelPaddingRight,
-                                              nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                              nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                              icon: textIcon,
-                                              iconWidth: textIcon.iconWidth,
-                                              iconHeight: iconHeight,
-                                              iconPaddingLeft: iconPaddingLeft,
-                                              iconPaddingRight: iconPaddingRight,
-                                              font: nameLabelFont,
-                                              height: horizontalHeight)
+                        IconBox(icon: textIcon,
+                                iconWidth: iconWidth,
+                                iconHeight: iconHeight,
+                                iconPaddingLeft: iconPaddingLeft,
+                                iconPaddingRight: iconPaddingRight,
+                                iconPaddingTop: iconPaddingTop)
+                        LabelBox(line1: line1,
+                                 line2: line2,
+                                 numberOfLines: numberOfLines,
+                                 width: nameLabelWidth,
+                                 paddingLeft: nameLabelPaddingLeft,
+                                 paddingRight: nameLabelPaddingRight,
+                                 paddingBottom: 0,
+                                 lineHeight: lineHeight,
+                                 spacingVertical: nameLabelVerticalSpacing,
+                                 font: nameLabelFont)
                     }
                 case .stackedLarge, .stackedMedium, .stackedSmall:
-                    HStack(spacing: 0.0) {
-                        IconAndTextVertical(orientation: orientation,
-                                            line1: line1,
-                                            line2: line2,
-                                            nameLabelTextWidth: nameLabelTextWidth,
-                                            nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                            nameLabelPaddingRight: nameLabelPaddingRight,
-                                            nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                            nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                            icon: textIcon,
-                                            iconWidth: iconWidth,
-                                            iconHeight: iconHeight,
-                                            iconPaddingLeft: iconPaddingLeft,
-                                            iconPaddingRight: iconPaddingRight,
-                                            iconPaddingTop: iconPaddingTop,
-                                            font: nameLabelFont)
+                    
+                    ZStack {
+                        VStack(spacing: 0.0) {
+                            IconBox(icon: textIcon,
+                                    iconWidth: iconWidth,
+                                    iconHeight: iconHeight,
+                                    iconPaddingLeft: iconPaddingLeft,
+                                    iconPaddingRight: iconPaddingRight,
+                                    iconPaddingTop: iconPaddingTop)
+                            Spacer(minLength: 0.0)
+                        }
+                        VStack(spacing: 0.0) {
+                            Spacer(minLength: 0.0)
+                            LabelBox(line1: line1,
+                                     line2: line2,
+                                     numberOfLines: numberOfLines,
+                                     width: nameLabelWidth,
+                                     paddingLeft: nameLabelPaddingLeft,
+                                     paddingRight: nameLabelPaddingRight,
+                                     paddingBottom: nameLabelPaddingBottom,
+                                     lineHeight: lineHeight,
+                                     spacingVertical: nameLabelVerticalSpacing,
+                                     font: nameLabelFont)
+                        }
                     }
                 }
-
+            }
+            .frame(height: CGFloat(contentHeight))
             
 #if INTERFACE_HINTS
             Spacer()
@@ -143,7 +156,6 @@ struct MagicalTextIconButtonContent: View {
         }
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalTextIconButtonViewModel.layoutHeight))
-        .background(RoundedRectangle(cornerRadius: 10.0).foregroundStyle(isPressed ? .blue : .red))
     }
 }
 

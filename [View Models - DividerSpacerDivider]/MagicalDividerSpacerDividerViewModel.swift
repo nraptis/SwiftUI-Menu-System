@@ -125,7 +125,6 @@ import SwiftUI
                 
                 _universalPaddingRight += 1
                 consumedWidth += 1
-                
             }
         }
         
@@ -133,7 +132,5 @@ import SwiftUI
         universalPaddingRight = _universalPaddingRight
         
         spaceBetween = _spaceBetween
-        
     }
-    
 }

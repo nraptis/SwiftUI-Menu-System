@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 @Observable class MagicalTextIconButtonViewModelPointBreakTangent: MagicalTextIconButtonViewModel {
     
     override func handleClicked() {

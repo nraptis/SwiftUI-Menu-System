@@ -75,11 +75,17 @@ struct MagicalSegmentedPickerPrimarySegmentContent: View {
         case .stackedSmall:
             nameLabelTextWidth = configuration.nameLabelWidthStackedSmall
         }
+        
+        let lineHeight = ToolInterfaceTheme.getLineHeight(font: nameLabelFont)
+        let nameLabelWidth = nameLabelTextWidth + nameLabelPaddingLeft + nameLabelPaddingRight
+        
         let iconPaddingLeft = magicalSegmentedPickerButtonViewModel.iconPaddingLeft
         let iconPaddingRight = magicalSegmentedPickerButtonViewModel.iconPaddingRight
         let iconPaddingTop = SegmentedPickerLayout.getIconPaddingTop(orientation: orientation,
                                                             flavor: layoutSchemeFlavor,
                                                             numberOfLines: numberOfLines)
+        
+        let contentHeight = magicalSegmentedPickerViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
         
         return VStack(spacing: 0.0) {
 
@@ -92,69 +98,82 @@ struct MagicalSegmentedPickerPrimarySegmentContent: View {
                 .frame(height: CGFloat(universalPaddingTop))
 #endif
             
-            HStack(spacing: 0.0) {
+            ZStack {
+                HStack(spacing: 0.0) {
                 
 #if INTERFACE_HINTS
-                Spacer()
-                    .frame(width: CGFloat(universalPaddingLeft), height: 28.0)
-                    .background(Color(red: 0.85, green: 0.45, blue: 0.65, opacity: 0.40))
+                    Spacer()
+                        .frame(width: CGFloat(universalPaddingLeft), height: 28.0)
+                        .background(Color(red: 0.85, green: 0.45, blue: 0.65, opacity: 0.40))
 #else
-                Spacer()
-                    .frame(width: CGFloat(universalPaddingLeft))
+                    Spacer()
+                        .frame(width: CGFloat(universalPaddingLeft))
 #endif
                 
-                switch layoutSchemeFlavor {
-                case .long:
-                    HStack(spacing: 0.0) {
-                        
-                        let horizontalHeight = magicalSegmentedPickerViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
-                        
-                        IconAndTextHorizontal(orientation: orientation,
-                                              line1: line1,
-                                              line2: line2,
-                                              nameLabelTextWidth: nameLabelTextWidth,
-                                              nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                              nameLabelPaddingRight: nameLabelPaddingRight,
-                                              nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                              nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                              icon: textIcon,
-                                              iconWidth: textIcon.iconWidth,
-                                              iconHeight: iconHeight,
-                                              iconPaddingLeft: iconPaddingLeft,
-                                              iconPaddingRight: iconPaddingRight,
-                                              font: nameLabelFont,
-                                              height: horizontalHeight)
-                    }
-                case .stackedLarge, .stackedMedium, .stackedSmall:
-                    HStack(spacing: 0.0) {
-                        IconAndTextVertical(orientation: orientation,
-                                            line1: line1,
-                                            line2: line2,
-                                            nameLabelTextWidth: nameLabelTextWidth,
-                                            nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                            nameLabelPaddingRight: nameLabelPaddingRight,
-                                            nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                            nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                            icon: textIcon,
+                    ZStack {
+                        switch layoutSchemeFlavor {
+                        case .long:
+                            HStack(spacing: 0.0) {
+                                IconBox(icon: textIcon,
+                                        iconWidth: iconWidth,
+                                        iconHeight: iconHeight,
+                                        iconPaddingLeft: iconPaddingLeft,
+                                        iconPaddingRight: iconPaddingRight,
+                                        iconPaddingTop: iconPaddingTop)
+                                LabelBox(line1: line1,
+                                         line2: line2,
+                                         numberOfLines: numberOfLines,
+                                         width: nameLabelWidth,
+                                         paddingLeft: nameLabelPaddingLeft,
+                                         paddingRight: nameLabelPaddingRight,
+                                         paddingBottom: 0,
+                                         lineHeight: lineHeight,
+                                         spacingVertical: nameLabelVerticalSpacing,
+                                         font: nameLabelFont)
+                            }
+                        case .stackedLarge, .stackedMedium, .stackedSmall:
+                            
+                            ZStack {
+                                VStack(spacing: 0.0) {
+                                    IconBox(icon: textIcon,
                                             iconWidth: iconWidth,
                                             iconHeight: iconHeight,
                                             iconPaddingLeft: iconPaddingLeft,
                                             iconPaddingRight: iconPaddingRight,
-                                            iconPaddingTop: iconPaddingTop,
-                                            font: nameLabelFont)
+                                            iconPaddingTop: iconPaddingTop)
+                                    Spacer(minLength: 0.0)
+                                }
+                                VStack(spacing: 0.0) {
+                                    Spacer(minLength: 0.0)
+                                    LabelBox(line1: line1,
+                                             line2: line2,
+                                             numberOfLines: numberOfLines,
+                                             width: nameLabelWidth,
+                                             paddingLeft: nameLabelPaddingLeft,
+                                             paddingRight: nameLabelPaddingRight,
+                                             paddingBottom: nameLabelPaddingBottom,
+                                             lineHeight: lineHeight,
+                                             spacingVertical: nameLabelVerticalSpacing,
+                                             font: nameLabelFont)
+                                }
+                            }
+                        }
                     }
-                }
+                    .frame(height: CGFloat(contentHeight))
                 
 #if INTERFACE_HINTS
-                Spacer()
-                    .frame(width: CGFloat(universalPaddingRight), height: 28.0)
-                    .background(Color(red: 1.0, green: 0.25, blue: 0.75, opacity: 0.40))
+                    Spacer()
+                        .frame(width: CGFloat(universalPaddingRight), height: 28.0)
+                        .background(Color(red: 1.0, green: 0.25, blue: 0.75, opacity: 0.40))
 #else
-                Spacer()
-                    .frame(width: CGFloat(universalPaddingRight))
+                    Spacer()
+                        .frame(width: CGFloat(universalPaddingRight))
 #endif
                 
+                }
+                
             }
+            .frame(height: CGFloat(contentHeight))
 
 #if INTERFACE_HINTS
             Spacer()

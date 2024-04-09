@@ -45,7 +45,9 @@ struct IconBox: View {
 #endif
                 
                 ZStack {
+                    
                     Image(uiImage: icon.image)
+                    
                 }
                 .frame(width: CGFloat(iconWidth),
                        height: CGFloat(iconHeight))
@@ -53,6 +55,9 @@ struct IconBox: View {
 #if INTERFACE_HINTS
                 .background(Color(red: 0.65, green: 0.75, blue: 0.95, opacity: 0.25))
                 .overlay(Rectangle().stroke().foregroundColor(Color.black).zIndex(3096.0))
+#endif
+#if ICON_HINTS
+                .overlay(Rectangle().stroke(lineWidth: 2.0).foregroundColor(Color.red).zIndex(3096.0))
 #endif
                 
 #if INTERFACE_HINTS

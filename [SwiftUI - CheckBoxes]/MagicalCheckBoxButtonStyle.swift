@@ -70,6 +70,4 @@ struct MagicalCheckBoxButtonStyle: ButtonStyle {
                    height: CGFloat(height))
             .foregroundStyle(color)
     }
-    
-    
 }

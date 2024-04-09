@@ -17,7 +17,6 @@ struct MagicalSliderGuts: View {
     let numberOfLines: Int
     let layoutWidth: Int
     let layoutHeight: Int
-    
     var body: some View {
         
         let orientation = magicalSliderViewModel.orientation
@@ -86,6 +85,9 @@ struct MagicalSliderGuts: View {
             valueLabelTextWidth = configuration.valueLabelWidthStackedSmall
         }
         
+        let lineHeight = ToolInterfaceTheme.getLineHeight(font: nameLabelFont)
+        let nameLabelWidth = layoutNameLabelTextWidth + nameLabelPaddingLeft + nameLabelPaddingRight
+        
         let valueLabelWidth = valueLabelPaddingLeft + valueLabelTextWidth + valueLabelPaddingRight
         
         let iconPaddingLeft = magicalSliderViewModel.iconPaddingLeft
@@ -124,64 +126,60 @@ struct MagicalSliderGuts: View {
                 extraPaddingLeft = 0
             }
         }
-        
-        //layoutNameLabelTextWidth
-        
-        print("extraPaddingLeft = \(extraPaddingLeft)")
-        print("LOW: \(magicalSliderViewModel.layoutWidth)")
-        
-        print("valueLabelWidth = \(valueLabelWidth)")
-        
+
         return HStack(spacing: 0.0) {
-            switch layoutSchemeFlavor {
-            case .long:
-                HStack(spacing: 0.0) {
-                    
-                    Spacer(minLength: 0.0)
-                    
-                    IconAndTextHorizontal(orientation: orientation,
-                                          line1: line1,
-                                          line2: line2,
-                                          nameLabelTextWidth: realNameLabelTextWidth,
-                                          nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                          nameLabelPaddingRight: nameLabelPaddingRight,
-                                          nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                          nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                          icon: textIcon,
-                                          iconWidth: textIcon.iconWidth,
-                                          iconHeight: iconHeight,
-                                          iconPaddingLeft: iconPaddingLeft,
-                                          iconPaddingRight: iconPaddingRight,
-                                          font: nameLabelFont,
-                                          height: layoutHeight)
-                    
+            
+            ZStack {
+                switch layoutSchemeFlavor {
+                case .long:
+                    HStack(spacing: 0.0) {
+                        IconBox(icon: textIcon,
+                                iconWidth: iconWidth,
+                                iconHeight: iconHeight,
+                                iconPaddingLeft: iconPaddingLeft,
+                                iconPaddingRight: iconPaddingRight,
+                                iconPaddingTop: iconPaddingTop)
+                        LabelBox(line1: line1,
+                                 line2: line2,
+                                 numberOfLines: numberOfLines,
+                                 width: nameLabelWidth,
+                                 paddingLeft: nameLabelPaddingLeft,
+                                 paddingRight: nameLabelPaddingRight,
+                                 paddingBottom: 0,
+                                 lineHeight: lineHeight,
+                                 spacingVertical: nameLabelVerticalSpacing,
+                                 font: nameLabelFont)
+                    }
+                case .stackedLarge, .stackedMedium, .stackedSmall:
+                    ZStack {
+                        VStack(spacing: 0.0) {
+                            IconBox(icon: textIcon,
+                                    iconWidth: iconWidth,
+                                    iconHeight: iconHeight,
+                                    iconPaddingLeft: iconPaddingLeft,
+                                    iconPaddingRight: iconPaddingRight,
+                                    iconPaddingTop: iconPaddingTop)
+                            Spacer(minLength: 0.0)
+                        }
+                        VStack(spacing: 0.0) {
+                            Spacer(minLength: 0.0)
+                            LabelBox(line1: line1,
+                                     line2: line2,
+                                     numberOfLines: numberOfLines,
+                                     width: nameLabelWidth,
+                                     paddingLeft: nameLabelPaddingLeft,
+                                     paddingRight: nameLabelPaddingRight,
+                                     paddingBottom: nameLabelPaddingBottom,
+                                     lineHeight: lineHeight,
+                                     spacingVertical: nameLabelVerticalSpacing,
+                                     font: nameLabelFont)
+                        }
+                    }
                 }
-                .frame(width: CGFloat(iconAndTextLayoutWidth))
-            case .stackedLarge, .stackedMedium, .stackedSmall:
-                HStack(spacing: 0.0) {
-                    Spacer(minLength: 0.0)
-                    IconAndTextVertical(orientation: orientation,
-                                        line1: line1,
-                                        line2: line2,
-                                        nameLabelTextWidth: realNameLabelTextWidth,
-                                        nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                        nameLabelPaddingRight: nameLabelPaddingRight,
-                                        nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                        nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                        icon: textIcon,
-                                        iconWidth: iconWidth,
-                                        iconHeight: iconHeight,
-                                        iconPaddingLeft: iconPaddingLeft,
-                                        iconPaddingRight: iconPaddingRight,
-                                        iconPaddingTop: iconPaddingTop,
-                                        font: nameLabelFont)
-                }
-                .frame(width: CGFloat(iconAndTextLayoutWidth))
             }
+            .frame(height: CGFloat(layoutHeight))
             
             MagicalSliderBar()
-                
-                //.background(RoundedRectangle(cornerRadius: 3.0).foregroundStyle(Color.brown.opacity(0.85)))
             
             HStack(spacing: 0.0) {
                 
@@ -220,8 +218,6 @@ struct MagicalSliderGuts: View {
                 
             }
             .frame(width: CGFloat(valueLabelWidth))
-            //.overlay(RoundedRectangle(cornerRadius: 8.0).foregroundStyle(Color.green.opacity(0.65)))
-            
         }
     }
 }

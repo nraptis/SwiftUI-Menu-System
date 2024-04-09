@@ -13,19 +13,18 @@ import Foundation
         print("MagicalSegmentedPickerButtonViewModel - Dealloc")
     }
     
-    var nameLabelPaddingLeft = 6
-    var nameLabelPaddingRight = 3
+    var nameLabelPaddingLeft = 0
+    var nameLabelPaddingRight = 0
     
-    var iconPaddingLeft = 17
-    var iconPaddingRight = 13
+    var iconPaddingLeft = 0
+    var iconPaddingRight = 0
     
-    var universalPaddingLeft = 11
-    var universalPaddingRight = 6
+    var universalPaddingLeft = 0
+    var universalPaddingRight = 0
     
     var x = 0
     var y = 0
-    var width = 200
-    //var height = 50
+    var width = 128
     
     let orientation: Orientation
     let segmentedPickerButtonConfiguration: ToolInterfaceElementSegmentedPickerButtonConfiguration
@@ -48,18 +47,18 @@ class MagicalSegmentedPickerButtonLayoutNode {
         print("MagicalSegmentedPickerButtonLayoutNode - Dealloc")
     }
     
-    var nameLabelPaddingLeft = 6
-    var nameLabelPaddingRight = 3
+    var nameLabelPaddingLeft = 0
+    var nameLabelPaddingRight = 0
     
-    var iconPaddingLeft = 17
-    var iconPaddingRight = 13
+    var iconPaddingLeft = 0
+    var iconPaddingRight = 0
     
-    var universalPaddingLeft = 11
-    var universalPaddingRight = 6
+    var universalPaddingLeft = 0
+    var universalPaddingRight = 0
     
     var x = 0
     var y = 0
-    var width = 32
+    var width = 128
     
     let segmentedPickerButtonConfiguration: ToolInterfaceElementSegmentedPickerButtonConfiguration
     init(segmentedPickerButtonConfiguration: ToolInterfaceElementSegmentedPickerButtonConfiguration) {
@@ -93,5 +92,4 @@ class MagicalSegmentedPickerButtonLayoutNode {
             return width1 + width2
         }
     }
-    
 }

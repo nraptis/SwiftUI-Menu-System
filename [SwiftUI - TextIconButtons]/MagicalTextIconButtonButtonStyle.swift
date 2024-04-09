@@ -38,5 +38,4 @@ struct MagicalTextIconButtonButtonStyle: ButtonStyle {
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalTextIconButtonViewModel.layoutHeight))
     }
-    
 }

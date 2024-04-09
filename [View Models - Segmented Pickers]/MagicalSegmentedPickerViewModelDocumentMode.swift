@@ -22,7 +22,6 @@ import Foundation
         if index == 1 {
             jiggleViewModel.set(documentMode: .edit)
         }
-        
     }
     
     override func refresh() {
@@ -33,6 +32,4 @@ import Foundation
             selectedSegmentIndex = 1
         }
     }
-    
-    
 }

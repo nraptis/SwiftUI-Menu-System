@@ -35,9 +35,6 @@ extension ToolInterfaceViewModel {
         
         for buttonConfiguration in configuration.buttonConfigurations {
             
-            let line1 = buttonConfiguration.nameLabelLine1
-            let line2 = buttonConfiguration.nameLabelLine2
-            
             let textIconImagePack = buttonConfiguration.textIconImagePack
             
             let numberOfLines = buttonConfiguration.nameLabelNumberOfLines
@@ -305,8 +302,6 @@ extension ToolInterfaceViewModel {
         
         let maximumWidthStackedLarge = middle2WidthStackedLarge + maximumExtraPadding
         
-        //////
-        
         let minimumWidthStackedMedium = sumMinimumWidthStackedMedium +
         buttonUniversalPaddingLeftStackedMediumSqueezed +
         buttonUniversalPaddingRightStackedMediumSqueezed +
@@ -326,8 +321,6 @@ extension ToolInterfaceViewModel {
         universalPaddingRightStackedMediumStandard
         
         let maximumWidthStackedMedium = middle2WidthStackedMedium + maximumExtraPadding
-        
-        //////
         
         let minimumWidthStackedSmall = sumMinimumWidthStackedSmall +
         buttonUniversalPaddingLeftStackedSmallSqueezed +
@@ -349,72 +342,6 @@ extension ToolInterfaceViewModel {
         
         let maximumWidthStackedSmall = middle2WidthStackedSmall + maximumExtraPadding
         
-        
-        /*
-        
-        var minimumWidthStackedSmall = 0
-        
-        minimumWidthStackedSmall += SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                  flavor: .stackedSmall,
-                                                                                  squeeze: .squeezed,
-                                                                                  neighborType: nil)
-        minimumWidthStackedSmall += SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                  flavor: .stackedSmall,
-                                                                                  squeeze: .squeezed,
-                                                                                  neighborType: nil)
-        
-        for buttonConfiguration in configuration.buttonConfigurations {
-            
-            let textIconImagePack = buttonConfiguration.textIconImagePack
-
-            let textIconAndNameLabelWidth = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedSmall,
-                                                                                               nameLabelNumberOfLines: buttonConfiguration.nameLabelNumberOfLines,
-                                                                                               textIconImagePack: textIconImagePack,
-                                                                                               orientation: orientation,
-                                                                                               flavor: .stackedSmall,
-                                                                                               squeeze: .squeezed)
-            let buttonUniversalPaddingLeft = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
-                                                                                                 flavor: .stackedSmall,
-                                                                                                 squeeze: .squeezed)
-            let buttonUniversalPaddingRight = SegmentedPickerLayout.getButtonUniversalPaddingRight(orientation: orientation,
-                                                                                                   flavor: .stackedSmall,
-                                                                                                   squeeze: .squeezed)
-            
-            
-            minimumWidthStackedSmall += textIconAndNameLabelWidth
-            
-            minimumWidthStackedSmall += buttonUniversalPaddingLeft
-            minimumWidthStackedSmall += buttonUniversalPaddingRight
-            
-            
-            
-            
-        }
-        
-        
-        
-        let flexSegmentData = FlexSegmentData(minimumWidthLong: 1000,
-                                              middle1WidthLong: 1000,
-                                              middle2WidthLong: 1000,
-                                              maximumWidthLong: 1000,
-                                                 
-                                              minimumWidthStackedLarge: 1000,
-                                              middle1WidthStackedLarge: 1000,
-                                              middle2WidthStackedLarge: 1000,
-                                              maximumWidthStackedLarge: 1000,
-                                                 
-                                              minimumWidthStackedMedium: 1000,
-                                              middle1WidthStackedMedium: 1000,
-                                              middle2WidthStackedMedium: 1000,
-                                              maximumWidthStackedMedium: 1000,
-                                                 
-                                              minimumWidthStackedSmall: minimumWidthStackedSmall,
-                                              middle1WidthStackedSmall: minimumWidthStackedSmall + 100,
-                                              middle2WidthStackedSmall: minimumWidthStackedSmall + 200,
-                                              maximumWidthStackedSmall: minimumWidthStackedSmall + 300)
-        
-        */
-         
         let flexSegmentData = FlexSegmentData(minimumWidthLong: minimumWidthLong,
                                               middle1WidthLong: middle1WidthLong,
                                               middle2WidthLong: middle2WidthLong,
@@ -437,6 +364,4 @@ extension ToolInterfaceViewModel {
         
         return ToolInterfaceElementFlex.segment(flexSegmentData)
     }
-    
-    
 }

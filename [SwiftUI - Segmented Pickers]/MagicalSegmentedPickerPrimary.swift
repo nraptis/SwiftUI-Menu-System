@@ -37,7 +37,6 @@ struct MagicalSegmentedPickerPrimary: View {
     func bodyContent() -> some View {
         
         let orientation = magicalSegmentedPickerViewModel.orientation
-        //let configuration = magicalSegmentedPickerViewModel.segmentedPickerConfiguration
         let layoutSchemeFlavor = magicalSegmentedPickerViewModel.getLayoutSchemeFlavor()
         
         let universalPaddingLeft = magicalSegmentedPickerViewModel.universalPaddingLeft
@@ -75,7 +74,5 @@ struct MagicalSegmentedPickerPrimary: View {
 #endif
             
         }
-            
     }
-    
 }

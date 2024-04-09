@@ -41,5 +41,4 @@ extension ToolInterfaceViewModel {
                                                                nameLabelLine1: textLine1,
                                                                nameLabelLine2: textLine2)
     }
-    
 }

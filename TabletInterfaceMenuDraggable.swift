@@ -38,10 +38,9 @@ class TabletInterfaceMenuDraggable: UIView {
         self.toolInterfaceViewModel = toolInterfaceViewModel
         super.init(frame: .zero)
         
-        backgroundColor = UIColor.green
+        backgroundColor = UIColor.black
         layer.cornerRadius = 12.0
         clipsToBounds = true
-        
     }
     
     required init?(coder: NSCoder) {
@@ -171,7 +170,6 @@ class TabletInterfaceMenuDraggable: UIView {
                                    constant: CGFloat(toolRowY)),
             ])
             
-            
             toolRowViews.append(toolRowView)
             
             toolRowY += rowHeight
@@ -187,7 +185,6 @@ class TabletInterfaceMenuDraggable: UIView {
         let diffY = abs(point.y - cornerY)
         
         if diffX <= Self.grabCornerDistance && diffY <= Self.grabCornerDistance {
-            print("Grabbing Top Left...")
             return true
         }
         
@@ -201,7 +198,6 @@ class TabletInterfaceMenuDraggable: UIView {
         let diffX = abs(point.x - cornerX)
         let diffY = abs(point.y - cornerY)
         if diffX <= Self.grabCornerDistance && diffY <= Self.grabCornerDistance {
-            print("Grabbing Top Right...")
             return true
         }
         
@@ -214,7 +210,6 @@ class TabletInterfaceMenuDraggable: UIView {
         let diffX = abs(point.x - cornerX)
         let diffY = abs(point.y - cornerY)
         if diffX <= Self.grabCornerDistance && diffY <= Self.grabCornerDistance {
-            print("Grabbing Bottom Left...")
             return true
         }
         
@@ -227,7 +222,6 @@ class TabletInterfaceMenuDraggable: UIView {
         let diffX = abs(point.x - cornerX)
         let diffY = abs(point.y - cornerY)
         if diffX <= Self.grabCornerDistance && diffY <= Self.grabCornerDistance {
-            print("Grabbing Bottom Right...")
             return true
         }
         return false
@@ -251,10 +245,7 @@ class TabletInterfaceMenuDraggable: UIView {
                 return nil
             }
         }
-        
     }
-    
-    //TabletInterfaceMenuTopBar
     
     func getHeight(orientation: Orientation) -> Int {
         

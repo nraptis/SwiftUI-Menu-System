@@ -17,7 +17,6 @@ class PhoneInterfaceMenuBottomBackingView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        
         var layoutY = CGFloat(0.0)
         let spacingTop = ToolInterfaceTheme.getBottomMenuSpacingTop(orientation: orientation)
         let spacingBottom = ToolInterfaceTheme.getBottomMenuSpacingBottom(orientation: orientation)
@@ -25,7 +24,6 @@ class PhoneInterfaceMenuBottomBackingView: UIView {
         let rowSpacing = ToolInterfaceTheme.getBottomMenuRowSpacing(orientation: orientation)
         let rowCount = toolInterfaceViewModel.rowsBottom.count
         let rowCount1 = rowCount - 1
-        
         
         backgroundColor = UIColor.red
         
@@ -67,9 +65,6 @@ class PhoneInterfaceMenuBottomBackingView: UIView {
                                multiplier: 1.0,
                                constant: 0.0)
         ])
-        
-        
-        
         
         let topSpacerView = UIView(frame: .zero)
         topSpacerView.translatesAutoresizingMaskIntoConstraints = false
@@ -204,7 +199,6 @@ class PhoneInterfaceMenuBottomBackingView: UIView {
         ])
     }
 
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

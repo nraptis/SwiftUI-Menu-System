@@ -17,7 +17,6 @@ struct MagicalCheckBoxContent: View {
     let universalPaddingTop: Int
     let universalPaddingBottom: Int
     let layoutWidth: Int
-    
     var body: some View {
         
         let configuration = magicalCheckBoxViewModel.checkBoxConfiguration
@@ -49,7 +48,6 @@ struct MagicalCheckBoxContent: View {
             iconHeight = textIcon.iconHeight
         }
         
-        
         let nameLabelFont = CheckBoxLayout.getNameLabelFont(orientation: orientation,
                                                                   flavor: layoutSchemeFlavor)
         let nameLabelPaddingBottom = CheckBoxLayout.getNameLabelPaddingBottom(orientation: orientation,
@@ -71,6 +69,10 @@ struct MagicalCheckBoxContent: View {
         case .stackedSmall:
             nameLabelTextWidth = configuration.nameLabelWidthStackedSmall
         }
+        
+        let lineHeight = ToolInterfaceTheme.getLineHeight(font: nameLabelFont)
+        let nameLabelWidth = nameLabelTextWidth + nameLabelPaddingLeft + nameLabelPaddingRight
+        
         let iconPaddingLeft = magicalCheckBoxViewModel.iconPaddingLeft
         let iconPaddingRight = magicalCheckBoxViewModel.iconPaddingRight
         let iconPaddingTop = CheckBoxLayout.getIconPaddingTop(orientation: orientation,
@@ -82,6 +84,8 @@ struct MagicalCheckBoxContent: View {
         
         let checkBoxPaddingLeft = magicalCheckBoxViewModel.checkBoxPaddingLeft
         let checkBoxPaddingRight = magicalCheckBoxViewModel.checkBoxPaddingRight
+        
+        let contentHeight = magicalCheckBoxViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
         
         return VStack(spacing: 0.0) {
             
@@ -96,47 +100,56 @@ struct MagicalCheckBoxContent: View {
             
             HStack(spacing: 0.0) {
                 
-                switch layoutSchemeFlavor {
-                case .long:
-                    HStack(spacing: 0.0) {
+                ZStack {
+                    switch layoutSchemeFlavor {
+                    case .long:
+                        HStack(spacing: 0.0) {
+                            IconBox(icon: textIcon,
+                                    iconWidth: iconWidth,
+                                    iconHeight: iconHeight,
+                                    iconPaddingLeft: iconPaddingLeft,
+                                    iconPaddingRight: iconPaddingRight,
+                                    iconPaddingTop: iconPaddingTop)
+                            LabelBox(line1: line1,
+                                     line2: line2,
+                                     numberOfLines: numberOfLines,
+                                     width: nameLabelWidth,
+                                     paddingLeft: nameLabelPaddingLeft,
+                                     paddingRight: nameLabelPaddingRight,
+                                     paddingBottom: 0,
+                                     lineHeight: lineHeight,
+                                     spacingVertical: nameLabelVerticalSpacing,
+                                     font: nameLabelFont)
+                        }
+                    case .stackedLarge, .stackedMedium, .stackedSmall:
                         
-                        let horizontalHeight = magicalCheckBoxViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
-                        
-                        IconAndTextHorizontal(orientation: orientation,
-                                              line1: line1,
-                                              line2: line2,
-                                              nameLabelTextWidth: nameLabelTextWidth,
-                                              nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                              nameLabelPaddingRight: nameLabelPaddingRight,
-                                              nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                              nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                              icon: textIcon,
-                                              iconWidth: textIcon.iconWidth,
-                                              iconHeight: iconHeight,
-                                              iconPaddingLeft: iconPaddingLeft,
-                                              iconPaddingRight: iconPaddingRight,
-                                              font: nameLabelFont,
-                                              height: horizontalHeight)
-                    }
-                case .stackedLarge, .stackedMedium, .stackedSmall:
-                    HStack(spacing: 0.0) {
-                        IconAndTextVertical(orientation: orientation,
-                                            line1: line1,
-                                            line2: line2,
-                                            nameLabelTextWidth: nameLabelTextWidth,
-                                            nameLabelPaddingLeft: nameLabelPaddingLeft,
-                                            nameLabelPaddingRight: nameLabelPaddingRight,
-                                            nameLabelPaddingBottom: nameLabelPaddingBottom,
-                                            nameLabelVerticalSpacing: nameLabelVerticalSpacing,
-                                            icon: textIcon,
-                                            iconWidth: iconWidth,
-                                            iconHeight: iconHeight,
-                                            iconPaddingLeft: iconPaddingLeft,
-                                            iconPaddingRight: iconPaddingRight,
-                                            iconPaddingTop: iconPaddingTop,
-                                            font: nameLabelFont)
+                        ZStack {
+                            VStack(spacing: 0.0) {
+                                IconBox(icon: textIcon,
+                                        iconWidth: iconWidth,
+                                        iconHeight: iconHeight,
+                                        iconPaddingLeft: iconPaddingLeft,
+                                        iconPaddingRight: iconPaddingRight,
+                                        iconPaddingTop: iconPaddingTop)
+                                Spacer(minLength: 0.0)
+                            }
+                            VStack(spacing: 0.0) {
+                                Spacer(minLength: 0.0)
+                                LabelBox(line1: line1,
+                                         line2: line2,
+                                         numberOfLines: numberOfLines,
+                                         width: nameLabelWidth,
+                                         paddingLeft: nameLabelPaddingLeft,
+                                         paddingRight: nameLabelPaddingRight,
+                                         paddingBottom: nameLabelPaddingBottom,
+                                         lineHeight: lineHeight,
+                                         spacingVertical: nameLabelVerticalSpacing,
+                                         font: nameLabelFont)
+                            }
+                        }
                     }
                 }
+                .frame(height: CGFloat(contentHeight))
                 
 #if INTERFACE_HINTS
             Spacer()

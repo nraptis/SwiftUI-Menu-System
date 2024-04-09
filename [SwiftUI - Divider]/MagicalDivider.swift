@@ -57,8 +57,6 @@ struct MagicalDivider: View {
 #endif
         .offset(x: CGFloat(magicalDividerViewModel.layoutX),
                 y: CGFloat(magicalDividerViewModel.layoutY))
-
-        
         
     }
 }

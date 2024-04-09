@@ -12,7 +12,7 @@ struct MagicalTextIconButton: View {
     @Environment(MagicalTextIconButtonViewModel.self) var magicalTextIconButtonViewModel: MagicalTextIconButtonViewModel
     
     var body: some View {
-        return GeometryReader { _ in
+        return ZStack {
             bodyContent()
         }
         .frame(width: CGFloat(magicalTextIconButtonViewModel.layoutWidth),

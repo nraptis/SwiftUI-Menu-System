@@ -35,11 +35,9 @@ extension ToolInterfaceViewModel {
         let textLine1 = ToolInterfaceStringLibrary.interfaceTextPointBreakTangentLine1()
         let textLine2 = ToolInterfaceStringLibrary.interfaceTextPointBreakTangentLine2()
         let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        
         return ToolInterfaceElementTextIconButtonConfiguration(textIconImagePack: textIconImagePack,
                                                                orientation: orientation,
                                                                nameLabelLine1: textLine1,
                                                                nameLabelLine2: textLine2)
     }
-    
 }

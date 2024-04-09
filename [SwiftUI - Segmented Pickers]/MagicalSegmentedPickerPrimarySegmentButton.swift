@@ -21,7 +21,6 @@ struct MagicalSegmentedPickerPrimarySegmentButton: View {
     let universalPaddingTop: Int
     let universalPaddingBottom: Int
     
-    
     var body: some View {
         return ZStack {
             bodyContent()

@@ -8,7 +8,6 @@
 import Foundation
 
 extension ToolInterfaceViewModel {
-
     
     func getDocumentModeSegmentToolNode(neighborTypeLeft: ToolInterfaceElementType?,
                                         neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
@@ -57,7 +56,5 @@ extension ToolInterfaceViewModel {
         
         return ToolInterfaceElementSegmentedPickerConfiguration(buttonConfigurations: [viewModeConfiguration,
                                                                                        editModeConfiguration])
-        
     }
-    
 }

@@ -76,19 +76,12 @@ struct SliderLayout: LayoutScheme {
         }
     }
     
-    
     static func getUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 2 : 1
     }
     
     static func getUniversalPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 2 : 1
     }
     
     static func getNameLabelPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
@@ -112,25 +105,7 @@ struct SliderLayout: LayoutScheme {
     }
     
     static func getNameLabelPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
-            return 2
-        } else {
-            return 4
-        }
-    }
-    
-    static func getNameLabelVerticalSpacing(orientation: Orientation, flavor: LayoutSchemeFlavor) -> Int {
-        if Device.isPhone {
-            if flavor.isStacked {
-                return -3
-            }
-        }
-        if Device.isPad {
-            if flavor.isStacked {
-                return -4
-            }
-        }
-        return -2
+        return 0
     }
     
     static func getValueLabelPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {

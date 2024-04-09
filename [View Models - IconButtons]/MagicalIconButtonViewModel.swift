@@ -19,8 +19,8 @@ import SwiftUI
     var iconPaddingLeft = 0
     var iconPaddingRight = 0
     
-    var universalPaddingLeft = 8
-    var universalPaddingRight = 13
+    var universalPaddingLeft = 0
+    var universalPaddingRight = 0
     
     let iconButtonConfiguration: ToolInterfaceElementIconButtonConfiguration
     init(jiggleViewModel: JiggleViewModel,
@@ -90,7 +90,6 @@ import SwiftUI
                                                                             squeeze: .standard)
         var _iconPaddingLeft = iconPaddingLeftSqueezed
         var _iconPaddingRight = iconPaddingRightSqueezed
-
         
         let totalWidth = layoutWidth
         
@@ -146,12 +145,10 @@ import SwiftUI
             }
         }
         
-        
         iconPaddingLeft = _iconPaddingLeft
         iconPaddingRight = _iconPaddingRight
         
         universalPaddingLeft = _universalPaddingLeft
         universalPaddingRight = _universalPaddingRight
     }
-    
 }

@@ -13,7 +13,6 @@ import Foundation
         print("MagicalTextIconButtonViewModelResetZoom => handleClicked()")
         
         toolInterfaceViewModel.replaceTopToolbarB()
-        
     }
     
     deinit {

@@ -80,7 +80,6 @@ import SwiftUI
                                                                                           squeeze: .standard,
                                                                                           neighborType: neighborTypeRight)
 
-        
         let buttonUniversalPaddingLeftSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: layoutSchemeFlavor,
                                                                                                      squeeze: .squeezed)
@@ -140,8 +139,7 @@ import SwiftUI
             layoutNode.nameLabelPaddingLeft = nameLabelPaddingLeftSqueezed
             layoutNode.nameLabelPaddingRight = nameLabelPaddingRightSqueezed
             
-            layoutNode.prepareForLayout(layoutSchemeFlavor: layoutSchemeFlavor,
-                                        textIcon: textIcon)
+            layoutNode.prepareForLayout(layoutSchemeFlavor: layoutSchemeFlavor, textIcon: textIcon)
         }
         
         if isStacked {
@@ -154,11 +152,8 @@ import SwiftUI
                 
             }
             
-            
             var consumedWidth = 0
-            
             while true {
-                
                 var areAllButtonsFullyGrown = true
                 
                 for layoutNode in layoutNodes {
@@ -273,7 +268,6 @@ import SwiftUI
                 consumedWidth += layoutNode.iconWidth
                 consumedWidth += layoutNode.iconPaddingLeft
                 consumedWidth += layoutNode.iconPaddingRight
-                
             }
             
             while consumedWidth < totalWidth {
@@ -337,7 +331,6 @@ import SwiftUI
         
         // Now there may be some space left over, distribute first to the smallest, then ubiquitously
         
-        
         if isStacked {
             for layoutNode in layoutNodes {
                 let width1 = layoutNode.nameLabelWidth + layoutNode.nameLabelPaddingLeft + layoutNode.nameLabelPaddingRight
@@ -352,13 +345,11 @@ import SwiftUI
             }
         }
         
-        
         var howMuchSpaceWeAreUsingSoFar = 0
         howMuchSpaceWeAreUsingSoFar += _universalPaddingLeft
         howMuchSpaceWeAreUsingSoFar += _universalPaddingRight
         for layoutNode in layoutNodes {
             howMuchSpaceWeAreUsingSoFar += layoutNode.width
-            
         }
         
         if layoutNodes.count > 0 {
@@ -384,8 +375,6 @@ import SwiftUI
                 if smallestWidth == largestWidth {
                     break
                 }
-                
-                //print("boosting[\(smallestIndex)], @ \(layoutNodes[smallestIndex].width) target \(largestWidth)")
                 layoutNodes[smallestIndex].width += 1
                 howMuchSpaceWeAreUsingSoFar += 1
             }
@@ -400,7 +389,6 @@ import SwiftUI
                 }
             }
         }
-        
         
         var x = 0
         for layoutNode in layoutNodes {
@@ -440,9 +428,7 @@ import SwiftUI
         return result
     }
     
-    
     func handleSelectedIndex(_ index: Int) {
         print("MagicalSegmentedPickerViewModel => handleSelectedIndex(\(index))")
     }
-    
 }

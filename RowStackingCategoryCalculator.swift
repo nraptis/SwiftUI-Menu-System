@@ -170,51 +170,6 @@ class RowStackingCategoryCalculator {
                 spaceCheckBoxesStackedSmallStandard += flexCheckBoxData.standardWidthStackedSmall
             }
         }
-        
-        /*
-        print("spaceTextIconButtonsLongSqueezed = \(spaceTextIconButtonsLongStandard)!")
-        print("spaceTextIconButtonsLongStandard = \(spaceTextIconButtonsLongStandard)!")
-        print("spaceTextIconButtonsStackedLargeSqueezed = \(spaceTextIconButtonsStackedLargeSqueezed)!")
-        print("spaceTextIconButtonsStackedLargeStandard = \(spaceTextIconButtonsStackedLargeStandard)!")
-        print("spaceTextIconButtonsStackedMediumSqueezed = \(spaceTextIconButtonsStackedMediumSqueezed)!")
-        print("spaceTextIconButtonsStackedMediumStandard = \(spaceTextIconButtonsStackedMediumStandard)!")
-        print("spaceTextIconButtonsStackedSmallSqueezed = \(spaceTextIconButtonsStackedSmallSqueezed)!")
-        print("spaceTextIconButtonsStackedSmallStandard = \(spaceTextIconButtonsStackedSmallStandard)!")
-        
-        print("spaceSegmentsLongSqueezed = \(spaceSegmentsLongSqueezed)!")
-        print("spaceSegmentsLongStandard = \(spaceSegmentsLongStandard)!")
-        print("spaceSegmentsStackedLargeSqueezed = \(spaceSegmentsStackedLargeSqueezed)!")
-        print("spaceSegmentsStackedLargeStandard = \(spaceSegmentsStackedLargeStandard)!")
-        print("spaceSegmentsStackedMediumSqueezed = \(spaceSegmentsStackedMediumSqueezed)!")
-        print("spaceSegmentsStackedMediumStandard = \(spaceSegmentsStackedMediumStandard)!")
-        print("spaceSegmentsStackedSmallSqueezed = \(spaceSegmentsStackedSmallSqueezed)!")
-        print("spaceSegmentsStackedSmallStandard = \(spaceSegmentsStackedSmallStandard)!")
-        
-        print("spaceCheckBoxesLongSqueezed = \(spaceCheckBoxesLongSqueezed)!")
-        print("spaceCheckBoxesLongStandard = \(spaceCheckBoxesLongStandard)!")
-        print("spaceCheckBoxesStackedLargeSqueezed = \(spaceCheckBoxesStackedLargeSqueezed)!")
-        print("spaceCheckBoxesStackedLargeStandard = \(spaceCheckBoxesStackedLargeStandard)!")
-        print("spaceCheckBoxesStackedMediumSqueezed = \(spaceCheckBoxesStackedMediumSqueezed)!")
-        print("spaceCheckBoxesStackedMediumStandard = \(spaceCheckBoxesStackedMediumStandard)!")
-        print("spaceCheckBoxesStackedSmallSqueezed = \(spaceCheckBoxesStackedSmallSqueezed)!")
-        print("spaceCheckBoxesStackedSmallStandard = \(spaceCheckBoxesStackedSmallStandard)!")
-        
-        print("spaceIconButtonsSqueezed = \(spaceIconButtonsSqueezed)!")
-        print("spaceIconButtonsStandard = \(spaceIconButtonsStandard)!")
-        
-        print("spaceDividerSpacerDividersSqueezed = \(spaceDividerSpacerDividersSqueezed)!")
-        print("spaceDividerSpacerDividersStandard = \(spaceDividerSpacerDividersStandard)!")
-        
-        print("spaceDividersSqueezed = \(spaceDividersSqueezed)!")
-        print("spaceDividersStandard = \(spaceDividersStandard)!")
-        
-        print("spaceSliders = \(spaceSliders)!")
-        
-        print("spaceSpacers = \(spaceSpacers)!")
-        
-        print("spaceFixed = \(spaceFixed)!")
-        */
-        
     }
     
     func doesSupportLayoutStackingCategory(layoutStackingCategory: ToolInterfaceLayoutStackingCategory,
@@ -227,27 +182,20 @@ class RowStackingCategoryCalculator {
         
         consumedWidth += spaceFixed
         consumedWidth += spaceSpacers
-        
         consumedWidth += spaceDividersStandard
-        
         consumedWidth += spaceDividerSpacerDividersStandard
-        
         consumedWidth += spaceSliders
         consumedWidth += spaceIconButtonsStandard
         
         switch layoutStackingCategory {
         case .allVerticalSmall:
-            
             consumedWidth += spaceTextIconButtonsStackedSmallStandard
             consumedWidth += spaceSegmentsStackedSmallStandard
             consumedWidth += spaceCheckBoxesStackedSmallStandard
-            
         case .allVerticalMedium:
-            
             consumedWidth += spaceTextIconButtonsStackedMediumStandard
             consumedWidth += spaceSegmentsStackedMediumStandard
             consumedWidth += spaceCheckBoxesStackedMediumStandard
-            
         case .large(let toolInterfaceLayoutStackingLargeData):
             if toolInterfaceLayoutStackingLargeData.isTextIconButtonLong {
                 consumedWidth += spaceTextIconButtonsLongStandard
@@ -266,7 +214,6 @@ class RowStackingCategoryCalculator {
             } else {
                 consumedWidth += spaceCheckBoxesStackedLargeStandard
             }
-            
         }
         
         if consumedWidth <= width {

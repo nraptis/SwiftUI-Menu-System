@@ -98,7 +98,7 @@ class ToolRowView: UIView {
                     hostingView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
                 ])
             }
-        
+            
             if animated {
                 if let hostingControllerPrevious = hostingControllerPrevious {
                     

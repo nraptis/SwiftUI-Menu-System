@@ -25,7 +25,7 @@ struct MagicalCheckBoxButton: View {
     func bodyContent() -> some View {
         Button {
             
-            print("chiiked CHEKC BOX")
+            print("Clicked CheckBox!!!")
             
         } label: {
             HStack(spacing: 0.0) {

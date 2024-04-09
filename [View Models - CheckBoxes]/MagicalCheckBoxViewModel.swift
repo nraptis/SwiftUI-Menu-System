@@ -24,7 +24,7 @@ import SwiftUI
     var universalPaddingLeft = 0
     var universalPaddingRight = 0
     
-    var checkBoxWidth = 32
+    var checkBoxWidth = 128
     var checkBoxHeight = 32
     
     let checkBoxConfiguration: ToolInterfaceElementCheckBoxConfiguration
@@ -306,7 +306,6 @@ import SwiftUI
                                                                    imagePaddingRight: _iconPaddingRight)
             consumedWidth = consumedBaseWidth + consumedStackWidth
             
-            /*
             while true {
                 
                 if consumedWidth >= totalWidth { break }
@@ -319,7 +318,6 @@ import SwiftUI
                 _universalPaddingLeft += 1
                 consumedWidth += 1
             }
-            */
             
         } else {
             
@@ -403,7 +401,6 @@ import SwiftUI
                 
             }
             
-            /*
             while consumedWidth < totalWidth {
                 if consumedWidth < totalWidth {
                     _universalPaddingRight += 1
@@ -414,7 +411,7 @@ import SwiftUI
                     consumedWidth += 1
                 }
             }
-            */
+            
         }
         
         universalPaddingLeft = _universalPaddingLeft
@@ -431,34 +428,6 @@ import SwiftUI
         
         checkBoxWidth = _checkBoxWidth
         checkBoxHeight = _checkBoxWidth
-        
-        print("aaa")
-        print("universalPaddingLeft = \(universalPaddingLeft)")
-        print("universalPaddingRight = \(universalPaddingRight)")
-        
-        print("nameLabelPaddingLeft = \(nameLabelPaddingLeft)")
-        print("nameLabelPaddingRight = \(nameLabelPaddingRight)")
-        
-        print("iconPaddingLeft = \(iconPaddingLeft)")
-        print("iconPaddingRight = \(iconPaddingRight)")
-        
-        print("checkBoxPaddingLeft = \(checkBoxPaddingLeft)")
-        print("checkBoxPaddingRight = \(checkBoxPaddingRight)")
-        
-        print("checkBoxWidth = \(checkBoxWidth)")
-        print("checkBoxHeight = \(checkBoxHeight)")
-        
-        let sum = universalPaddingLeft + universalPaddingRight +
-        nameLabelPaddingLeft + nameLabelPaddingRight +
-        iconPaddingLeft + iconPaddingRight +
-        checkBoxPaddingLeft + checkBoxPaddingRight +
-        nameLabelTextWidth + iconWidth + checkBoxWidth
-        
-        print("total: \(sum), LOW: \(layoutWidth), TW: \(totalWidth)")
-        
-        
-        
-        
     }
     
     func getTextIcon(layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {

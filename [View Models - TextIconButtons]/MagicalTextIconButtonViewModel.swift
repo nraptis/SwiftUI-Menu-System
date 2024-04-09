@@ -8,9 +8,6 @@
 import Foundation
 import SwiftUI
 
-// So, it's not until the LAYOUT (row) step that we will KNOW WHICH CONFIGURATION...
-// It has HAS HAS to be... That we DO NOT DECIDE which layout until... Until... THEN!!!
-
 @Observable class MagicalTextIconButtonViewModel: MagicalViewModel {
     
     var nameLabelPaddingLeft = 0
@@ -19,8 +16,8 @@ import SwiftUI
     var iconPaddingLeft = 0
     var iconPaddingRight = 0
     
-    var universalPaddingLeft = 8
-    var universalPaddingRight = 13
+    var universalPaddingLeft = 0
+    var universalPaddingRight = 0
     
     let textIconButtonConfiguration: ToolInterfaceElementTextIconButtonConfiguration
     init(jiggleViewModel: JiggleViewModel,
@@ -44,7 +41,6 @@ import SwiftUI
     }
     
     func getTextIcon(layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {
-        //let layoutSchemeFlavor = toolInterfaceViewModel.layoutStackingCategory.getLayoutSchemeFlavor(toolInterfaceElementType: toolNode.type)
         return ToolInterfaceImageLibrary.getTextIcon(numberOfLines: textIconButtonConfiguration.nameLabelNumberOfLines,
                                                      textIconImagePack: textIconButtonConfiguration.textIconImagePack,
                                                      orientation: orientation,
@@ -70,7 +66,6 @@ import SwiftUI
         case .stackedSmall:
             nameLabelTextWidth = textIconButtonConfiguration.nameLabelWidthStackedSmall
         }
-        
         
         let universalPaddingLeftSqueezed = TextIconButtonLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                         flavor: layoutSchemeFlavor,
@@ -143,82 +138,78 @@ import SwiftUI
                     break
                 }
                 
-                    
-                    var didModify = false
-                    consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                      textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                      textPaddingRight: _nameLabelPaddingRight,
-                                                                                      imageWidth: iconWidth,
-                                                                                      imagePaddingLeft: _iconPaddingLeft,
-                                                                                      imagePaddingRight: _iconPaddingRight)
-                    if _iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
-                        _iconPaddingLeft += 1
-                        didModify = true
-                    }
-                    
-                    
-                    consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                      textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                      textPaddingRight: _nameLabelPaddingRight,
-                                                                                      imageWidth: iconWidth,
-                                                                                      imagePaddingLeft: _iconPaddingLeft,
-                                                                                      imagePaddingRight: _iconPaddingRight)
-                    if _iconPaddingRight < iconPaddingRightStandard && consumedWidth < totalWidth {
-                        _iconPaddingRight += 1
-                        didModify = true
-                    }
-                    
-                    consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                      textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                      textPaddingRight: _nameLabelPaddingRight,
-                                                                                      imageWidth: iconWidth,
-                                                                                      imagePaddingLeft: _iconPaddingLeft,
-                                                                                      imagePaddingRight: _iconPaddingRight)
-                    if _nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
-                        _nameLabelPaddingLeft += 1
-                        didModify = true
-                    }
-                    
-                    consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                      textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                      textPaddingRight: _nameLabelPaddingRight,
-                                                                                      imageWidth: iconWidth,
-                                                                                      imagePaddingLeft: _iconPaddingLeft,
-                                                                                      imagePaddingRight: _iconPaddingRight)
-                    if _nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
-                        _nameLabelPaddingRight += 1
-                        didModify = true
-                    }
-                    
-                    consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                      textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                      textPaddingRight: _nameLabelPaddingRight,
-                                                                                      imageWidth: iconWidth,
-                                                                                      imagePaddingLeft: _iconPaddingLeft,
-                                                                                      imagePaddingRight: _iconPaddingRight)
-                    if _universalPaddingLeft < universalPaddingLeftStandard && consumedWidth < totalWidth {
-                        _universalPaddingLeft += 1
-                        consumedBaseWidth += 1
-                        didModify = true
-                    }
-                    
-                    //if neighborTypeRight != .textIconButton {
-                        consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                          textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                          textPaddingRight: _nameLabelPaddingRight,
-                                                                                          imageWidth: iconWidth,
-                                                                                          imagePaddingLeft: _iconPaddingLeft,
-                                                                                          imagePaddingRight: _iconPaddingRight)
-                        if _universalPaddingRight < universalPaddingRightStandard && consumedWidth < totalWidth {
-                            _universalPaddingRight += 1
-                            consumedBaseWidth += 1
-                            didModify = true
-                        }
-                    //}
-            
-                    if didModify == false {
-                        break
-                    }
+                var didModify = false
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
+                    _iconPaddingLeft += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _iconPaddingRight < iconPaddingRightStandard && consumedWidth < totalWidth {
+                    _iconPaddingRight += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
+                    _nameLabelPaddingLeft += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
+                    _nameLabelPaddingRight += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _universalPaddingLeft < universalPaddingLeftStandard && consumedWidth < totalWidth {
+                    _universalPaddingLeft += 1
+                    consumedBaseWidth += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _universalPaddingRight < universalPaddingRightStandard && consumedWidth < totalWidth {
+                    _universalPaddingRight += 1
+                    consumedBaseWidth += 1
+                    didModify = true
+                }
+                
+                if didModify == false {
+                    break
+                }
             }
             
             let consumedStackWidth = calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
@@ -233,10 +224,8 @@ import SwiftUI
                 
                 if consumedWidth >= totalWidth { break }
                 
-                //if neighborTypeRight != .textIconButton {
-                    _universalPaddingRight += 1
-                    consumedWidth += 1
-                //}
+                _universalPaddingRight += 1
+                consumedWidth += 1
                 
                 if consumedWidth >= totalWidth { break }
                 
@@ -324,5 +313,4 @@ import SwiftUI
         universalPaddingLeft = _universalPaddingLeft
         universalPaddingRight = _universalPaddingRight
     }
-    
 }

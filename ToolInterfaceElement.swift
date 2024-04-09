@@ -20,8 +20,13 @@ enum ToolInterfaceElementType: UInt16 {
 
 enum ToolInterfaceElement: UInt16 {
     
-    case sliderJiggleSpeedAmount
-    case sliderJigglePowerAmount
+    case sliderJiggleSpeed
+    case sliderJigglePower
+    case sliderTwistSpeed
+    case sliderTwistPower
+    case sliderBounceSpeed
+    case sliderBouncePower
+    case sliderZoom
     
     case buttonPhoneCollapseTop
     case buttonPhoneCollapseBottom
@@ -33,16 +38,24 @@ enum ToolInterfaceElement: UInt16 {
     case buttonRemovePoint
     case buttonUndo
     case buttonRedo
+    case buttonResetZoom
+    case buttonFlipHorizontal
+    case buttonFlipVertical
+    
     case buttonCloneJiggle
-    case buttonZoomReset
+    
     case buttonZoomSelected
     case buttonPointBreakTangent
+    case buttonRecordMovie
+    
     
     case segmentDocumentMode
     case segmentEditMode
     
-    case checkBoxStereoscopic3DEnabled
+    case checkBoxStereoscopicEnabled
     case checkBoxZoomEnabled
+    case checkBoxAudioEnabled
+    case checkBoxGyroscopeEnabled
     
     case spacer
     case divider
@@ -51,14 +64,29 @@ enum ToolInterfaceElement: UInt16 {
     
     var type: ToolInterfaceElementType {
         switch self {
-        case .checkBoxStereoscopic3DEnabled:
+        case .checkBoxStereoscopicEnabled:
             return .checkBox
         case .checkBoxZoomEnabled:
             return .checkBox
-        case .sliderJiggleSpeedAmount:
+        case .checkBoxAudioEnabled:
+            return .checkBox
+        case .checkBoxGyroscopeEnabled:
+            return .checkBox
+        case .sliderJiggleSpeed:
             return .slider
-        case .sliderJigglePowerAmount:
+        case .sliderJigglePower:
             return .slider
+        case .sliderTwistSpeed:
+            return .slider
+        case .sliderTwistPower:
+            return .slider
+        case .sliderZoom:
+            return .slider
+        case .sliderBounceSpeed:
+            return .slider
+        case .sliderBouncePower:
+            return .slider
+            
         case .buttonPhoneCollapseTop:
             return .iconButton
         case .buttonPhoneCollapseBottom:
@@ -67,6 +95,9 @@ enum ToolInterfaceElement: UInt16 {
             return .textIconButton
         case .buttonCreateJiggle:
             return .textIconButton
+        case .buttonCloneJiggle:
+            return .textIconButton
+            
         case .buttonCreateControlPoint:
             return .textIconButton
         case .buttonRemoveJiggle:
@@ -79,12 +110,17 @@ enum ToolInterfaceElement: UInt16 {
             return .textIconButton
         case .buttonRedo:
             return .textIconButton
-        case .buttonCloneJiggle:
-            return .textIconButton
-        case .buttonZoomReset:
+        case .buttonResetZoom:
             return .textIconButton
         case .buttonZoomSelected:
             return .textIconButton
+        case .buttonFlipHorizontal:
+            return .textIconButton
+        case .buttonFlipVertical:
+            return .textIconButton
+        case .buttonRecordMovie:
+            return .textIconButton
+            
         case .segmentDocumentMode:
             return .segment
         case .segmentEditMode:

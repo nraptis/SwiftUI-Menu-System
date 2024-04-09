@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct MagicalIconButtonButtonStyle: ButtonStyle {
     
     @Environment(MagicalIconButtonViewModel.self) var magicalIconButtonViewModel: MagicalIconButtonViewModel
@@ -17,7 +15,6 @@ struct MagicalIconButtonButtonStyle: ButtonStyle {
     let universalPaddingTop: Int
     let universalPaddingBottom: Int
     let layoutWidth: Int
-    
     func makeBody(configuration: Configuration) -> some View {
         return ZStack {
             bodyContent(isPressed: configuration.isPressed)
@@ -37,5 +34,4 @@ struct MagicalIconButtonButtonStyle: ButtonStyle {
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalIconButtonViewModel.layoutHeight))
     }
-    
 }

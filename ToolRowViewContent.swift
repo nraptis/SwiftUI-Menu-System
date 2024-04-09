@@ -44,59 +44,29 @@ struct ToolRowViewContent: View {
                 .environment((toolNode.magicalViewModel as! MagicalDividerSpacerDividerViewModel))
         }
         
-        if toolNode.element == .sliderJiggleSpeedAmount {
+        if toolNode.element.type == .slider {
             MagicalSlider()
                 .environment((toolNode.magicalViewModel as! MagicalSliderViewModel))
         }
         
-        if toolNode.element == .sliderJigglePowerAmount {
-            MagicalSlider()
-                .environment((toolNode.magicalViewModel as! MagicalSliderViewModel))
-        }
-        
-        if toolNode.element == .buttonMainMenu {
+        if toolNode.element.type == .textIconButton {
             MagicalTextIconButton()
                 .environment((toolNode.magicalViewModel as! MagicalTextIconButtonViewModel))
         }
         
-        if toolNode.element == .buttonPointBreakTangent {
-            MagicalTextIconButton()
-                .environment((toolNode.magicalViewModel as! MagicalTextIconButtonViewModel))
-        }
-        
-        if toolNode.element == .buttonZoomReset {
-            MagicalTextIconButton()
-                .environment((toolNode.magicalViewModel as! MagicalTextIconButtonViewModel))
-        }
-        
-        if toolNode.element == .segmentDocumentMode {
-            MagicalSegmentedPickerPrimary()
-                .environment((toolNode.magicalViewModel as! MagicalSegmentedPickerViewModel))
-        }
-        
-        if toolNode.element == .segmentEditMode {
-            MagicalSegmentedPickerPrimary()
-                .environment((toolNode.magicalViewModel as! MagicalSegmentedPickerViewModel))
-        }
-        
-        if toolNode.element == .checkBoxStereoscopic3DEnabled {
-            MagicalCheckBox()
-                .environment((toolNode.magicalViewModel as! MagicalCheckBoxViewModel))
-        }
-        
-        if toolNode.element == .checkBoxZoomEnabled {
-            MagicalCheckBox()
-                .environment((toolNode.magicalViewModel as! MagicalCheckBoxViewModel))
-        }
-        
-        if toolNode.element == .buttonPhoneCollapseTop {
+        if toolNode.element.type == .iconButton {
             MagicalIconButton()
                 .environment((toolNode.magicalViewModel as! MagicalIconButtonViewModel))
         }
         
-        if toolNode.element == .buttonPhoneCollapseBottom {
-            MagicalIconButton()
-                .environment((toolNode.magicalViewModel as! MagicalIconButtonViewModel))
+        if toolNode.element.type == .checkBox {
+            MagicalCheckBox()
+                .environment((toolNode.magicalViewModel as! MagicalCheckBoxViewModel))
+        }
+        
+        if toolNode.element.type == .segment {
+            MagicalSegmentedPickerPrimary()
+                .environment((toolNode.magicalViewModel as! MagicalSegmentedPickerViewModel))
         }
     }
 }

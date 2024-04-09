@@ -11,19 +11,42 @@ struct LabelBox: View {
     
     let line1: String?
     let line2: String?
-    
+    let numberOfLines: Int
     let width: Int
     let height: Int
-    
     let paddingLeft: Int
     let paddingRight: Int
     let paddingBottom: Int
-    
     let lineHeight: Int
-    
     let spacingVertical: Int
-    
     let font: UIFont
+    init(line1: String?,
+         line2: String?,
+         numberOfLines: Int,
+         width: Int,
+         paddingLeft: Int,
+         paddingRight: Int,
+         paddingBottom: Int,
+         lineHeight: Int,
+         spacingVertical: Int,
+         font: UIFont) {
+        self.line1 = line1
+        self.line2 = line2
+        self.numberOfLines = numberOfLines
+        self.width = width
+        self.paddingLeft = paddingLeft
+        self.paddingRight = paddingRight
+        self.paddingBottom = paddingBottom
+        self.lineHeight = lineHeight
+        self.spacingVertical = spacingVertical
+        self.font = font
+        
+        var _height = lineHeight + paddingBottom
+        if numberOfLines == 2 {
+            _height += (lineHeight + spacingVertical)
+        }
+        self.height = _height
+    }
     
     var body: some View {
         return ZStack {
@@ -75,7 +98,9 @@ struct LabelBox: View {
 #if INTERFACE_HINTS
                     .overlay(Rectangle().stroke().foregroundStyle(Color(red: 0.87, green: 0.95, blue: 0.45)))
 #endif
-                
+#if LABEL_HINTS
+                    .overlay(Rectangle().stroke(lineWidth: 2.0).foregroundColor(Color.white.opacity(0.5)).zIndex(3097.0))
+#endif
                 
 #if INTERFACE_HINTS
                 Spacer(minLength: 0.0)
@@ -125,6 +150,9 @@ struct LabelBox: View {
                     .foregroundColor(.white)
 #if INTERFACE_HINTS
                     .overlay(Rectangle().stroke().foregroundStyle(Color(red: 0.87, green: 0.95, blue: 0.45)))
+#endif
+#if LABEL_HINTS
+                    .overlay(Rectangle().stroke(lineWidth: 2.0).foregroundColor(Color.white.opacity(0.5)).zIndex(3097.0))
 #endif
                 
 #if INTERFACE_HINTS
@@ -181,6 +209,9 @@ struct LabelBox: View {
 #if INTERFACE_HINTS
                     .overlay(Rectangle().stroke().foregroundStyle(Color(red: 0.87, green: 0.95, blue: 0.45)))
 #endif
+#if LABEL_HINTS
+                    .overlay(Rectangle().stroke(lineWidth: 2.0).foregroundColor(Color.white.opacity(0.5)).zIndex(3097.0))
+#endif
                 
                 
 #if INTERFACE_HINTS
@@ -216,5 +247,4 @@ struct LabelBox: View {
         }
         .frame(width: CGFloat(width), height: CGFloat(height))
     }
-    
 }

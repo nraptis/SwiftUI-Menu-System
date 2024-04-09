@@ -70,7 +70,6 @@ enum TextIconImageSet {
 
 struct TextIconImagePack {
     
-    //let image
     init(name: String,
          widthPhoneOneLineLandscape: Int,
          heightPhoneOneLineLandscape: Int,
@@ -166,7 +165,6 @@ struct TextIconImagePack {
                                                width: widthPhoneTwoLineLandscape, height: heightPhoneTwoLineLandscape,
                                                configuration: .twoLine))
         }
-        print(textIconImageSet)
     }
     
     let widthPhoneOneLineLandscape: Int

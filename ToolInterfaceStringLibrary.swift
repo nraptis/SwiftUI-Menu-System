@@ -9,9 +9,8 @@ import Foundation
 import UIKit
 
 struct ToolInterfaceStringLibrary {
-    
     static func stringOrNull(_ string: String?) -> String? {
-        if let string = string {
+        if let string = string?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if string.count <= 0 {
                 return nil
             }
@@ -39,6 +38,47 @@ struct ToolInterfaceStringLibrary {
         stringOrNull(String(localized: "jiggle_power_line_2", table: "ToolInterface"))
     }
     
+    static func interfaceTextZoomLine1() -> String? {
+        stringOrNull(String(localized: "zoom_amount_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextZoomLine2() -> String? {
+        stringOrNull(String(localized: "zoom_amount_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextTwistSpeedLine1() -> String? {
+        stringOrNull(String(localized: "twist_speed_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextTwistSpeedLine2() -> String? {
+        stringOrNull(String(localized: "twist_speed_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextTwistPowerLine1() -> String? {
+        stringOrNull(String(localized: "twist_power_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextTwistPowerLine2() -> String? {
+        stringOrNull(String(localized: "twist_power_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextBounceSpeedLine1() -> String? {
+        stringOrNull(String(localized: "bounce_speed_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextBounceSpeedLine2() -> String? {
+        stringOrNull(String(localized: "bounce_speed_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextBouncePowerLine1() -> String? {
+        stringOrNull(String(localized: "bounce_power_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextBouncePowerLine2() -> String? {
+        stringOrNull(String(localized: "bounce_power_line_2", table: "ToolInterface"))
+    }
+    
+    
     static func interfaceTextMainMenuLine1() -> String? {
         stringOrNull(String(localized: "main_menu_line_1", table: "ToolInterface"))
     }
@@ -47,22 +87,31 @@ struct ToolInterfaceStringLibrary {
         stringOrNull(String(localized: "main_menu_line_2", table: "ToolInterface"))
     }
     
+    
     static func interfaceTextCreateJiggleLine1() -> String? {
-        String("CreateCreate")
+        stringOrNull(String(localized: "create_jiggle_line_1", table: "ToolInterface"))
     }
     
     static func interfaceTextCreateJiggleLine2() -> String? {
-        String("Jiggle")
+        stringOrNull(String(localized: "create_jiggle_line_2", table: "ToolInterface"))
     }
     
-    
-    static func interfaceTextRemoveJiggleLine1() -> String {
-        String("Remove")
+    static func interfaceTextRemoveJiggleLine1() -> String? {
+        stringOrNull(String(localized: "remove_jiggle_line_1", table: "ToolInterface"))
     }
     
-    static func interfaceTextRemoveJiggleLine2() -> String {
-        String("Jiggle")
+    static func interfaceTextRemoveJiggleLine2() -> String? {
+        stringOrNull(String(localized: "remove_jiggle_line_2", table: "ToolInterface"))
     }
+    
+    static func interfaceTextCloneJiggleLine1() -> String? {
+        stringOrNull(String(localized: "clone_jiggle_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextCloneJiggleLine2() -> String? {
+        stringOrNull(String(localized: "clone_jiggle_line_2", table: "ToolInterface"))
+    }
+    
     
     static func interfaceTextRemovePointLine1() -> String? {
         String("Remove")
@@ -81,39 +130,52 @@ struct ToolInterfaceStringLibrary {
     }
     
     static func interfaceTextUndoLine1() -> String? {
-        String("Undo")
+        stringOrNull(String(localized: "undo_line_1", table: "ToolInterface"))
     }
     
     static func interfaceTextUndoLine2() -> String? {
-        nil
+        stringOrNull(String(localized: "undo_line_2", table: "ToolInterface"))
     }
     
     static func interfaceTextRedoLine1() -> String? {
-        String("Redo")
+        stringOrNull(String(localized: "redo_line_1", table: "ToolInterface"))
     }
     
     static func interfaceTextRedoLine2() -> String? {
-        String("Redo Redo")
+        stringOrNull(String(localized: "redo_line_2", table: "ToolInterface"))
     }
     
-    
-    static func interfaceTextCloneJiggleLine1() -> String? {
-        String("Clone")
+    static func interfaceTextFlipVerticalLine1() -> String? {
+        stringOrNull(String(localized: "flip_vertical_line_1", table: "ToolInterface"))
     }
     
-    static func interfaceTextCloneJiggleLine2() -> String? {
-        String("Jiggle")
+    static func interfaceTextFlipVerticalLine2() -> String? {
+        stringOrNull(String(localized: "flip_vertical_line_2", table: "ToolInterface"))
     }
     
-    
-    static func interfaceTextZoomResetLine1() -> String? {
-        String("Zoom Reset")
+    static func interfaceTextFlipHorizontalLine1() -> String? {
+        stringOrNull(String(localized: "flip_horizontal_line_1", table: "ToolInterface"))
     }
     
-    static func interfaceTextZoomResetLine2() -> String? {
-        String("Reset")
+    static func interfaceTextFlipHorizontalLine2() -> String? {
+        stringOrNull(String(localized: "flip_horizontal_line_2", table: "ToolInterface"))
     }
     
+    static func interfaceTextRecordMovieLine1() -> String? {
+        stringOrNull(String(localized: "record_movie_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextRecordMovieLine2() -> String? {
+        stringOrNull(String(localized: "record_movie_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextResetZoomLine1() -> String? {
+        stringOrNull(String(localized: "reset_zoom_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextResetZoomLine2() -> String? {
+        stringOrNull(String(localized: "reset_zoom_line_2", table: "ToolInterface"))
+    }
     
     static func interfaceTextZoomSelectedLine1() -> String? {
         String("Zoom Selected")
@@ -185,11 +247,11 @@ struct ToolInterfaceStringLibrary {
     }
     
     
-    static func interfaceTextStereoscopic3DEnabledLine1() -> String? {
+    static func interfaceTextStereoscopicEnabledLine1() -> String? {
         stringOrNull(String(localized: "stereoscopic_line_1", table: "ToolInterface"))
     }
     
-    static func interfaceTextStereoscopic3DEnabledLine2() -> String? {
+    static func interfaceTextStereoscopicEnabledLine2() -> String? {
         stringOrNull(String(localized: "stereoscopic_line_2", table: "ToolInterface"))
     }
     
@@ -200,6 +262,26 @@ struct ToolInterfaceStringLibrary {
     static func interfaceTextZoomEnabledLine2() -> String? {
         stringOrNull(String(localized: "zoom_enabled_line_2", table: "ToolInterface"))
     }
+    
+    static func interfaceTextAudioEnabledLine1() -> String? {
+        stringOrNull(String(localized: "audio_enabled_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextAudioEnabledLine2() -> String? {
+        stringOrNull(String(localized: "audio_enabled_line_2", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextGyroscopeEnabledLine1() -> String? {
+        stringOrNull(String(localized: "gyroscope_enabled_line_1", table: "ToolInterface"))
+    }
+    
+    static func interfaceTextGyroscopeEnabledLine2() -> String? {
+        stringOrNull(String(localized: "gyroscope_enabled_line_2", table: "ToolInterface"))
+    }
+    
+    
+    
+    
     
     
 }

@@ -18,11 +18,8 @@ struct MagicalIconButtonContent: View {
     let layoutWidth: Int
     
     var body: some View {
-        
-        //let configuration = magicalIconButtonViewModel.iconButtonConfiguration
         let textIcon = magicalIconButtonViewModel.getTextIcon()
-
-        let iconWidth = textIcon.iconWidth
+        let iconWidth = 52
         let iconHeight: Int
         if Device.isPad {
             iconHeight = 44
@@ -41,6 +38,8 @@ struct MagicalIconButtonContent: View {
                                                                 flavor: .long,
                                                                 numberOfLines: 1)
         
+        let contentHeight = magicalIconButtonViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
+        
         return VStack(spacing: 0.0) {
             
 #if INTERFACE_HINTS
@@ -52,13 +51,15 @@ struct MagicalIconButtonContent: View {
                 .frame(height: CGFloat(universalPaddingTop))
 #endif
             
-            
-            IconBox(icon: textIcon,
-                    iconWidth: iconWidth,
-                    iconHeight: iconHeight,
-                    iconPaddingLeft: iconPaddingLeft,
-                    iconPaddingRight: iconPaddingRight,
-                    iconPaddingTop: iconPaddingTop)
+            ZStack {
+                IconBox(icon: textIcon,
+                        iconWidth: iconWidth,
+                        iconHeight: iconHeight,
+                        iconPaddingLeft: iconPaddingLeft,
+                        iconPaddingRight: iconPaddingRight,
+                        iconPaddingTop: iconPaddingTop)
+            }
+            .frame(height: CGFloat(contentHeight))
             
 #if INTERFACE_HINTS
             Spacer(minLength: 0.0)
@@ -80,7 +81,6 @@ struct MagicalIconButtonContent: View {
         }
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalIconButtonViewModel.layoutHeight))
-        .background(RoundedRectangle(cornerRadius: 10.0).foregroundStyle(isPressed ? .blue : .red))
     }
     
 }

@@ -57,7 +57,6 @@ class PhoneInterfaceMenuTopBackingView: UIView {
                                constant: 0.0)
         ])
         
-        
         var layoutY = CGFloat(0.0)
         let spacingTop = ToolInterfaceTheme.getTopMenuSpacingTop(orientation: orientation)
         let spacingBottom = ToolInterfaceTheme.getTopMenuSpacingBottom(orientation: orientation)
@@ -160,13 +159,9 @@ class PhoneInterfaceMenuTopBackingView: UIView {
             rowIndex += 1
         }
         
-        
-        
         let topSpacerView = UIView(frame: .zero)
         topSpacerView.translatesAutoresizingMaskIntoConstraints = false
         topSpacerView.backgroundColor = UIColor.yellow
-        
-        
         
         topSpacerView.addConstraints([
             NSLayoutConstraint(item: topSpacerView,
@@ -202,7 +197,6 @@ class PhoneInterfaceMenuTopBackingView: UIView {
                                constant: 0.0)
         ])
     }
-
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

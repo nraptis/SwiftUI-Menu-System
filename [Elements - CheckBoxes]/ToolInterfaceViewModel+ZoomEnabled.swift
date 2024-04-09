@@ -21,7 +21,7 @@ extension ToolInterfaceViewModel {
                                                                        checkBoxConfiguration: configuration)
         
         let result = ToolNode(id: getToolNodeID(),
-                              element: .checkBoxStereoscopic3DEnabled,
+                              element: .checkBoxZoomEnabled,
                               flex: flex,
                               toolInterfaceViewModel: self,
                               magicalViewModel: viewModelZoomEnabled,

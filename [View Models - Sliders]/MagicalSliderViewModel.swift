@@ -41,8 +41,6 @@ import SwiftUI
         super.init(jiggleViewModel: jiggleViewModel, toolInterfaceViewModel: toolInterfaceViewModel)
     }
     
-    
-    
     func handleSlideStarted(percent: CGFloat) {
         self.percent = CGFloat(percent)
     }
@@ -87,145 +85,6 @@ import SwiftUI
                                                      orientation: orientation,
                                                      layoutSchemeFlavor: layoutSchemeFlavor)
     }
-    
-    /*
-    func computeLayoutSchemeFlavor(width: Int,
-                                   height: Int,
-                                   safeAreaLeft: Int,
-                                   safeAreaRight: Int) -> LayoutSchemeFlavor {
-        let universalPaddingLeftStandardLong = SliderLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                    flavor: .long,
-                                                                                    squeeze: .standard,
-                                                                                    neighborType: neighborTypeLeft)
-        let universalPaddingRightStandardLong = SliderLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                      flavor: .long,
-                                                                                      squeeze: .standard,
-                                                                                      neighborType: neighborTypeRight)
-        let universalPaddingLeftStandardStacked = SliderLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                       flavor: .stackedLarge,
-                                                                                       squeeze: .standard,
-                                                                                       neighborType: neighborTypeLeft)
-        let universalPaddingRightStandardStacked = SliderLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                         flavor: .stackedLarge,
-                                                                                         squeeze: .standard,
-                                                                                         neighborType: neighborTypeRight)
-        let iconPaddingLeftStandardLong = SliderLayout.getIconPaddingLeft(orientation: orientation,
-                                                                          flavor: .long,
-                                                                          squeeze: .standard)
-        let iconPaddingRightStandardLong = SliderLayout.getIconPaddingRight(orientation: orientation,
-                                                                            flavor: .long,
-                                                                            squeeze: .standard)
-        let nameLabelPaddingLeftStandardLong = SliderLayout.getNameLabelPaddingLeft(orientation: orientation,
-                                                                                    flavor: .long,
-                                                                                    squeeze: .standard)
-        let nameLabelPaddingRightStandardLong = SliderLayout.getNameLabelPaddingRight(orientation: orientation,
-                                                                                      flavor: .long,
-                                                                                      squeeze: .standard)
-        let valueLabelPaddingLeftStandardLong = SliderLayout.getValueLabelPaddingLeft(orientation: orientation,
-                                                                                      flavor: .long,
-                                                                                      squeeze: .standard)
-        let valueLabelPaddingRightStandardLong = SliderLayout.getValueLabelPaddingRight(orientation: orientation,
-                                                                                        flavor: .long,
-                                                                                        squeeze: .standard)
-        let iconPaddingLeftStandardStacked = SliderLayout.getIconPaddingLeft(orientation: orientation,
-                                                                             flavor: .stackedLarge,
-                                                                             squeeze: .standard)
-        let iconPaddingRightStandardStacked = SliderLayout.getIconPaddingRight(orientation: orientation,
-                                                                               flavor: .stackedLarge,
-                                                                               squeeze: .standard)
-        let nameLabelPaddingLeftStandardStacked = SliderLayout.getNameLabelPaddingLeft(orientation: orientation,
-                                                                                       flavor: .stackedLarge,
-                                                                                       squeeze: .standard)
-        let nameLabelPaddingRightStandardStacked = SliderLayout.getNameLabelPaddingRight(orientation: orientation,
-                                                                                         flavor: .stackedLarge,
-                                                                                         squeeze: .standard)
-        let valueLabelPaddingLeftStandardStacked = SliderLayout.getValueLabelPaddingLeft(orientation: orientation,
-                                                                                         flavor: .stackedLarge,
-                                                                                         squeeze: .standard)
-        let valueLabelPaddingRightStandardStacked = SliderLayout.getValueLabelPaddingRight(orientation: orientation,
-                                                                                           flavor: .stackedLarge,
-                                                                                           squeeze: .standard)
-        
-        let nameLabelWidthLong = sliderConfiguration.layoutNameLabelWidthLong
-        let valueLabelWidthLong = sliderConfiguration.valueLabelWidthLong
-        let nameLabelWidthStackedLarge = sliderConfiguration.layoutNameLabelWidthStackedLarge
-        let valueLabelWidthStackedLarge = sliderConfiguration.valueLabelWidthStackedLarge
-        let nameLabelWidthStackedMedium = sliderConfiguration.layoutNameLabelWidthStackedMedium
-        let valueLabelWidthStackedMedium = sliderConfiguration.valueLabelWidthStackedMedium
-        let nameLabelWidthStackedSmall = sliderConfiguration.layoutNameLabelWidthStackedSmall
-        let valueLabelWidthStackedSmall = sliderConfiguration.valueLabelWidthStackedSmall
-        
-        let nameLabelSpaceLong = nameLabelWidthLong + nameLabelPaddingLeftStandardLong + nameLabelPaddingRightStandardLong
-        let nameLabelSpaceStackedLarge = nameLabelWidthStackedLarge + nameLabelPaddingLeftStandardStacked + nameLabelPaddingRightStandardStacked
-        let nameLabelSpaceStackedMedium = nameLabelWidthStackedMedium + nameLabelPaddingLeftStandardStacked + nameLabelPaddingRightStandardStacked
-        let nameLabelSpaceStackedSmall = nameLabelWidthStackedSmall + nameLabelPaddingLeftStandardStacked + nameLabelPaddingRightStandardStacked
-        
-        let valueLabelSpaceLong = valueLabelWidthLong + valueLabelPaddingLeftStandardLong + valueLabelPaddingRightStandardLong
-        let valueLabelSpaceStackedLarge = valueLabelWidthStackedLarge + valueLabelPaddingLeftStandardStacked + valueLabelPaddingRightStandardStacked
-        let valueLabelSpaceStackedMedium = valueLabelWidthStackedMedium + valueLabelPaddingLeftStandardStacked + valueLabelPaddingRightStandardStacked
-        let valueLabelSpaceStackedSmall = valueLabelWidthStackedSmall + valueLabelPaddingLeftStandardStacked + valueLabelPaddingRightStandardStacked
-        
-        let iconWidthLong = sliderConfiguration.iconWidthLong + iconPaddingLeftStandardLong + iconPaddingRightStandardLong
-        let iconWidthStacked = sliderConfiguration.iconWidthStacked + iconPaddingLeftStandardStacked + iconPaddingRightStandardStacked
-        
-        let textAndIconSpaceLong = nameLabelSpaceLong + iconWidthLong
-        let textAndIconSpaceStackedLarge = max(nameLabelSpaceStackedLarge, iconWidthStacked)
-        let textAndIconSpaceStackedMedium = max(nameLabelSpaceStackedMedium, iconWidthStacked)
-        let textAndIconSpaceStackedSmall = max(nameLabelSpaceStackedSmall, iconWidthStacked)
-        
-        let preferredMinimumBarWidth = SliderLayout.getPreferredMinimumBarWidth(orientation: orientation,
-                                                                                widthCategory: sliderConfiguration.widthCategory)
-        
-        var proposedLongWidth = 0
-        proposedLongWidth += universalPaddingLeftStandardLong
-        proposedLongWidth += textAndIconSpaceLong
-        proposedLongWidth += preferredMinimumBarWidth
-        proposedLongWidth += valueLabelSpaceLong
-        proposedLongWidth += universalPaddingRightStandardLong
-        
-        var proposedStackedLargeWidth = 0
-        proposedStackedLargeWidth += universalPaddingLeftStandardStacked
-        proposedStackedLargeWidth += textAndIconSpaceStackedLarge
-        proposedStackedLargeWidth += preferredMinimumBarWidth
-        proposedStackedLargeWidth += valueLabelSpaceStackedLarge
-        proposedStackedLargeWidth += universalPaddingRightStandardStacked
-        
-        var proposedStackedMediumWidth = 0
-        proposedStackedMediumWidth += universalPaddingLeftStandardStacked
-        proposedStackedMediumWidth += textAndIconSpaceStackedMedium
-        proposedStackedMediumWidth += preferredMinimumBarWidth
-        proposedStackedMediumWidth += valueLabelSpaceStackedMedium
-        proposedStackedMediumWidth += universalPaddingRightStandardStacked
-        
-        var proposedStackedSmallWidth = 0
-        proposedStackedSmallWidth += universalPaddingLeftStandardStacked
-        proposedStackedSmallWidth += textAndIconSpaceStackedSmall
-        proposedStackedSmallWidth += preferredMinimumBarWidth
-        proposedStackedSmallWidth += valueLabelSpaceStackedSmall
-        proposedStackedSmallWidth += universalPaddingRightStandardStacked
-        
-        let totalWidth = width
-        let availableSpace: Int
-        switch sliderConfiguration.widthCategory {
-        case .fullWidth:
-            availableSpace = totalWidth
-        case .halfWidthLeft:
-            availableSpace = totalWidth / 2
-        case .halfWidthRight:
-            availableSpace = totalWidth - (totalWidth / 2)
-        }
-        
-        if availableSpace >= proposedLongWidth {
-            return .long
-        } else if availableSpace >= proposedStackedLargeWidth {
-            return .stackedLarge
-        } else if availableSpace >= proposedStackedMediumWidth {
-            return .stackedMedium
-        } else {
-            return .stackedSmall
-        }
-    }
-    */
     
     override func refreshLayoutFrame() {
         
@@ -561,10 +420,7 @@ import SwiftUI
             }
         }
         
-        
         howMuchSpaceWeAreUsingSoFar = 0
-        
-        
         
         howMuchSpaceWeAreUsingSoFar += _universalPaddingLeft
         howMuchSpaceWeAreUsingSoFar += _universalPaddingRight
@@ -583,9 +439,8 @@ import SwiftUI
         
         howMuchSpaceWeAreUsingSoFar += _sliderBoxWidth
         
-        while howMuchSpaceWeAreUsingSoFar < totalWidth {
-            howMuchSpaceWeAreUsingSoFar += 1
-            _sliderBoxWidth += 1
+        if howMuchSpaceWeAreUsingSoFar < totalWidth {
+            _sliderBoxWidth += (totalWidth - howMuchSpaceWeAreUsingSoFar)
         }
         
         nameLabelPaddingLeft = _nameLabelPaddingLeft
@@ -602,10 +457,7 @@ import SwiftUI
         universalPaddingLeft = _universalPaddingLeft
         universalPaddingRight = _universalPaddingRight
         
-        
         let thumbCircleSize = SliderLayout.getThumbCircleSize(orientation: orientation)
         thumbMaximumX = CGFloat(sliderBoxWidth - thumbCircleSize)
-        
-        
     }
 }

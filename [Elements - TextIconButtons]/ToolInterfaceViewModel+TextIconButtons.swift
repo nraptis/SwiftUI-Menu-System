@@ -14,10 +14,7 @@ extension ToolInterfaceViewModel {
                                       neighborTypeLeft: ToolInterfaceElementType?,
                                       neighborTypeRight: ToolInterfaceElementType?) -> ToolInterfaceElementFlex {
         
-        let line1 = configuration.nameLabelLine1
-        let line2 = configuration.nameLabelLine2
         let textIconImagePack = configuration.textIconImagePack
-        
         
         let minimumWidthLong = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthLong,
                                                                                                      nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,

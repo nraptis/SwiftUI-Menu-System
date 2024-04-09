@@ -27,9 +27,7 @@ struct MagicalTextIconButtonButton: View {
     
     func bodyContent() -> some View {
         Button {
-            
             magicalTextIconButtonViewModel.handleClicked()
-            
         } label: {
             HStack(spacing: 0.0) {
                 

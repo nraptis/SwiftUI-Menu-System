@@ -21,7 +21,7 @@ extension ToolInterfaceViewModel {
                                                                      sliderConfiguration: configuration)
         
         let result = ToolNode(id: getToolNodeID(),
-                              element: .sliderJiggleSpeedAmount,
+                              element: .sliderJiggleSpeed,
                               flex: flex,
                               toolInterfaceViewModel: self,
                               magicalViewModel: viewModelJiggleSpeed,

@@ -30,17 +30,11 @@ struct CheckBoxLayout: LayoutScheme {
     }
     
     static func getUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 3 : 2
     }
     
     static func getUniversalPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 3 : 2
     }
     
     static func getNameLabelPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
@@ -64,15 +58,12 @@ struct CheckBoxLayout: LayoutScheme {
     }
     
     static func getNameLabelPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
+        
+        if Device.isPad {
             return 2
-        } else {
-            return 4
         }
-    }
-    
-    static func getNameLabelVerticalSpacing(orientation: Orientation, flavor: LayoutSchemeFlavor) -> Int {
-        0
+        
+        return 0
     }
     
     static func getIconPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {

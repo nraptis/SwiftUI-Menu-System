@@ -83,17 +83,11 @@ struct SegmentedPickerLayout: LayoutScheme {
     }
     
     static func getUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 3 : 2
     }
     
     static func getUniversalPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if Device.isPad {
-            return 4
-        }
-        return 2
+        Device.isPad ? 3 : 2
     }
     
     static func getButtonUniversalPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
@@ -153,25 +147,11 @@ struct SegmentedPickerLayout: LayoutScheme {
     }
     
     static func getNameLabelPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
-            return 2
-        } else {
-            return 4
-        }
-    }
-    
-    static func getNameLabelVerticalSpacing(orientation: Orientation, flavor: LayoutSchemeFlavor) -> Int {
-        if Device.isPhone {
-            if flavor.isStacked {
-                return -2
-            }
-        }
         if Device.isPad {
-            if flavor.isStacked {
-                return -3
-            }
+            return 2
         }
-        return -1
+        
+        return 0
     }
     
     static func getIconPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {

@@ -7,15 +7,11 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct MagicalIconButton: View {
     
     @Environment(MagicalIconButtonViewModel.self) var magicalIconButtonViewModel: MagicalIconButtonViewModel
-    
     var body: some View {
-        
-        return GeometryReader { _ in
+        return ZStack {
             bodyContent()
         }
         .frame(width: CGFloat(magicalIconButtonViewModel.layoutWidth),
@@ -34,10 +30,7 @@ struct MagicalIconButton: View {
     }
     
     func bodyContent() -> some View {
-        
         let orientation = magicalIconButtonViewModel.orientation
-        //let configuration = magicalIconButtonViewModel.iconButtonConfiguration
-        
         let universalPaddingLeft = magicalIconButtonViewModel.universalPaddingLeft
         let universalPaddingRight = magicalIconButtonViewModel.universalPaddingRight
         
@@ -69,7 +62,6 @@ struct MagicalIconButton: View {
             }
             .frame(width: CGFloat(layoutWidth),
                    height: CGFloat(magicalIconButtonViewModel.layoutHeight))
-            
             
 #if INTERFACE_HINTS
             Spacer()
