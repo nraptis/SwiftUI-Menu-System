@@ -8,28 +8,89 @@
 import Foundation
 
 struct IconButtonLayout: LayoutScheme {
-    static func getUniversalPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze, neighborType: ToolInterfaceElementType?) -> Int {
+    static func getUniversalPaddingLeft(orientation: Orientation,
+                                        flavor: LayoutSchemeFlavor,
+                                        squeeze: LayoutSchemeSqueeze,
+                                        neighborTypeLeft: ToolInterfaceElementType?,
+                                        neighborTypeRight: ToolInterfaceElementType?) -> Int {
         if Device.isPad {
-            switch squeeze {
-            case .squeezed:
-                return 6
-            case .standard:
-                return 10
+            if neighborTypeLeft == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 12
+                }
+            }
+        } else {
+            if neighborTypeLeft == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 8
+                }
             }
         }
         return 0
     }
     
-    static func getUniversalPaddingRight(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze, neighborType: ToolInterfaceElementType?) -> Int {
+    static func getUniversalPaddingRight(orientation: Orientation,
+                                         flavor: LayoutSchemeFlavor,
+                                         squeeze: LayoutSchemeSqueeze,
+                                         neighborTypeLeft: ToolInterfaceElementType?,
+                                         neighborTypeRight: ToolInterfaceElementType?) -> Int {
         if Device.isPad {
-            switch squeeze {
-            case .squeezed:
-                return 6
-            case .standard:
-                return 10
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 3
+                case .standard:
+                    return 12
+                }
+            }
+            if neighborTypeRight == .textIconButton || neighborTypeRight == .iconButton {
+                let separatorWidth = getSeparatorWidth(orientation: orientation)
+                switch squeeze {
+                case .squeezed:
+                    return separatorWidth + (3 + 3)
+                case .standard:
+                    return separatorWidth + (6 + 6)
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 3
+                case .standard:
+                    return 6
+                }
+            }
+        } else {
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 8
+                }
+            }
+            if neighborTypeRight == .textIconButton || neighborTypeRight == .iconButton {
+                let separatorWidth = getSeparatorWidth(orientation: orientation)
+                switch squeeze {
+                case .squeezed:
+                    return separatorWidth + (2 + 2)
+                case .standard:
+                    return separatorWidth + (4 + 4)
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 4
+                }
             }
         }
-        return 0
     }
     
     static func getUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
@@ -70,32 +131,41 @@ struct IconButtonLayout: LayoutScheme {
         0
     }
     
-    static func getIconWidthWithUniversalPadding(textIconImagePack: TextIconImagePack,
+    static func getIconWidthWithUniversalPadding(iconPack: TextIconPackable,
                                                  orientation: Orientation,
                                                  squeeze: LayoutSchemeSqueeze,
                                                  neighborTypeLeft: ToolInterfaceElementType?,
                                                  neighborTypeRight: ToolInterfaceElementType?) -> Int {
-        let univarsalPaddingLeft = getUniversalPaddingLeft(orientation: orientation,
+        let universalPaddingLeft = getUniversalPaddingLeft(orientation: orientation,
                                                            flavor: .long,
                                                            squeeze: squeeze,
-                                                           neighborType: neighborTypeLeft)
-        let univarsalPaddingRight = getUniversalPaddingRight(orientation: orientation,
+                                                           neighborTypeLeft: neighborTypeLeft,
+                                                           neighborTypeRight: neighborTypeRight)
+        let universalPaddingRight = getUniversalPaddingRight(orientation: orientation,
                                                              flavor: .long,
                                                              squeeze: squeeze,
-                                                             neighborType: neighborTypeRight)
-        var result = getIconWidth(textIconImagePack: textIconImagePack,
+                                                             neighborTypeLeft: neighborTypeLeft,
+                                                             neighborTypeRight: neighborTypeRight)
+        var result = getIconWidth(iconPack: iconPack,
                                   orientation: orientation,
                                   squeeze: squeeze)
-        result += univarsalPaddingLeft
-        result += univarsalPaddingRight
+        result += universalPaddingLeft
+        result += universalPaddingRight
         return result
     }
     
-    static func getIconWidth(textIconImagePack: TextIconImagePack,
+    static func getIconWidth(iconPack: TextIconPackable,
                              orientation: Orientation,
                              squeeze: LayoutSchemeSqueeze) -> Int {
-        let icon = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: 1,
-                                                         textIconImagePack: textIconImagePack,
+        
+        return 80
+        
+        /*
+        let icon = iconPack.getTextIcon(orientation: orientation,
+                                        layoutSchemeFlavor: .long, numberOfLines: <#T##Int#>)
+        
+        ToolInterfaceImageLibrary.getTextIcon(numberOfLines: 1,
+                                                         iconPack: iconPack,
                                                          orientation: orientation,
                                                          layoutSchemeFlavor: .long)
         let iconPaddingLeft = Self.getIconPaddingLeft(orientation: orientation, flavor: .long, squeeze: squeeze)
@@ -103,5 +173,23 @@ struct IconButtonLayout: LayoutScheme {
         let iconWidth = icon.iconWidth
         let result = iconWidth + iconPaddingLeft + iconPaddingRight
         return result
+        */
+    }
+    
+    static func getSeparatorWidth(orientation: Orientation) -> Int {
+        return 1
+    }
+    
+    static func getSeparatorHeight(orientation: Orientation) -> Int {
+        if Device.isPad {
+            return 54 - 8
+        } else {
+            switch orientation {
+            case .landscape:
+                return 34 - 6
+            case .portrait:
+                return 40 - 6
+            }
+        }
     }
 }

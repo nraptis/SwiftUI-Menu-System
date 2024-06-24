@@ -20,119 +20,481 @@ enum ToolInterfaceElementType: UInt16 {
 
 enum ToolInterfaceElement: UInt16 {
     
-    case sliderJiggleSpeed
-    case sliderJigglePower
-    case sliderTwistSpeed
-    case sliderTwistPower
-    case sliderBounceSpeed
     case sliderBouncePower
-    case sliderZoom
+    case sliderBounceSpeed
+    case sliderCircleFactor
+    case sliderInflateAmount
+    case sliderInflateAmountEnd
+    case sliderInflateAmountStart
+    case sliderJigglePower
+    case sliderJiggleSpeed
+    case sliderLoopSpeed
+    case sliderMovementHorizontal
+    case sliderMovementVertical
+    case sliderSwivelCameraPan
+    case sliderSwivelCameraTilt
+    case sliderSwivelCameraTwist
+    case sliderSwivelCameraZoom
+    case sliderSwivelLightAmbient
+    case sliderSwivelLightDiffuse
+    case sliderSwivelLightSpecular
+    case sliderTwistPower
+    case sliderTwistSpeed
+    case sliderZoomAmount
     
     case buttonPhoneCollapseTop
     case buttonPhoneCollapseBottom
     
-    case buttonMainMenu
-    case buttonCreateJiggle
-    case buttonCreateControlPoint
-    case buttonRemoveJiggle
-    case buttonRemovePoint
-    case buttonUndo
-    case buttonRedo
-    case buttonResetZoom
-    case buttonFlipHorizontal
-    case buttonFlipVertical
+    case textIconButtonGenerateWeightRings
+    case textIconButtonBreakTangentWeightRingPoint
+    case textIconButtonBreakManualWeightGraph
+    case textIconButtonCloneJiggle
+    case textIconButtonCloneWeightRing
+    case textIconButtonCloseWeightGraph
+    case textIconButtonCreateJiggle
+    case textIconButtonCreatePoint
+    case textIconButtonCreateWeightRing
+    case textIconButtonCreateWeightRingPoint
+    case textIconButtonDrawJiggles
+    case textIconButtonDrawWeightRing
+    case textIconButtonFlipHorizontalJiggle
+    case textIconButtonFlipHorizontalWeightRing
+    case textIconButtonFlipVerticalJiggle
+    case textIconButtonFlipVerticalWeightRing
+    case textIconButtonFreezeOffAllJiggle
+    case textIconButtonFreezeOffAllWeightRing
+    case textIconButtonFreezeOnAllJiggle
+    case textIconButtonFreezeOnAllWeightRing
+    case textIconButtonFreezeOnSelectedJiggle
+    case textIconButtonFreezeOnSelectedWeightRing
+    case textIconButtonMainMenu
+    case textIconButtonRandomizeWeightGraph
+    case textIconButtonRecordCancel
+    case textIconButtonRecordMovie
+    case textIconButtonRedo
+    case textIconButtonRemoveJiggle
+    case textIconButtonRemovePoint
+    case textIconButtonRemoveWeightRing
+    case textIconButtonRemoveWeightRingPoint
+    case textIconButtonResetSwivelCamera
+    case textIconButtonResetToDefault
+    case textIconButtonResetWeightGraph
+    case textIconButtonResetZoom
+    case textIconButtonResetZoomSelectedJiggle
+    case textIconButtonSelectNextJiggle
+    case textIconButtonSelectNextPoint
+    case textIconButtonSelectNextWeightRing
+    case textIconButtonSelectNextWeightRingPoint
+    case textIconButtonSelectPreviousJiggle
+    case textIconButtonSelectPreviousPoint
+    case textIconButtonSelectPreviousWeightRing
+    case textIconButtonSelectPreviousWeightRingPoint
+    case textIconButtonSendBackJiggle
+    case textIconButtonSendBackWeightRing
+    case textIconButtonSendBackwardJiggle
+    case textIconButtonSendBackwardWeightRing
+    case textIconButtonSendForwardJiggle
+    case textIconButtonSendForwardWeightRing
+    case textIconButtonSendFrontWeightRing
+    case textIconButtonUndo
+    case textIconButtonResetCenterJiggle
+    case textIconButtonResetCenterWeightRing
+    case textIconButtonPhoneExpandTopMenu
+    case textIconButtonPhoneExpandBottomMenu
+    case textIconButtonPhoneCollapseTopMenu
+    case textIconButtonPhoneCollapseBottomMenu
+    case textIconButtonPadCollapseMenu
+    case textIconButtonPadExpandMenu
     
-    case buttonCloneJiggle
+    case textIconButtonFreezeOnAllUnselectedJiggle
+    case textIconButtonFreezeOnAllUnselectedWeightRing
+    case textIconButtonSendFrontJiggle
+    case textIconButtonExitZoomMode
     
-    case buttonZoomSelected
-    case buttonPointBreakTangent
-    case buttonRecordMovie
+    case textIconButtonExitViewMode
+    case textIconButtonExitWeightMode
+    case textIconButtonGenerateTopography
     
+    case textIconButtonExitRecordMode
+    case textIconButtonResetCenterWeightGeometry
+    case textIconButtonResetSwivelFront
+    case textIconButtonResetSwivelBack
+    case textIconButtonResetSwivelLeft
+    case textIconButtonResetSwivelRight
+    case textIconButtonResetSwivelTilt
+    case textIconButtonIncreaseJigglePoints
+    case textIconButtonIncreaseWeightRingPoints
     
+    case textIconButtonTest1
+    case textIconButtonTest2
+    case textIconButtonTest3
+    
+    case segmentDisplayMode
     case segmentDocumentMode
-    case segmentEditMode
+    case segmentPointMode
+    case segmentPointCreateMode
+    case segmentWeightMode
+    case segmentWeightPointMode
+    case segmentWeightPointCreateMode
+    case segmentAnimationMode
     
-    case checkBoxStereoscopicEnabled
-    case checkBoxZoomEnabled
-    case checkBoxAudioEnabled
+    
+    case checkBoxAlternateMotionEnabled
+    case checkBoxAutoLoopEnabled
+    case checkBoxBulgeEnabled
+    case checkBoxCreateJigglesDrawing
+    case checkBoxCreateJigglesStandard
+    case checkBoxCreatePoints
+    case checkBoxCreateWeightRingPoints
+    case checkBoxCreateWeightRingsDrawing
+    case checkBoxCreateWeightRingsStandard
     case checkBoxGyroscopeEnabled
+    case checkBoxHorizontalEnabled
+    case checkBoxInvertHorizontalEnabled
+    case checkBoxInvertMotionEnabled
+    case checkBoxInvertMotionEvenEnabled
+    case checkBoxInvertMotionOddEnabled
+    case checkBoxInvertVerticalEnabled
+    case checkBoxOvershootEnabled
+    case checkBoxRecordAudioEnabled
+    case checkBoxRelaxEnabled
+    case checkBoxRemovePoints
+    case checkBoxRemoveWeightRingPoints
+    case checkBoxReverseMotionEnabled
+    case checkBoxReverseMotionEvenEnabled
+    case checkBoxReverseMotionOddEnabled
+    case checkBoxSineEnabled
+    case checkBoxStaggerEnabled
+    case checkBoxStereoscopicEnabled
+    case checkBoxTwistEnabled
+    case checkBoxUndershootEnabled
+    case checkBoxVerticalEnabled
+    case checkBoxWeightCurveGraphEnabled
+    case checkBoxZoomEnabled
+    case checkBoxDarkModeEnabled
+    case checkBoxSwivelOrbitEnabled
     
     case spacer
     case divider
     
     case dividerSpacerDivider
     
+    case buttonTest1
+    case buttonTest2
+    case buttonTest3
+    
     var type: ToolInterfaceElementType {
         switch self {
-        case .checkBoxStereoscopicEnabled:
-            return .checkBox
-        case .checkBoxZoomEnabled:
-            return .checkBox
-        case .checkBoxAudioEnabled:
-            return .checkBox
-        case .checkBoxGyroscopeEnabled:
-            return .checkBox
-        case .sliderJiggleSpeed:
-            return .slider
-        case .sliderJigglePower:
-            return .slider
-        case .sliderTwistSpeed:
-            return .slider
-        case .sliderTwistPower:
-            return .slider
-        case .sliderZoom:
+        case .sliderBouncePower:
             return .slider
         case .sliderBounceSpeed:
             return .slider
-        case .sliderBouncePower:
+        case .sliderCircleFactor:
+            return .slider
+        case .sliderInflateAmount:
+            return .slider
+        case .sliderInflateAmountEnd:
+            return .slider
+        case .sliderInflateAmountStart:
+            return .slider
+        case .sliderJigglePower:
+            return .slider
+        case .sliderJiggleSpeed:
+            return .slider
+        case .sliderLoopSpeed:
+            return .slider
+        case .sliderMovementHorizontal:
+            return .slider
+        case .sliderMovementVertical:
+            return .slider
+        case .sliderSwivelCameraPan:
+            return .slider
+        case .sliderSwivelCameraTilt:
+            return .slider
+        case .sliderSwivelCameraTwist:
+            return .slider
+        case .sliderSwivelCameraZoom:
+            return .slider
+        case .sliderSwivelLightAmbient:
+            return .slider
+        case .sliderSwivelLightDiffuse:
+            return .slider
+        case .sliderSwivelLightSpecular:
+            return .slider
+        case .sliderTwistPower:
+            return .slider
+        case .sliderTwistSpeed:
+            return .slider
+        case .sliderZoomAmount:
             return .slider
             
         case .buttonPhoneCollapseTop:
             return .iconButton
         case .buttonPhoneCollapseBottom:
             return .iconButton
-        case .buttonMainMenu:
-            return .textIconButton
-        case .buttonCreateJiggle:
-            return .textIconButton
-        case .buttonCloneJiggle:
-            return .textIconButton
             
-        case .buttonCreateControlPoint:
-            return .textIconButton
-        case .buttonRemoveJiggle:
-            return .textIconButton
-        case .buttonRemovePoint:
-            return .textIconButton
-        case .buttonPointBreakTangent:
-            return .textIconButton
-        case .buttonUndo:
-            return .textIconButton
-        case .buttonRedo:
-            return .textIconButton
-        case .buttonResetZoom:
-            return .textIconButton
-        case .buttonZoomSelected:
-            return .textIconButton
-        case .buttonFlipHorizontal:
-            return .textIconButton
-        case .buttonFlipVertical:
-            return .textIconButton
-        case .buttonRecordMovie:
-            return .textIconButton
-            
+        case .segmentDisplayMode:
+            return .segment
         case .segmentDocumentMode:
             return .segment
-        case .segmentEditMode:
+        case .segmentPointMode:
             return .segment
+        case .segmentPointCreateMode:
+            return .segment
+        case .segmentWeightMode:
+            return .segment
+        case .segmentWeightPointMode:
+            return .segment
+        case .segmentWeightPointCreateMode:
+            return .segment
+        case .segmentAnimationMode:
+            return .segment
+            
+        case .checkBoxAlternateMotionEnabled:
+            return .checkBox
+        case .checkBoxAutoLoopEnabled:
+            return .checkBox
+        case .checkBoxBulgeEnabled:
+            return .checkBox
+        case .checkBoxCreateJigglesDrawing:
+            return .checkBox
+        case .checkBoxCreateJigglesStandard:
+            return .checkBox
+        case .checkBoxCreatePoints:
+            return .checkBox
+        case .checkBoxCreateWeightRingPoints:
+            return .checkBox
+        case .checkBoxCreateWeightRingsDrawing:
+            return .checkBox
+        case .checkBoxCreateWeightRingsStandard:
+            return .checkBox
+        case .checkBoxGyroscopeEnabled:
+            return .checkBox
+        case .checkBoxHorizontalEnabled:
+            return .checkBox
+        case .checkBoxInvertHorizontalEnabled:
+            return .checkBox
+        case .checkBoxInvertMotionEnabled:
+            return .checkBox
+        case .checkBoxInvertMotionEvenEnabled:
+            return .checkBox
+        case .checkBoxInvertMotionOddEnabled:
+            return .checkBox
+        case .checkBoxInvertVerticalEnabled:
+            return .checkBox
+        case .checkBoxOvershootEnabled:
+            return .checkBox
+        case .checkBoxRecordAudioEnabled:
+            return .checkBox
+        case .checkBoxRelaxEnabled:
+            return .checkBox
+        case .checkBoxRemovePoints:
+            return .checkBox
+        case .checkBoxRemoveWeightRingPoints:
+            return .checkBox
+        case .checkBoxReverseMotionEnabled:
+            return .checkBox
+        case .checkBoxReverseMotionEvenEnabled:
+            return .checkBox
+        case .checkBoxReverseMotionOddEnabled:
+            return .checkBox
+        case .checkBoxSineEnabled:
+            return .checkBox
+        case .checkBoxStaggerEnabled:
+            return .checkBox
+        case .checkBoxStereoscopicEnabled:
+            return .checkBox
+        case .checkBoxTwistEnabled:
+            return .checkBox
+        case .checkBoxUndershootEnabled:
+            return .checkBox
+        case .checkBoxVerticalEnabled:
+            return .checkBox
+        case .checkBoxWeightCurveGraphEnabled:
+            return .checkBox
+        case .checkBoxZoomEnabled:
+            return .checkBox
+        case .checkBoxDarkModeEnabled:
+            return .checkBox
+        case .checkBoxSwivelOrbitEnabled:
+            return .checkBox
+            
         case .spacer:
             return .spacer
         case .divider:
             return .divider
         case .dividerSpacerDivider:
             return .dividerSpacerDivider
+            
+        case .buttonTest1:
+            return .textIconButton
+        case .buttonTest2:
+            return .textIconButton
+        case .buttonTest3:
+            return .textIconButton
+            
+        case .textIconButtonGenerateWeightRings:
+            return .textIconButton
+        case .textIconButtonBreakTangentWeightRingPoint:
+            return .textIconButton
+        case .textIconButtonBreakManualWeightGraph:
+            return .textIconButton
+        case .textIconButtonCloneJiggle:
+            return .textIconButton
+        case .textIconButtonCloneWeightRing:
+            return .textIconButton
+        case .textIconButtonCloseWeightGraph:
+            return .textIconButton
+        case .textIconButtonCreateJiggle:
+            return .textIconButton
+        case .textIconButtonCreatePoint:
+            return .textIconButton
+        case .textIconButtonCreateWeightRing:
+            return .textIconButton
+        case .textIconButtonCreateWeightRingPoint:
+            return .textIconButton
+        case .textIconButtonDrawJiggles:
+            return .textIconButton
+        case .textIconButtonDrawWeightRing:
+            return .textIconButton
+        case .textIconButtonFlipHorizontalJiggle:
+            return .textIconButton
+        case .textIconButtonFlipHorizontalWeightRing:
+            return .textIconButton
+        case .textIconButtonFlipVerticalJiggle:
+            return .textIconButton
+        case .textIconButtonFlipVerticalWeightRing:
+            return .textIconButton
+        case .textIconButtonFreezeOffAllJiggle:
+            return .textIconButton
+        case .textIconButtonFreezeOffAllWeightRing:
+            return .textIconButton
+        case .textIconButtonFreezeOnAllJiggle:
+            return .textIconButton
+        case .textIconButtonFreezeOnAllWeightRing:
+            return .textIconButton
+        case .textIconButtonFreezeOnSelectedJiggle:
+            return .textIconButton
+        case .textIconButtonFreezeOnSelectedWeightRing:
+            return .textIconButton
+        case .textIconButtonMainMenu:
+            return .textIconButton
+        case .textIconButtonRandomizeWeightGraph:
+            return .textIconButton
+        case .textIconButtonRecordCancel:
+            return .textIconButton
+        case .textIconButtonRecordMovie:
+            return .textIconButton
+        case .textIconButtonRedo:
+            return .textIconButton
+        case .textIconButtonRemoveJiggle:
+            return .textIconButton
+        case .textIconButtonRemovePoint:
+            return .textIconButton
+        case .textIconButtonRemoveWeightRing:
+            return .textIconButton
+        case .textIconButtonRemoveWeightRingPoint:
+            return .textIconButton
+        case .textIconButtonResetSwivelCamera:
+            return .textIconButton
+        case .textIconButtonResetToDefault:
+            return .textIconButton
+        case .textIconButtonResetWeightGraph:
+            return .textIconButton
+        case .textIconButtonResetZoom:
+            return .textIconButton
+        case .textIconButtonResetZoomSelectedJiggle:
+            return .textIconButton
+        case .textIconButtonSelectNextJiggle:
+            return .textIconButton
+        case .textIconButtonSelectNextPoint:
+            return .textIconButton
+        case .textIconButtonSelectNextWeightRing:
+            return .textIconButton
+        case .textIconButtonSelectNextWeightRingPoint:
+            return .textIconButton
+        case .textIconButtonSelectPreviousJiggle:
+            return .textIconButton
+        case .textIconButtonSelectPreviousPoint:
+            return .textIconButton
+        case .textIconButtonSelectPreviousWeightRing:
+            return .textIconButton
+        case .textIconButtonSelectPreviousWeightRingPoint:
+            return .textIconButton
+        case .textIconButtonSendBackJiggle:
+            return .textIconButton
+        case .textIconButtonSendBackWeightRing:
+            return .textIconButton
+        case .textIconButtonSendBackwardJiggle:
+            return .textIconButton
+        case .textIconButtonSendBackwardWeightRing:
+            return .textIconButton
+        case .textIconButtonSendForwardJiggle:
+            return .textIconButton
+        case .textIconButtonSendForwardWeightRing:
+            return .textIconButton
+        case .textIconButtonSendFrontWeightRing:
+            return .textIconButton
+        case .textIconButtonUndo:
+            return .textIconButton
+        case .textIconButtonResetCenterJiggle:
+            return .textIconButton
+        case .textIconButtonResetCenterWeightRing:
+            return .textIconButton
+        case .textIconButtonPhoneExpandTopMenu:
+            return .textIconButton
+        case .textIconButtonPhoneExpandBottomMenu:
+            return .textIconButton
+        case .textIconButtonPhoneCollapseTopMenu:
+            return .textIconButton
+        case .textIconButtonPhoneCollapseBottomMenu:
+            return .textIconButton
+        case .textIconButtonPadCollapseMenu:
+            return .textIconButton
+        case .textIconButtonPadExpandMenu:
+            return .textIconButton
+            
+        case .textIconButtonFreezeOnAllUnselectedJiggle:
+            return .textIconButton
+        case .textIconButtonFreezeOnAllUnselectedWeightRing:
+            return .textIconButton
+        case .textIconButtonSendFrontJiggle:
+            return .textIconButton
+        case .textIconButtonExitZoomMode:
+            return .textIconButton
+            
+        case .textIconButtonExitRecordMode:
+            return .textIconButton
+        case .textIconButtonResetCenterWeightGeometry:
+            return .textIconButton
+        case .textIconButtonResetSwivelFront:
+            return .textIconButton
+        case .textIconButtonResetSwivelBack:
+            return .textIconButton
+        case .textIconButtonResetSwivelLeft:
+            return .textIconButton
+        case .textIconButtonResetSwivelRight:
+            return .textIconButton
+        case .textIconButtonResetSwivelTilt:
+            return .textIconButton
+        case .textIconButtonIncreaseJigglePoints:
+            return .textIconButton
+        case .textIconButtonIncreaseWeightRingPoints:
+            return .textIconButton
+            
+        case .textIconButtonExitViewMode:
+            return .textIconButton
+        case .textIconButtonExitWeightMode:
+            return .textIconButton
+        case .textIconButtonGenerateTopography:
+            return .textIconButton
+        case .textIconButtonTest1:
+            return .textIconButton
+        case .textIconButtonTest2:
+            return .textIconButton
+        case .textIconButtonTest3:
+            return .textIconButton
+            
         }
     }
-    
 }
-

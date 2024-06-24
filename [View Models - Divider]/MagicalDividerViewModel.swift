@@ -19,21 +19,25 @@ import SwiftUI
         let capsuleWidth = DividerLayout.getCapsuleWidth(orientation: orientation)
         
         let universalPaddingLeftSqueezed = DividerLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                  flavor: layoutSchemeFlavor,
-                                                                                  squeeze: .squeezed,
-                                                                                  neighborType: neighborTypeLeft)
+                                                                                 flavor: layoutSchemeFlavor,
+                                                                                 squeeze: .squeezed,
+                                                                                 neighborTypeLeft: neighborTypeLeft,
+                                                                                 neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStandard = DividerLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                  flavor: layoutSchemeFlavor,
-                                                                                  squeeze: .standard,
-                                                                                  neighborType: neighborTypeLeft)
+                                                                                 flavor: layoutSchemeFlavor,
+                                                                                 squeeze: .standard,
+                                                                                 neighborTypeLeft: neighborTypeLeft,
+                                                                                 neighborTypeRight: neighborTypeRight)
         let universalPaddingRightSqueezed = DividerLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                    flavor: layoutSchemeFlavor,
-                                                                                    squeeze: .squeezed,
-                                                                                    neighborType: neighborTypeLeft)
+                                                                                   flavor: layoutSchemeFlavor,
+                                                                                   squeeze: .squeezed,
+                                                                                   neighborTypeLeft: neighborTypeLeft,
+                                                                                   neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStandard = DividerLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                    flavor: layoutSchemeFlavor,
-                                                                                    squeeze: .standard,
-                                                                                    neighborType: neighborTypeRight)
+                                                                                   flavor: layoutSchemeFlavor,
+                                                                                   squeeze: .standard,
+                                                                                   neighborTypeLeft: neighborTypeLeft,
+                                                                                   neighborTypeRight: neighborTypeRight)
         
         var _universalPaddingLeft = universalPaddingLeftSqueezed
         var _universalPaddingRight = universalPaddingRightSqueezed

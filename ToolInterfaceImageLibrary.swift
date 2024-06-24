@@ -10,48 +10,6 @@ import UIKit
 
 struct ToolInterfaceImageLibrary {
     
-    
-    
-    static let iconPackMainMenu = TextIconImagePack(name: "tool_btn_icn_main_menu",
-                                                    widthPhoneOneLineLandscape: 20,
-                                                    heightPhoneOneLineLandscape: 18,
-                                                    widthPhoneTwoLineLandscape: 20,
-                                                    heightPhoneTwoLineLandscape: 12,
-                                                    widthPhoneWholeLandscape: 32,
-                                                    heightPhoneWholeLandscape: 32,
-                                                    widthPhoneOneLinePortrait: 22,
-                                                    heightPhoneOneLinePortrait: 20,
-                                                    widthPhoneTwoLinePortrait: 20,
-                                                    heightPhoneTwoLinePortrait: 14,
-                                                    widthPhoneWholePortrait: 32,
-                                                    heightPhoneWholePortrait: 34,
-                                                    widthTabletOneLine: 32,
-                                                    heightTabletOneLine: 32,
-                                                    widthTabletTwoLine: 22,
-                                                    heightTabletTwoLine: 18,
-                                                    widthTabletWhole: 40,
-                                                    heightTabletWhole: 40)
-    
-    static let testIconPackMainMenu = TextIconImagePack(name: "test_tool_btn_icn_main_menu",
-                                                        widthPhoneOneLineLandscape: 20,
-                                                        heightPhoneOneLineLandscape: 18,
-                                                        widthPhoneTwoLineLandscape: 20,
-                                                        heightPhoneTwoLineLandscape: 12,
-                                                        widthPhoneWholeLandscape: 32,
-                                                        heightPhoneWholeLandscape: 32,
-                                                        widthPhoneOneLinePortrait: 22,
-                                                        heightPhoneOneLinePortrait: 20,
-                                                        widthPhoneTwoLinePortrait: 20,
-                                                        heightPhoneTwoLinePortrait: 14,
-                                                        widthPhoneWholePortrait: 32,
-                                                        heightPhoneWholePortrait: 34,
-                                                        widthTabletOneLine: 32,
-                                                        heightTabletOneLine: 32,
-                                                        widthTabletTwoLine: 22,
-                                                        heightTabletTwoLine: 18,
-                                                        widthTabletWhole: 40,
-                                                        heightTabletWhole: 40)
-    
     static var buttonMainMenuUp: UIImage {
         UIImage(named: "size_58") ?? UIImage()
     }
@@ -111,11 +69,11 @@ struct ToolInterfaceImageLibrary {
         UIImage(named: "tb_btn_add_blob_down") ?? UIImage()
     }
     
-    static var buttonZoomResetUp: UIImage {
+    static var buttonResetZoomUp: UIImage {
         UIImage(named: "tb_btn_reset_zoom") ?? UIImage()
     }
 
-    static var buttonZoomResetDown: UIImage {
+    static var buttonResetZoomDown: UIImage {
         UIImage(named: "tb_btn_reset_zoom_down") ?? UIImage()
     }
     
@@ -239,56 +197,4 @@ struct ToolInterfaceImageLibrary {
         UIImage(named: "tb_seg_anim_bulge_bouncer_selected") ?? UIImage()
     }
     
-    static func getTextIcon(numberOfLines: Int,
-                            textIconImagePack: TextIconImagePack,
-                            orientation: Orientation,
-                            layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {
-        
-        switch textIconImagePack.textIconImageSet {
-        case .phone(let iconWholePortrait,
-                    let iconOneLinePortrait,
-                    let iconTwoLinePortrait,
-                    let iconWholeLandscape,
-                    let iconOneLineLandscape,
-                    let iconTwoLineLandscape):
-            switch layoutSchemeFlavor {
-            case .long:
-                switch orientation {
-                case .landscape:
-                    return iconWholeLandscape
-                case .portrait:
-                    return iconWholePortrait
-                }
-            case .stackedLarge, .stackedMedium, .stackedSmall:
-                if numberOfLines == 2 {
-                    switch orientation {
-                    case .landscape:
-                        return iconTwoLineLandscape
-                    case .portrait:
-                        return iconTwoLinePortrait
-                    }
-                } else {
-                    switch orientation {
-                    case .landscape:
-                        return iconOneLineLandscape
-                    case .portrait:
-                        return iconOneLinePortrait
-                    }
-                }
-            }
-        case .tablet(let iconWhole,
-                     let iconOneLine,
-                     let iconTwoLine):
-            switch layoutSchemeFlavor {
-            case .long:
-                return iconWhole
-            case .stackedLarge, .stackedMedium, .stackedSmall:
-                if numberOfLines == 2 {
-                    return iconTwoLine
-                } else {
-                    return iconOneLine
-                }
-            }
-        }
-    }
 }

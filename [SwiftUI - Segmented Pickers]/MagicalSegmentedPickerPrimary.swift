@@ -25,13 +25,12 @@ struct MagicalSegmentedPickerPrimary: View {
             LinearGradient(colors: [Color(red: 0.25, green: 0.98, blue: 0.25, opacity: 0.15),
                                     Color(red: 0.45, green: 0.45, blue: 0.98, opacity: 0.15)], startPoint: .leading, endPoint: .trailing)))
 #endif
-        
-        .overlay(Rectangle().stroke(lineWidth: 2.0).foregroundStyle(Color.white))
-        
         .offset(x: CGFloat(magicalSegmentedPickerViewModel.layoutX),
                 y: CGFloat(magicalSegmentedPickerViewModel.layoutY))
-        //.disabled(!magicalSliderViewModel.isEnabled)
-        
+        .disabled(!magicalSegmentedPickerViewModel.isEnabled)
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func bodyContent() -> some View {

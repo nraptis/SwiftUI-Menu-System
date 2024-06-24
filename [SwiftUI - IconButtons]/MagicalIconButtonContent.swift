@@ -18,19 +18,27 @@ struct MagicalIconButtonContent: View {
     let layoutWidth: Int
     
     var body: some View {
-        let textIcon = magicalIconButtonViewModel.getTextIcon()
-        let iconWidth = 52
+        let textIcon = magicalIconButtonViewModel.iconButtonConfiguration.getTextIcon(orientation: orientation)
+        
+        /*
+        let iconWidth = textIcon.iconWidth
         let iconHeight: Int
         if Device.isPad {
-            iconHeight = 44
+            iconHeight = 42
         } else {
-            switch orientation {
-            case .landscape:
-                iconHeight = 28
-            case .portrait:
+            if orientation.isLandscape {
+                iconHeight = 27
+            } else {
                 iconHeight = 32
             }
         }
+        */
+        let imageWidth = textIcon.imageWidth
+        let imageHeight = textIcon.imageHeight
+        let iconX = textIcon.iconX
+        let iconY = textIcon.iconY
+        let iconWidth = textIcon.iconWidth
+        let iconHeight = textIcon.iconHeight
         
         let iconPaddingLeft = magicalIconButtonViewModel.iconPaddingLeft
         let iconPaddingRight = magicalIconButtonViewModel.iconPaddingRight
@@ -39,6 +47,8 @@ struct MagicalIconButtonContent: View {
                                                                 numberOfLines: 1)
         
         let contentHeight = magicalIconButtonViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
+        
+        let color = magicalIconButtonViewModel.getTextAndIconColor(isPressed: isPressed)
         
         return VStack(spacing: 0.0) {
             
@@ -53,11 +63,16 @@ struct MagicalIconButtonContent: View {
             
             ZStack {
                 IconBox(icon: textIcon,
+                        imageWidth: imageWidth,
+                        imageHeight: imageHeight,
+                        iconX: iconX,
+                        iconY: iconY,
                         iconWidth: iconWidth,
                         iconHeight: iconHeight,
                         iconPaddingLeft: iconPaddingLeft,
                         iconPaddingRight: iconPaddingRight,
-                        iconPaddingTop: iconPaddingTop)
+                        iconPaddingTop: iconPaddingTop,
+                        color: color)
             }
             .frame(height: CGFloat(contentHeight))
             

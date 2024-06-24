@@ -13,26 +13,51 @@ struct DividerLayout {
     static func getUniversalPaddingLeft(orientation: Orientation,
                                         flavor: LayoutSchemeFlavor,
                                         squeeze: LayoutSchemeSqueeze,
-                                        neighborType: ToolInterfaceElementType?) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 12
-        }
+                                        neighborTypeLeft: ToolInterfaceElementType?,
+                                        neighborTypeRight: ToolInterfaceElementType?) -> Int {
+        return 0
     }
     
     static func getUniversalPaddingRight(orientation: Orientation,
                                          flavor: LayoutSchemeFlavor,
                                          squeeze: LayoutSchemeSqueeze,
-                                         neighborType: ToolInterfaceElementType?) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 24
+                                         neighborTypeLeft: ToolInterfaceElementType?,
+                                         neighborTypeRight: ToolInterfaceElementType?) -> Int {
+        if Device.isPad {
+
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 3
+                case .standard:
+                    return 12
+                }
+            } else {
+                
+                switch squeeze {
+                case .squeezed:
+                    return 3
+                case .standard:
+                    return 6
+                }
+            }
+            
+        } else {
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 8
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 4
+                }
+            }
         }
     }
     
@@ -45,9 +70,9 @@ struct DividerLayout {
     
     static func getCapsuleWidth(orientation: Orientation) -> Int {
         if Device.isPad {
-            return 4
+            return 1
         } else {
-            return 2
+            return 1
         }
     }
     

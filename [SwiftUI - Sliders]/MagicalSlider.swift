@@ -26,8 +26,10 @@ struct MagicalSlider: View {
 #endif
         .offset(x: CGFloat(magicalSliderViewModel.layoutX),
                 y: CGFloat(magicalSliderViewModel.layoutY))
-        //.disabled(!magicalSliderViewModel.isEnabled)
-        
+        .disabled(!magicalSliderViewModel.isEnabled)
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func bodyContent() -> some View {

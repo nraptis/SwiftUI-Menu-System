@@ -64,22 +64,26 @@ import SwiftUI
         let isStacked = layoutSchemeFlavor.isStacked
         
         let universalPaddingLeftSqueezed = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                        flavor: layoutSchemeFlavor,
-                                                                                        squeeze: .squeezed,
-                                                                                        neighborType: neighborTypeLeft)
+                                                                                         flavor: layoutSchemeFlavor,
+                                                                                         squeeze: .squeezed,
+                                                                                         neighborTypeLeft: neighborTypeLeft,
+                                                                                         neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStandard = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                        flavor: layoutSchemeFlavor,
-                                                                                        squeeze: .standard,
-                                                                                        neighborType: neighborTypeLeft)
+                                                                                         flavor: layoutSchemeFlavor,
+                                                                                         squeeze: .standard,
+                                                                                         neighborTypeLeft: neighborTypeLeft,
+                                                                                         neighborTypeRight: neighborTypeRight)
         let universalPaddingRightSqueezed = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                          flavor: layoutSchemeFlavor,
-                                                                                          squeeze: .squeezed,
-                                                                                          neighborType: neighborTypeLeft)
+                                                                                           flavor: layoutSchemeFlavor,
+                                                                                           squeeze: .squeezed,
+                                                                                           neighborTypeLeft: neighborTypeLeft,
+                                                                                           neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStandard = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                          flavor: layoutSchemeFlavor,
-                                                                                          squeeze: .standard,
-                                                                                          neighborType: neighborTypeRight)
-
+                                                                                           flavor: layoutSchemeFlavor,
+                                                                                           squeeze: .standard,
+                                                                                           neighborTypeLeft: neighborTypeLeft,
+                                                                                           neighborTypeRight: neighborTypeRight)
+        
         let buttonUniversalPaddingLeftSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: layoutSchemeFlavor,
                                                                                                      squeeze: .squeezed)
@@ -128,7 +132,8 @@ import SwiftUI
             let layoutNode = layoutNodes[layoutIndex]
             let buttonViewModel = buttonViewModels[layoutIndex]
             
-            let textIcon = buttonViewModel.getTextIcon(layoutSchemeFlavor: layoutSchemeFlavor)
+            let textIcon = buttonViewModel.segmentedPickerButtonConfiguration.getTextIcon(orientation: orientation,
+                                                                                          layoutSchemeFlavor: layoutSchemeFlavor)
             
             layoutNode.universalPaddingLeft = buttonUniversalPaddingLeftSqueezed
             layoutNode.universalPaddingRight = buttonUniversalPaddingRightSqueezed
@@ -271,40 +276,34 @@ import SwiftUI
             }
             
             while consumedWidth < totalWidth {
-                
                 var didModify = false
-                
                 for layoutNode in layoutNodes {
-                    if layoutNode.iconPaddingLeft < iconPaddingLeftStandard {
+                    if layoutNode.iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
                         layoutNode.iconPaddingLeft += 1
                         consumedWidth += 1
                         didModify = true
                     }
-                    if layoutNode.iconPaddingRight < iconPaddingRightStandard {
+                    if layoutNode.iconPaddingRight < iconPaddingRightStandard && consumedWidth < totalWidth {
                         layoutNode.iconPaddingRight += 1
                         consumedWidth += 1
                         didModify = true
                     }
-                    
-                    if layoutNode.nameLabelPaddingLeft < nameLabelPaddingLeftStandard {
+                    if layoutNode.nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
                         layoutNode.nameLabelPaddingLeft += 1
                         consumedWidth += 1
                         didModify = true
                     }
-                    
-                    if layoutNode.nameLabelPaddingRight < nameLabelPaddingRightStandard {
+                    if layoutNode.nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
                         layoutNode.nameLabelPaddingRight += 1
                         consumedWidth += 1
                         didModify = true
                     }
-                    
-                    if layoutNode.universalPaddingLeft < buttonUniversalPaddingLeftStandard {
+                    if layoutNode.universalPaddingLeft < buttonUniversalPaddingLeftStandard && consumedWidth < totalWidth {
                         layoutNode.universalPaddingLeft += 1
                         consumedWidth += 1
                         didModify = true
                     }
-                    
-                    if layoutNode.universalPaddingRight < buttonUniversalPaddingRightStandard {
+                    if layoutNode.universalPaddingRight < buttonUniversalPaddingRightStandard && consumedWidth < totalWidth {
                         layoutNode.universalPaddingRight += 1
                         consumedWidth += 1
                         didModify = true

@@ -32,8 +32,8 @@ extension ToolInterfaceViewModel {
     
     func getPhoneCollapseTopButtonConfiguration() -> ToolInterfaceElementIconButtonConfiguration {
         let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementIconButtonConfiguration(textIconImagePack: textIconImagePack,
+        let iconPack = TextIconButtonIconLibrary.box
+        return ToolInterfaceElementIconButtonConfiguration(iconPack: iconPack,
                                                            orientation: orientation)
     }
 }

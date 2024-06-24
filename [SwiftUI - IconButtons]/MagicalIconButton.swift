@@ -27,6 +27,9 @@ struct MagicalIconButton: View {
         .offset(x: CGFloat(magicalIconButtonViewModel.layoutX),
                 y: CGFloat(magicalIconButtonViewModel.layoutY))
         .disabled(!magicalIconButtonViewModel.isEnabled)
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func bodyContent() -> some View {
@@ -40,6 +43,15 @@ struct MagicalIconButton: View {
         let universalPaddingBottom = IconButtonLayout.getUniversalPaddingBottom(orientation: orientation,
                                                                                 flavor: .long,
                                                                                 numberOfLines: 1)
+        
+        let separatorWidth = IconButtonLayout.getSeparatorWidth(orientation: orientation)
+        let separatorHeight = IconButtonLayout.getSeparatorHeight(orientation: orientation)
+        
+        var isShowingSeparator = false
+        if (magicalIconButtonViewModel.neighborTypeRight == .textIconButton) ||
+            (magicalIconButtonViewModel.neighborTypeRight == .iconButton) {
+            isShowingSeparator = true
+        }
         
         let layoutWidth = magicalIconButtonViewModel.layoutWidth - (universalPaddingLeft + universalPaddingRight)
         
@@ -62,16 +74,46 @@ struct MagicalIconButton: View {
             }
             .frame(width: CGFloat(layoutWidth),
                    height: CGFloat(magicalIconButtonViewModel.layoutHeight))
+
             
+            
+            if isShowingSeparator {
+                
+                HStack(spacing: 0.0) {
 #if INTERFACE_HINTS
-            Spacer()
-                .frame(width: CGFloat(universalPaddingRight), height: 28.0)
-                .background(Color(red: 1.0, green: 0.75, blue: 0.25, opacity: 0.40))
+                    Spacer(minLength: 0.0)
+                        .frame(height: 28.0)
+                        .background(Color(red: 0.65, green: 0.25, blue: 0.97, opacity: 0.40))
 #else
-            Spacer()
-                .frame(width: CGFloat(universalPaddingRight))
+                    Spacer(minLength: 0.0)
 #endif
-            
+      
+                    Capsule()
+                        .frame(width: CGFloat(separatorWidth),
+                               height: CGFloat(separatorHeight))
+                        .foregroundStyle(ToolInterfaceTheme.gray950)
+                    
+#if INTERFACE_HINTS
+                    Spacer(minLength: 0.0)
+                        .frame(height: 28.0)
+                        .background(Color(red: 0.25, green: 0.65, blue: 0.97, opacity: 0.40))
+#else
+                    Spacer(minLength: 0.0)
+#endif
+                }
+                .frame(width: CGFloat(universalPaddingRight))
+                
+            } else {
+                
+#if INTERFACE_HINTS
+                Spacer()
+                    .frame(width: CGFloat(universalPaddingRight), height: 28.0)
+                    .background(Color(red: 1.0, green: 0.75, blue: 0.25, opacity: 0.40))
+#else
+                Spacer()
+                    .frame(width: CGFloat(universalPaddingRight))
+#endif
+            }
         }
         .frame(width: CGFloat(magicalIconButtonViewModel.layoutWidth),
                height: CGFloat(magicalIconButtonViewModel.layoutHeight))

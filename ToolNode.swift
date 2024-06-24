@@ -14,6 +14,7 @@ class ToolNode {
     let flex: ToolInterfaceElementFlex
     unowned var toolInterfaceViewModel: ToolInterfaceViewModel!
     let magicalViewModel: MagicalViewModel
+    var isCenterPinned = false
     
     deinit {
         print("ToolNode - Dealloc \(element)")

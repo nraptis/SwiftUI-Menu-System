@@ -21,13 +21,13 @@ struct MagicalTextIconButtonContent: View {
     var body: some View {
         
         let configuration = magicalTextIconButtonViewModel.textIconButtonConfiguration
-        let textIcon = magicalTextIconButtonViewModel.getTextIcon(layoutSchemeFlavor: layoutSchemeFlavor)
+        let textIcon = configuration.getTextIcon(orientation: orientation,
+                                                 layoutSchemeFlavor: layoutSchemeFlavor)
         
         let line1 = configuration.nameLabelLine1
         let line2 = configuration.nameLabelLine2
         
         let numberOfLines = configuration.nameLabelNumberOfLines
-        
         
         let nameLabelFont = TextIconButtonLayout.getNameLabelFont(orientation: orientation,
                                                                   flavor: layoutSchemeFlavor)
@@ -54,25 +54,50 @@ struct MagicalTextIconButtonContent: View {
         let lineHeight = ToolInterfaceTheme.getLineHeight(font: nameLabelFont)
         let nameLabelWidth = nameLabelTextWidth + nameLabelPaddingLeft + nameLabelPaddingRight
         
+        /*
         let iconWidth = textIcon.iconWidth
         let iconHeight: Int
         if layoutSchemeFlavor.isStacked {
             if Device.isPad {
                 if numberOfLines == 2 {
-                    iconHeight = 25
+                    iconHeight = 27
                 } else {
-                    iconHeight = 39
+                    iconHeight = 41
                 }
             } else {
-                if numberOfLines == 2 {
-                    iconHeight = 16
+                if orientation.isLandscape {
+                    if numberOfLines == 2 {
+                        iconHeight = 17
+                    } else {
+                        iconHeight = 27
+                    }
                 } else {
-                    iconHeight = 26
+                    if numberOfLines == 2 {
+                        iconHeight = 21
+                    } else {
+                        iconHeight = 32
+                    }
                 }
             }
         } else {
-            iconHeight = textIcon.iconHeight
+            if Device.isPad {
+                iconHeight = 42
+            } else {
+                if orientation.isLandscape {
+                    iconHeight = 27
+                } else {
+                    iconHeight = 32
+                }
+            }
         }
+        */
+        
+        let imageWidth = textIcon.imageWidth
+        let imageHeight = textIcon.imageHeight
+        let iconX = textIcon.iconX
+        let iconY = textIcon.iconY
+        let iconWidth = textIcon.iconWidth
+        let iconHeight = textIcon.iconHeight
         
         let iconPaddingLeft = magicalTextIconButtonViewModel.iconPaddingLeft
         let iconPaddingRight = magicalTextIconButtonViewModel.iconPaddingRight
@@ -81,6 +106,8 @@ struct MagicalTextIconButtonContent: View {
                                                                     numberOfLines: numberOfLines)
         
         let contentHeight = magicalTextIconButtonViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
+        
+        let color = magicalTextIconButtonViewModel.getTextAndIconColor(isPressed: isPressed)
         
         return VStack(spacing: 0.0) {
             
@@ -98,11 +125,16 @@ struct MagicalTextIconButtonContent: View {
                 case .long:
                     HStack(spacing: 0.0) {
                         IconBox(icon: textIcon,
+                                imageWidth: imageWidth,
+                                imageHeight: imageHeight,
+                                iconX: iconX,
+                                iconY: iconY,
                                 iconWidth: iconWidth,
                                 iconHeight: iconHeight,
                                 iconPaddingLeft: iconPaddingLeft,
                                 iconPaddingRight: iconPaddingRight,
-                                iconPaddingTop: iconPaddingTop)
+                                iconPaddingTop: iconPaddingTop,
+                                color: color)
                         LabelBox(line1: line1,
                                  line2: line2,
                                  numberOfLines: numberOfLines,
@@ -112,18 +144,24 @@ struct MagicalTextIconButtonContent: View {
                                  paddingBottom: 0,
                                  lineHeight: lineHeight,
                                  spacingVertical: nameLabelVerticalSpacing,
-                                 font: nameLabelFont)
+                                 font: nameLabelFont, 
+                                 color: color)
                     }
                 case .stackedLarge, .stackedMedium, .stackedSmall:
                     
                     ZStack {
                         VStack(spacing: 0.0) {
                             IconBox(icon: textIcon,
+                                    imageWidth: imageWidth,
+                                    imageHeight: imageHeight,
+                                    iconX: iconX,
+                                    iconY: iconY,
                                     iconWidth: iconWidth,
                                     iconHeight: iconHeight,
                                     iconPaddingLeft: iconPaddingLeft,
                                     iconPaddingRight: iconPaddingRight,
-                                    iconPaddingTop: iconPaddingTop)
+                                    iconPaddingTop: iconPaddingTop,
+                                    color: color)
                             Spacer(minLength: 0.0)
                         }
                         VStack(spacing: 0.0) {
@@ -137,7 +175,8 @@ struct MagicalTextIconButtonContent: View {
                                      paddingBottom: nameLabelPaddingBottom,
                                      lineHeight: lineHeight,
                                      spacingVertical: nameLabelVerticalSpacing,
-                                     font: nameLabelFont)
+                                     font: nameLabelFont,
+                                     color: color)
                         }
                     }
                 }

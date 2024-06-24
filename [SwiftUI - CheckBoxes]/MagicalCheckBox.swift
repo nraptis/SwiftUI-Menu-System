@@ -26,8 +26,10 @@ struct MagicalCheckBox: View {
 #endif
         .offset(x: CGFloat(magicalCheckBoxViewModel.layoutX),
                 y: CGFloat(magicalCheckBoxViewModel.layoutY))
-        //.disabled(!magicalSliderViewModel.isEnabled)
-        
+        .disabled(!magicalCheckBoxViewModel.isEnabled)
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func bodyContent() -> some View {

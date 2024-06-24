@@ -24,6 +24,9 @@ import SwiftUI
     var universalPaddingLeft = 0
     var universalPaddingRight = 0
     
+    var buttonUniversalPaddingLeft = 0
+    var buttonUniversalPaddingRight = 0
+    
     var checkBoxWidth = 128
     var checkBoxHeight = 32
     
@@ -48,12 +51,15 @@ import SwiftUI
         super.refreshEnabled()
     }
     
+    func handleClicked() {
+        print("MagicalCheckBoxViewModel => handleClicked()")
+    }
+    
     override func refreshLayoutFrame() {
-        
-        //return ;
 
         let layoutSchemeFlavor = getLayoutSchemeFlavor()
-        let textIcon = getTextIcon(layoutSchemeFlavor: layoutSchemeFlavor)
+        let textIcon = checkBoxConfiguration.getTextIcon(orientation: orientation,
+                                                         layoutSchemeFlavor: layoutSchemeFlavor)
         let isStacked = layoutSchemeFlavor.isStacked
         
         let iconWidth = textIcon.iconWidth
@@ -75,22 +81,43 @@ import SwiftUI
         let universalPaddingLeftSqueezed = CheckBoxLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                   flavor: layoutSchemeFlavor,
                                                                                   squeeze: .squeezed,
-                                                                                  neighborType: neighborTypeLeft)
+                                                                                  neighborTypeLeft: neighborTypeLeft,
+                                                                                  neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStandard = CheckBoxLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                   flavor: layoutSchemeFlavor,
                                                                                   squeeze: .standard,
-                                                                                  neighborType: neighborTypeLeft)
+                                                                                  neighborTypeLeft: neighborTypeLeft,
+                                                                                  neighborTypeRight: neighborTypeRight)
         let universalPaddingRightSqueezed = CheckBoxLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                     flavor: layoutSchemeFlavor,
                                                                                     squeeze: .squeezed,
-                                                                                    neighborType: neighborTypeLeft)
+                                                                                    neighborTypeLeft: neighborTypeLeft,
+                                                                                    neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStandard = CheckBoxLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                     flavor: layoutSchemeFlavor,
                                                                                     squeeze: .standard,
-                                                                                    neighborType: neighborTypeRight)
+                                                                                    neighborTypeLeft: neighborTypeLeft,
+                                                                                    neighborTypeRight: neighborTypeRight)
         
         var _universalPaddingLeft = universalPaddingLeftSqueezed
         var _universalPaddingRight = universalPaddingRightSqueezed
+        
+        
+        let buttonUniversalPaddingLeftSqueezed = CheckBoxLayout.getButtonUniversalPaddingLeft(orientation: orientation,
+                                                                                              flavor: layoutSchemeFlavor,
+                                                                                              squeeze: .squeezed)
+        let buttonUniversalPaddingLeftStandard = CheckBoxLayout.getButtonUniversalPaddingLeft(orientation: orientation,
+                                                                                              flavor: layoutSchemeFlavor,
+                                                                                              squeeze: .standard)
+        let buttonUniversalPaddingRightSqueezed = CheckBoxLayout.getButtonUniversalPaddingRight(orientation: orientation,
+                                                                                                flavor: layoutSchemeFlavor,
+                                                                                                squeeze: .squeezed)
+        let buttonUniversalPaddingRightStandard = CheckBoxLayout.getButtonUniversalPaddingRight(orientation: orientation,
+                                                                                                flavor: layoutSchemeFlavor,
+                                                                                                squeeze: .standard)
+        
+        var _buttonUniversalPaddingLeft = buttonUniversalPaddingLeftSqueezed
+        var _buttonUniversalPaddingRight = buttonUniversalPaddingRightSqueezed
         
         let nameLabelPaddingLeftSqueezed = CheckBoxLayout.getNameLabelPaddingLeft(orientation: orientation,
                                                                                   flavor: layoutSchemeFlavor,
@@ -159,6 +186,9 @@ import SwiftUI
             consumedBaseWidth += universalPaddingRightSqueezed
             consumedBaseWidth += universalPaddingLeftSqueezed
             
+            consumedBaseWidth += buttonUniversalPaddingRightSqueezed
+            consumedBaseWidth += buttonUniversalPaddingLeftSqueezed
+            
             consumedBaseWidth += checkBoxWidthSqueezed
             consumedBaseWidth += checkBoxPaddingLeftSqueezed
             consumedBaseWidth += checkBoxPaddingRightSqueezed
@@ -168,6 +198,8 @@ import SwiftUI
                 
                 if _universalPaddingLeft >= universalPaddingLeftStandard &&
                     _universalPaddingRight >= universalPaddingRightStandard &&
+                    _buttonUniversalPaddingLeft >= buttonUniversalPaddingLeftStandard &&
+                    _buttonUniversalPaddingRight >= buttonUniversalPaddingRightStandard &&
                     _nameLabelPaddingLeft >= nameLabelPaddingLeftStandard &&
                     _nameLabelPaddingRight >= nameLabelPaddingRightStandard &&
                     _iconPaddingLeft >= iconPaddingLeftStandard &&
@@ -180,6 +212,35 @@ import SwiftUI
                 
                     
                 var didModify = false
+                
+                
+                
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                
+                if _buttonUniversalPaddingLeft < buttonUniversalPaddingLeftStandard && consumedWidth < totalWidth {
+                    _buttonUniversalPaddingLeft += 1
+                    consumedBaseWidth += 1
+                    didModify = true
+                }
+                
+                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
+                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
+                                                                                  textPaddingRight: _nameLabelPaddingRight,
+                                                                                  imageWidth: iconWidth,
+                                                                                  imagePaddingLeft: _iconPaddingLeft,
+                                                                                  imagePaddingRight: _iconPaddingRight)
+                if _buttonUniversalPaddingRight < buttonUniversalPaddingRightStandard && consumedWidth < totalWidth {
+                    _buttonUniversalPaddingRight += 1
+                    consumedBaseWidth += 1
+                    didModify = true
+                }
+
                 consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
                                                                                   textPaddingLeft: _nameLabelPaddingLeft,
                                                                                   textPaddingRight: _nameLabelPaddingRight,
@@ -325,6 +386,9 @@ import SwiftUI
             consumedWidth += universalPaddingLeftSqueezed
             consumedWidth += universalPaddingRightSqueezed
             
+            consumedWidth += buttonUniversalPaddingLeftSqueezed
+            consumedWidth += buttonUniversalPaddingRightSqueezed
+            
             consumedWidth += nameLabelTextWidth
             consumedWidth += nameLabelPaddingLeftSqueezed
             consumedWidth += nameLabelPaddingRightSqueezed
@@ -340,6 +404,18 @@ import SwiftUI
             while consumedWidth < totalWidth {
                 
                 var didModify = false
+                
+                if _buttonUniversalPaddingLeft < buttonUniversalPaddingLeftStandard && consumedWidth < totalWidth {
+                    _buttonUniversalPaddingLeft += 1
+                    consumedWidth += 1
+                    didModify = true
+                }
+                
+                if _buttonUniversalPaddingRight < buttonUniversalPaddingRightStandard && consumedWidth < totalWidth {
+                    _buttonUniversalPaddingRight += 1
+                    consumedWidth += 1
+                    didModify = true
+                }
                 
                 if _iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
                     _iconPaddingLeft += 1
@@ -411,11 +487,13 @@ import SwiftUI
                     consumedWidth += 1
                 }
             }
-            
         }
         
         universalPaddingLeft = _universalPaddingLeft
         universalPaddingRight = _universalPaddingRight
+        
+        buttonUniversalPaddingLeft = _buttonUniversalPaddingLeft
+        buttonUniversalPaddingRight = _buttonUniversalPaddingRight
         
         nameLabelPaddingLeft = _nameLabelPaddingLeft
         nameLabelPaddingRight = _nameLabelPaddingRight
@@ -428,13 +506,6 @@ import SwiftUI
         
         checkBoxWidth = _checkBoxWidth
         checkBoxHeight = _checkBoxWidth
-    }
-    
-    func getTextIcon(layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {
-        return ToolInterfaceImageLibrary.getTextIcon(numberOfLines: checkBoxConfiguration.nameLabelNumberOfLines,
-                                                     textIconImagePack: checkBoxConfiguration.textIconImagePack,
-                                                     orientation: orientation,
-                                                     layoutSchemeFlavor: layoutSchemeFlavor)
     }
     
 }

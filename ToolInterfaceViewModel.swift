@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import Combine
 
 @Observable class ToolInterfaceViewModel {
     
@@ -16,25 +17,147 @@ import Observation
     // ...
     //
     
-    @ObservationIgnored var allPossibleRowConfigurations = [[ToolNode]]()
+    @ObservationIgnored weak var jiggleViewController: JiggleViewController?
+    
+    struct RowBluePrint {
+        
+        var configuration: ToolRowConfiguration
+        var nodes: [ToolNode]
+        var centerPinnedElement: ToolInterfaceElement?
+        
+        init(nodes: [ToolNode], configuration: ToolRowConfiguration, centerPinnedElement: ToolInterfaceElement? = nil) {
+            self.nodes = nodes
+            self.configuration = configuration
+            self.centerPinnedElement = centerPinnedElement
+            
+            
+            SANITY_CHECK(configuration: configuration)
+        }
+        
+        func SANITY_CHECK(configuration: ToolRowConfiguration) {
+            var nodeIndex = 0
+            while nodeIndex < nodes.count {
+                
+                if nodeIndex == 0 {
+                    if nodes.count == 1 {
+                        if nodes[nodeIndex].neighborTypeLeft != nil {
+                            print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeLeft as NIL, got \(nodes[nodeIndex].neighborTypeLeft!) [\(nodes.count) node case]")
+                        }
+                        if nodes[nodeIndex].neighborTypeRight != nil {
+                            print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeRight as NIL, got \(nodes[nodeIndex].neighborTypeRight!) [\(nodes.count) node case]")
+                        }
+                    } else {
+                        let nextNode = nodes[nodeIndex + 1]
+                        if nodes[nodeIndex].neighborTypeLeft != nil {
+                            print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeLeft as NIL, got \(String(describing: nodes[nodeIndex].neighborTypeLeft)) [\(nodes.count) node case]")
+                        }
+                        if nodes[nodeIndex].neighborTypeRight != nextNode.type {
+                            print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeRight as \(nextNode.type), got \(String(describing: nodes[nodeIndex].neighborTypeRight)) [\(nodes.count) node case]")
+                        }
+                    }
+                    
+                } else if nodeIndex == (nodes.count - 1) {
+                    let previousNode = nodes[nodeIndex - 1]
+                    if nodes[nodeIndex].neighborTypeLeft != previousNode.type {
+                        print("@Nodes @[\(configuration)] @ \(nodeIndex), expected previousNode as \(previousNode.type), got \(String(describing: nodes[nodeIndex].neighborTypeLeft)) [\(nodes.count) node case]")
+                    }
+                    if nodes[nodeIndex].neighborTypeRight != nil {
+                        print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeRight as NIL, got \(nodes[nodeIndex].neighborTypeRight!) [\(nodes.count) node case]")
+                    }
+                    
+                } else {
+                    let previousNode = nodes[nodeIndex - 1]
+                    let nextNode = nodes[nodeIndex + 1]
+                    if nodes[nodeIndex].neighborTypeLeft != previousNode.type {
+                        print("@Nodes @[\(configuration)] @ \(nodeIndex), expected previousNode as \(previousNode.type), got \(String(describing: nodes[nodeIndex].neighborTypeLeft)) [\(nodes.count) node case]")
+                    }
+                    if nodes[nodeIndex].neighborTypeRight != nextNode.type {
+                        print("@Nodes @[\(configuration)] @ \(nodeIndex), expected neighborTypeRight as \(nextNode.type), got \(String(describing: nodes[nodeIndex].neighborTypeRight)) [\(nodes.count) node case]")
+                    }
+                }
+                
+                nodeIndex += 1
+            }
+        }
+        
+        init(nodes: [ToolNode], configuration: ToolRowConfiguration) {
+            self.nodes = nodes
+            self.configuration = configuration
+            self.centerPinnedElement = nil
+        }
+        
+        func getCenterPinnedNode() -> ToolNode? {
+            for node in nodes {
+                if node.element == centerPinnedElement {
+                    return node
+                }
+            }
+            return nil
+        }
+    }
+    
+    func getRow(slot: ToolRowSlot) -> ToolRow? {
+        if Device.isPad {
+            for row in rowsDraggable {
+                if row.slot == slot {
+                    return row
+                }
+            }
+        } else {
+            for row in rowsTop {
+                if row.slot == slot {
+                    return row
+                }
+            }
+            for row in rowsBottom {
+                if row.slot == slot {
+                    return row
+                }
+            }
+        }
+        for row in rowsGraphSideMenu {
+            if row.slot == slot {
+                return row
+            }
+        }
+        return nil
+    }
+    
+    private func getRow(rowBluePrint: RowBluePrint?, slot: ToolRowSlot, width: Int, height: Int) -> ToolRow {
+        let result = ToolRow(slot: slot)
+        if let rowBluePrint = rowBluePrint {
+            result.configuration = rowBluePrint.configuration
+            result.setNodes(rowBluePrint.nodes,
+                            animated: false,
+                            reversed: false, width: width,
+                            height: height,
+                            layoutStackingCategory: layoutStackingCategory,
+                            sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                            centerPinnedElement: rowBluePrint.centerPinnedElement)
+        } else {
+            result.configuration = .empty
+            result.setNodes([],
+                            animated: false,
+                            reversed: false, width: width,
+                            height: height,
+                            layoutStackingCategory: layoutStackingCategory,
+                            sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                            centerPinnedElement: nil)
+        }
+        return result
+    }
+    
+    @ObservationIgnored var allPossibleRowBluePrints = [RowBluePrint]()
     @ObservationIgnored var rowStackingCategoryCalculators = [RowStackingCategoryCalculator]()
     @ObservationIgnored var checkLayoutStackingCategories = ToolInterfaceLayoutStackingCategory.getAllInPriorityOrderExceptLeast()
     
+    @ObservationIgnored var layoutStackingCategory = ToolInterfaceLayoutStackingCategory.allVerticalSmall
+    @ObservationIgnored var layoutStackingCategoryGraphSideMenu = ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: false, isTextIconButtonLong: false))
     
-    var layoutStackingCategory = ToolInterfaceLayoutStackingCategory.allVerticalSmall
-    var layoutSchemeFlavorSliders = LayoutSchemeFlavor.stackedSmall
+    @ObservationIgnored var layoutSchemeFlavorSliders = LayoutSchemeFlavor.stackedSmall
     
     func calculatelayoutStackingCategory(width: Int,
-                                         height: Int,
-                                         safeAreaLeft: Int,
-                                         safeAreaRight: Int) {
-        
-        for rowStackingCategoryCalculator in rowStackingCategoryCalculators {
-            rowStackingCategoryCalculator.measure(width: width,
-                                                  height: height,
-                                                  safeAreaLeft: safeAreaLeft,
-                                                  safeAreaRight: safeAreaRight)
-        }
+                                         height: Int) {
         
         var _layoutStackingCategory = ToolInterfaceLayoutStackingCategory.allVerticalSmall
         for layoutStackingCategory in checkLayoutStackingCategories {
@@ -44,15 +167,15 @@ import Observation
                 
                 if rowStackingCategoryCalculator.doesSupportLayoutStackingCategory(layoutStackingCategory: layoutStackingCategory,
                                                                                    width: width,
-                                                                                   height: height,
-                                                                                   safeAreaLeft: safeAreaLeft,
-                                                                                   safeAreaRight: safeAreaRight) == false {
+                                                                                   height: height) == false {
+                    print("*NOT* Supporter: \(layoutStackingCategory)")
                     isSupported = false
                     break
                 }
             }
             
             if isSupported {
+                print("IS Supporter: \(layoutStackingCategory)")
                 _layoutStackingCategory = layoutStackingCategory
                 break
             }
@@ -75,286 +198,90 @@ import Observation
         layoutSchemeFlavorSliders = _layoutSchemeFlavorSliders
     }
     
-    var rowsTop = [ToolRow]()
-    var rowsBottom = [ToolRow]()
-    var rowsDraggable = [ToolRow]()
+    @ObservationIgnored var toolConfigurationIdiomPrevious = ToolConfigurationIdiom.unknown
+    @ObservationIgnored var toolConfigurationIdiomCurrent = ToolConfigurationIdiom.unknown
     
-    var toolNodeBaseID = UInt16(0)
+    
+    @ObservationIgnored var rowsTop = [ToolRow]()
+    @ObservationIgnored var rowsBottom = [ToolRow]()
+    @ObservationIgnored var rowsDraggable = [ToolRow]()
+    @ObservationIgnored var rowsGraphSideMenu = [ToolRow]()
+    
+    
+    @ObservationIgnored var toolNodeBaseID = UInt16(0)
     func getToolNodeID() -> UInt16 {
         toolNodeBaseID += 1
         return toolNodeBaseID
     }
     
-    let orientation: Orientation
-    weak var jiggleViewModel: JiggleViewModel!
+    @ObservationIgnored let orientation: Orientation
+    @ObservationIgnored weak var jiggleViewModel: JiggleViewModel!
     init(orientation: Orientation, jiggleViewModel: JiggleViewModel) {
         self.orientation = orientation
         self.jiggleViewModel = jiggleViewModel
         
         self.rowHeight = ToolInterfaceTheme.getRowHeight(orientation: orientation)
         
-        let row1 = ToolRow(toolInterfaceRow: .topBarTop1)
-        row1.setNodes([
-
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .dividerSpacerDivider),
-            getMainMenuButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
+        
+        
+        let idiom = calculateToolConfigurationIdiom()
+        toolConfigurationIdiomPrevious = idiom
+        toolConfigurationIdiomCurrent = idiom
+        
+        if Device.isPad {
             
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .iconButton),
+            let bluePrintTopPrimary = getRowBluePrint_Top_Primary_Pad(toolConfigurationIdiom: idiom)
+            let rowTopPrimary = getRow(rowBluePrint: bluePrintTopPrimary,
+                                       slot: .top_Primary,
+                                       width: rowWidth,
+                                       height: rowHeight)
+            rowsDraggable.append(rowTopPrimary)
             
-            getUndoButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: .textIconButton),
-            getRedoButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .dividerSpacerDivider),
+            let bluePrintTopSecondary1 = getRowBluePrint_Top_Secondary1_Pad(toolConfigurationIdiom: idiom)
+            let rowTopSecondary1 = getRow(rowBluePrint: bluePrintTopSecondary1,
+                                          slot: .top_Secondary1,
+                                          width: rowWidth,
+                                          height: rowHeight)
+            rowsDraggable.append(rowTopSecondary1)
             
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .checkBox, neighborTypeRight: .textIconButton),
+            let bluePrintTopSecondary2 = getRowBluePrint_Top_Secondary2_Pad(toolConfigurationIdiom: idiom)
+            let rowTopSecondary2 = getRow(rowBluePrint: bluePrintTopSecondary2,
+                                          slot: .top_Secondary2,
+                                          width: rowWidth,
+                                          height: rowHeight)
+            rowsDraggable.append(rowTopSecondary2)
             
-            getFlipVerticalButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: .textIconButton),
-            getFlipHorizontalButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .textIconButton),
-            getResetZoomButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: nil),
+            let bluePrintBottomSecondary2 = getRowBluePrint_Bottom_Secondary2_Pad(toolConfigurationIdiom: idiom)
+            let rowBottomSecondary2 = getRow(rowBluePrint: bluePrintBottomSecondary2,
+                                             slot: .bottom_Secondary2,
+                                             width: rowWidth,
+                                             height: rowHeight)
+            rowsDraggable.append(rowBottomSecondary2)
             
-                      ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row1)
-        rowsTop.append(row1)
-        
-        let row2 = ToolRow(toolInterfaceRow: .topBarTop2)
-        row2.setNodes([
+            let bluePrintBottomSecondary1 = getRowBluePrint_Bottom_Secondary1_Pad(toolConfigurationIdiom: idiom)
+            let rowBottomSecondary1 = getRow(rowBluePrint: bluePrintBottomSecondary1,
+                                             slot: .bottom_Secondary1,
+                                             width: rowWidth,
+                                             height: rowHeight)
+            rowsDraggable.append(rowBottomSecondary1)
             
-            
-            getMainMenuButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .dividerSpacerDivider),
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            getFlipVerticalButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .textIconButton),
-            getFlipHorizontalButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .iconButton),
-            
-            getRedoButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: .textIconButton),
-            getUndoButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            getDividerToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .spacer),
-            getSpacerToolNode(defaultWidth: 8, neighborTypeLeft: .divider, neighborTypeRight: .checkBox),
-            
-            getStereoscopicEnabledCheckBoxNode(neighborTypeLeft: .spacer, neighborTypeRight: nil),
-        ],
-        
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        
-        rowsDraggable.append(row2)
-        rowsTop.append(row2)
-        
-        
-        let row3 = ToolRow(toolInterfaceRow: .topBarTop3)
-        row3.setNodes([
-            getCreateJiggleButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .dividerSpacerDivider),
-            getRemoveJiggleButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            getRecordMovieButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .textIconButton),
-            getCloneJiggleButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .iconButton),
-            
-            getCreateJiggleButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: .textIconButton),
-            getRemoveJiggleButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .dividerSpacerDivider),
-            
-            getDividerToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: nil)
-        ],
-        
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row3)
-        rowsTop.append(row3)
-        
-        
-        let row4 = ToolRow(toolInterfaceRow: .topBarTop4)
-        row4.setNodes([
-            getSpacerToolNode(defaultWidth: 20, neighborTypeLeft: nil, neighborTypeRight: .checkBox),
-            getZoomEnabledCheckBoxNode(neighborTypeLeft: .spacer, neighborTypeRight: .checkBox),
-            getStereoscopicEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .checkBox),
-            getSpacerToolNode(defaultWidth: 20, neighborTypeLeft: .checkBox, neighborTypeRight: .checkBox),
-            getGyroscopeEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .spacer),
-            getAudioEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .checkBox),
-            getSpacerToolNode(defaultWidth: 20, neighborTypeLeft: .checkBox, neighborTypeRight: nil)
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row4)
-        //rowsTop.append(row4)
-        
-        
-        let row5 = ToolRow(toolInterfaceRow: .topBarTop5)
-        row5.setNodes([
-            getStereoscopicEnabledCheckBoxNode(neighborTypeLeft: nil, neighborTypeRight: .checkBox),
-            getZoomEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .checkBox),
-            getAudioEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .checkBox),
-            getGyroscopeEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .spacer),
-            getSpacerToolNode(defaultWidth: 40, neighborTypeLeft: .checkBox, neighborTypeRight: nil)
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row5)
-        //rowsTop.append(row5)
-        
-        
-        let row6 = ToolRow(toolInterfaceRow: .topBarTop6)
-        row6.setNodes([
-            getTwistPowerSliderToolNode(widthCategory: .fullWidth, neighborTypeLeft: nil, neighborTypeRight: nil),
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row6)
-        //rowsTop.append(row6)
-        
-        
-        let row7 = ToolRow(toolInterfaceRow: .topBarTop7)
-        row7.setNodes([
-            getTwistSpeedSliderToolNode(widthCategory: .fullWidth, neighborTypeLeft: nil, neighborTypeRight: nil),
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row7)
-        rowsBottom.append(row7)
-        
-        
-        let row8 = ToolRow(toolInterfaceRow: .topBarTop8)
-        row8.setNodes([
-            getZoomSliderToolNode(widthCategory: .fullWidth, neighborTypeLeft: nil, neighborTypeRight: nil),
-            
-                      ],
-                      animated: false,
-                      reversed: false,
-                      width: rowWidth,
-                      height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row8)
-        rowsBottom.append(row8)
-        
-        
-        
-        let row9 = ToolRow(toolInterfaceRow: .topBarTop9)
-        row9.setNodes([
-            getTwistPowerSliderToolNode(widthCategory: .halfWidthLeft, neighborTypeLeft: nil, neighborTypeRight: .slider),
-            getTwistSpeedSliderToolNode(widthCategory: .halfWidthRight, neighborTypeLeft: .slider, neighborTypeRight: nil),
-            
-            
-                      ],
-                      animated: false,
-                      reversed: false,
-                      width: rowWidth,
-                      height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row9)
-        rowsBottom.append(row9)
-        
-        
-        let row10 = ToolRow(toolInterfaceRow: .topBarTop10)
-        row10.setNodes([
-            getJiggleSpeedSliderToolNode(widthCategory: .halfWidthLeft, neighborTypeLeft: nil, neighborTypeRight: .slider),
-            getJigglePowerSliderToolNode(widthCategory: .halfWidthRight, neighborTypeLeft: .slider, neighborTypeRight: nil),
-                      ],
-                      animated: false,
-                      reversed: false,
-                      width: rowWidth,
-                      height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row10)
-        rowsBottom.append(row10)
-        
-        
-         
-        let row11 = ToolRow(toolInterfaceRow: .topBarTop11)
-        row11.setNodes([
-            getJiggleSpeedSliderToolNode(widthCategory: .fullWidth, neighborTypeLeft: nil, neighborTypeRight: nil),
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row11)
-        rowsBottom.append(row11)
-        
-        let row12 = ToolRow(toolInterfaceRow: .topBarTop12)
-         row12.setNodes([
-            getJigglePowerSliderToolNode(widthCategory: .fullWidth, neighborTypeLeft: nil, neighborTypeRight: nil),
-        ],
-                      animated: false,
-                      reversed: false,
-                      width: rowWidth,
-                      height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row12)
-        rowsBottom.append(row12)
-        
-        
-        let row13 = ToolRow(toolInterfaceRow: .topBarTop13)
-        row13.setNodes([
-            getDocumentModeSegmentToolNode(neighborTypeLeft: nil, neighborTypeRight: .segment),
-            getEditModeSegmentToolNode(neighborTypeLeft: .segment, neighborTypeRight: nil),
-            getSpacerToolNode(defaultWidth: 20, neighborTypeLeft: .segment, neighborTypeRight: nil)
-        ],
-                      animated: false, reversed: false,
-                      width: rowWidth, height: rowHeight,
-                      safeAreaLeft: safeAreaLeft, safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory, sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row13)
-        rowsBottom.append(row13)
-        
-        
-        let row15 = ToolRow(toolInterfaceRow: .topBarTop15)
-        row15.setNodes([
-            getSpacerToolNode(defaultWidth: 10, neighborTypeLeft: nil, neighborTypeRight: .segment),
-            getEditModeSegmentToolNode(neighborTypeLeft: .spacer, neighborTypeRight: .segment),
-            getEditModeSegmentToolNode(neighborTypeLeft: .segment, neighborTypeRight: .spacer),
-            getSpacerToolNode(defaultWidth: 10, neighborTypeLeft: .segment, neighborTypeRight: nil)
-                      ],
-                      animated: false,
-                      reversed: false,
-                      width: rowWidth,
-                      height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
-                      layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row15)
-        rowsBottom.append(row15)
+            let bluePrintBottomPrimary = getRowBluePrint_Bottom_Primary_Pad(toolConfigurationIdiom: idiom)
+            let rowBottomPrimary = getRow(rowBluePrint: bluePrintBottomPrimary,
+                                          slot: .bottom_Primary,
+                                          width: rowWidth,
+                                          height: rowHeight)
+            rowsDraggable.append(rowBottomPrimary)
+        }
+       
         
         
         /*
-        let row9 = ToolRow(toolInterfaceRow: .topBarTop9)
-        row9.setNodes([
-            getEditModeSegmentToolNode(neighborTypeLeft: nil, neighborTypeRight: .dividerSpacerDivider),
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .spacer, neighborTypeRight: .textIconButton),
-            getMainMenuButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .dividerSpacerDivider),
-            getDividerSpacerDividerToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .textIconButton),
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .textIconButton),
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .textIconButton),
+        
+        let rowGraphSide1 = ToolRow()
+        rowGraphSide1.setNodes([
+            getSpacerToolNode(defaultWidth: 0),
+            getResetWeightGraphTextIconButtonToolNode(neighborTypeLeft: .spacer, neighborTypeRight: .spacer),
+            getSpacerToolNode(defaultWidth: 0),
                       ],
                       animated: false,
                       reversed: false,
@@ -364,21 +291,187 @@ import Observation
                       safeAreaRight: safeAreaRight,
                       layoutStackingCategory: layoutStackingCategory,
                       sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
-        rowsDraggable.append(row9)
-        rowsBottom.append(row9)
+        rowsGraphSideMenu.append(rowGraphSide1)
+        
+        let rowGraphSide2 = ToolRow()
+        rowGraphSide2.setNodes([
+            getCloseWeightGraphTextIconButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: nil),
+                      ],
+                      animated: false,
+                      reversed: false,
+                      width: rowWidth,
+                      height: rowHeight,
+                      safeAreaLeft: safeAreaLeft,
+                      safeAreaRight: safeAreaRight,
+                      layoutStackingCategory: layoutStackingCategory,
+                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
+        rowsGraphSideMenu.append(rowGraphSide2)
+        
+        let rowGraphSide3 = ToolRow()
+        rowGraphSide3.setNodes([
+            getBreakManualWeightGraphTextIconButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: nil),
+                      ],
+                      animated: false,
+                      reversed: false,
+                      width: rowWidth,
+                      height: rowHeight,
+                      safeAreaLeft: safeAreaLeft,
+                      safeAreaRight: safeAreaRight,
+                      layoutStackingCategory: layoutStackingCategory,
+                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
+        rowsGraphSideMenu.append(rowGraphSide3)
+         
         */
         
-        
         // TODO: These need to be clones, not the original nodes.
-        for row in rowsDraggable {
-            allPossibleRowConfigurations.append(row.nodes)
+        if Device.isPad {
+            //allPossibleRowBluePrints.append(getRowBluePrintMainControlsStandardPad())
+            //allPossibleRowBluePrints.append(getRowBluePrintMainControlsViewPad())
+            //allPossibleRowBluePrints.append(getRowBluePrintMainControlsWeightsPad())
+            
+        } else {
+            
         }
         
-        for possibleRowConfiguration in allPossibleRowConfigurations {
+        for possibleRowBluePrint in allPossibleRowBluePrints {
             let rowStackingCategoryCalculator = RowStackingCategoryCalculator(orientation: orientation,
-                                                                              nodes: possibleRowConfiguration)
+                                                                              rowBluePrint: possibleRowBluePrint)
             rowStackingCategoryCalculators.append(rowStackingCategoryCalculator)
         }
+        
+        publisherLinkUp()
+    }
+    
+    var zoomEnabledUpdateCancellable: AnyCancellable?
+    var resetZoomActiveUpdateCancellable: AnyCancellable?
+    var weightCurveGraphEnabledUpdateCancellable: AnyCancellable?
+    var jigglesDidChangeCancellable: AnyCancellable?
+    var createJigglesStandardUpdateCancellable: AnyCancellable?
+    var createJigglesDrawingUpdateCancellable: AnyCancellable?
+    var createPointsUpdateCancellable: AnyCancellable?
+    var removePointsUpdateCancellable: AnyCancellable?
+    var createWeightRingsStandardUpdateCancellable: AnyCancellable?
+    var createWeightRingsDrawingUpdateCancellable: AnyCancellable?
+    var createWeightRingPointsUpdateCancellable: AnyCancellable?
+    var removeWeightRingPointsUpdateCancellable: AnyCancellable?
+    var selectedJiggleDataUpdateCancellable: AnyCancellable?
+    
+    func publisherLinkUp() {
+        
+        jigglesDidChangeCancellable = jiggleViewModel
+            .jiggleDocument
+            .jigglesDidChangePublisher
+            .sink { [weak self] in
+                print("Jiggles Changed...!!!")
+                if let self = self {
+                    self.handleJigglesDidChange()
+                }
+            }
+        
+        zoomEnabledUpdateCancellable = jiggleViewModel
+            .zoomEnabledUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleZoomEnabledDidChange()
+                }
+            }
+        
+        resetZoomActiveUpdateCancellable = jiggleViewModel
+            .resetZoomActiveUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleResetZoomActiveDidChange()
+                }
+            }
+        
+        weightCurveGraphEnabledUpdateCancellable = jiggleViewModel
+            .weightCurveGraphEnabledUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleWeightCurveGraphEnabledDidChange()
+                }
+            }
+        
+        selectedJiggleDataUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .selectedJiggleDataUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleSelectedJiggleDidChange()
+                }
+            }
+        
+        createJigglesStandardUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createJigglesStandardUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreateJiggleStandardDidChange()
+                }
+            }
+        
+        createJigglesDrawingUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createJigglesDrawingUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreateJiggleDrawingDidChange()
+                }
+            }
+        
+        createPointsUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createPointsUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreatePointsDidChange()
+                }
+            }
+        
+        removePointsUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .removePointsUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleRemovePointsDidChange()
+                }
+            }
+        
+        createWeightRingsStandardUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createWeightRingsStandardUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreateWeightRingsStandardDidChange()
+                }
+            }
+        
+        createWeightRingsDrawingUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createWeightRingsDrawingUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreateWeightRingsDrawingDidChange()
+                }
+            }
+        
+        createWeightRingPointsUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .createWeightRingPointsUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleCreateWeightRingPointsDidChange()
+                }
+            }
+        
+        removeWeightRingPointsUpdateCancellable = jiggleViewModel
+            .jiggleDocument
+            .removeWeightRingPointsUpdatePublisher
+            .sink { [weak self] _ in
+                if let self = self {
+                    self.handleRemoveWeightRingPointsDidChange()
+                }
+            }
     }
     
     func getSpacerToolNode(defaultWidth: Int,
@@ -400,7 +493,6 @@ import Observation
     var safeAreaRight = 0
     
     func layoutAllRowsPhone(rowWidth: Int, rowHeight: Int, safeAreaLeft: Int, safeAreaRight: Int) {
-
         if rowWidth != self.rowWidth ||
             rowHeight != self.rowHeight ||
             safeAreaLeft != self.safeAreaLeft ||
@@ -413,15 +505,11 @@ import Observation
             
             for row in rowsTop { row.layout(width: rowWidth, 
                                             height: rowHeight,
-                                            safeAreaLeft: safeAreaLeft,
-                                            safeAreaRight: safeAreaRight,
                                             layoutStackingCategory: layoutStackingCategory,
                                             sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders) }
             
             for row in rowsBottom { row.layout(width: rowWidth,
                                                height: rowHeight,
-                                               safeAreaLeft: safeAreaLeft,
-                                               safeAreaRight: safeAreaRight,
                                                layoutStackingCategory: layoutStackingCategory,
                                                sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders) }
         }
@@ -441,64 +529,8 @@ import Observation
             
             for row in rowsDraggable { row.layout(width: rowWidth,
                                                   height: rowHeight,
-                                                  safeAreaLeft: safeAreaLeft,
-                                                  safeAreaRight: safeAreaRight,
                                                   layoutStackingCategory: layoutStackingCategory,
                                                   sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders) }
-        }
-    }
-    
-    func handleSelectedJiggleDidChange() {
-        if Device.isPad {
-            for row in rowsDraggable { handleSelectedJiggleDidChange(row: row) }
-        } else {
-            for row in rowsTop { handleSelectedJiggleDidChange(row: row) }
-            for row in rowsBottom { handleSelectedJiggleDidChange(row: row) }
-        }
-    }
-    
-    func handleSelectedJiggleDidChange(row: ToolRow) {
-        for node in row.nodes {
-            if node.element == .sliderJigglePower {
-                node.magicalViewModel.refresh()
-            }
-            if node.element == .sliderJiggleSpeed {
-                node.magicalViewModel.refresh()
-            }
-        }
-    }
-    
-    func handleDocumentModeDidChange() {
-        if Device.isPad {
-            for row in rowsDraggable { handleDocumentModeDidChange(row: row) }
-        } else {
-            for row in rowsTop { handleDocumentModeDidChange(row: row) }
-            for row in rowsBottom { handleDocumentModeDidChange(row: row) }
-        }
-    }
-    
-    func handleDocumentModeDidChange(row: ToolRow) {
-        for node in row.nodes {
-            if node.element == .segmentDocumentMode {
-                node.magicalViewModel.refresh()
-            }
-        }
-    }
-    
-    func handleEditModeDidChange() {
-        if Device.isPad {
-            for row in rowsDraggable { handleEditModeDidChange(row: row) }
-        } else {
-            for row in rowsTop { handleEditModeDidChange(row: row) }
-            for row in rowsBottom { handleEditModeDidChange(row: row) }
-        }
-    }
-    
-    func handleEditModeDidChange(row: ToolRow) {
-        for node in row.nodes {
-            if node.element == .segmentEditMode {
-                node.magicalViewModel.refresh()
-            }
         }
     }
     
@@ -507,8 +539,8 @@ import Observation
         
         let row1 = rowsDraggable[0]
         row1.setNodes([
-            getMainMenuButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .textIconButton),
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .divider),
+            getCloneJiggleTextIconButtonToolNode(neighborTypeLeft: nil, neighborTypeRight: .textIconButton),
+            getCloneJiggleTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .divider),
             getDividerToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .spacer),
             getSpacerToolNode(defaultWidth: 8, neighborTypeLeft: .divider, neighborTypeRight: .segment),
             getDocumentModeSegmentToolNode(neighborTypeLeft: .spacer, neighborTypeRight: .spacer),
@@ -518,10 +550,9 @@ import Observation
                       reversed: false, 
                       width: rowWidth,
                       height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
                       layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
+                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                      centerPinnedElement: nil)
         
     }
     
@@ -530,22 +561,20 @@ import Observation
         
         let row1 = rowsDraggable[0]
         row1.setNodes([
-            getPointBreakTangentButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
+            getCloneJiggleTextIconButtonToolNode(neighborTypeLeft: .iconButton, neighborTypeRight: .dividerSpacerDivider),
             getDividerToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .spacer),
             getSpacerToolNode(defaultWidth: 12, neighborTypeLeft: .divider, neighborTypeRight: .segment),
-            getEditModeSegmentToolNode(neighborTypeLeft: .divider, neighborTypeRight: .checkBox),
-            getStereoscopicEnabledCheckBoxNode(neighborTypeLeft: .segment, neighborTypeRight: .dividerSpacerDivider),
+            getZoomEnabledCheckBoxNode(neighborTypeLeft: .segment, neighborTypeRight: .dividerSpacerDivider),
             getDividerSpacerDividerToolNode(neighborTypeLeft: .checkBox, neighborTypeRight: .textIconButton),
-            getMainMenuButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: nil)
+            getCloneJiggleTextIconButtonToolNode(neighborTypeLeft: .dividerSpacerDivider, neighborTypeRight: nil)
         ],
                       animated: true,
                       reversed: false,
                       width: rowWidth,
                       height: rowHeight,
-                      safeAreaLeft: safeAreaLeft,
-                      safeAreaRight: safeAreaRight,
                       layoutStackingCategory: layoutStackingCategory,
-                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders)
+                      sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                      centerPinnedElement: nil)
     }
     
     
@@ -555,6 +584,273 @@ import Observation
     
     func replaceBottom3ToolbarsB() {
         print("replaceBottom3ToolbarsB()")
+    }
+    
+    func getRowBluePrintEmpty() -> RowBluePrint {
+        RowBluePrint(nodes: [], configuration: .empty)
+    }
+    
+    func getRowBluePrint_Top_Secondary1_Empty() -> RowBluePrint {
+        return RowBluePrint(nodes: [], configuration: .top_Secondary1_Empty)
+    }
+    
+    func getRowBluePrint_Top_Secondary2_Empty() -> RowBluePrint {
+        return RowBluePrint(nodes: [], configuration: .top_Secondary2_Empty)
+    }
+    
+    func getRowBluePrint_Bottom_Secondary2_Empty() -> RowBluePrint {
+        return RowBluePrint(nodes: [], configuration: .bottom_Secondary2_Empty)
+    }
+    
+    func getRowBluePrint_Bottom_Secondary1_Empty() -> RowBluePrint {
+        return RowBluePrint(nodes: [], configuration: .bottom_Secondary1_Empty)
+    }
+    
+    func getRowBluePrintJunkTest(toolRowConfiguration: ToolRowConfiguration) -> RowBluePrint {
+        let nodes = [
+            getWeightCurveGraphEnabledCheckBoxNode(neighborTypeLeft: nil, neighborTypeRight: .checkBox),
+            getGyroscopeEnabledCheckBoxNode(neighborTypeLeft: .checkBox, neighborTypeRight: .spacer),
+            getSpacerToolNode(defaultWidth: 0, neighborTypeLeft: .checkBox, neighborTypeRight: .textIconButton),
+            getFlipVerticalJiggleTextIconButtonToolNode(neighborTypeLeft: .spacer, neighborTypeRight: .textIconButton),
+            getFlipHorizontalJiggleTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .textIconButton),
+            getSendBackJiggleTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .textIconButton),
+            getSendBackwardJiggleTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .textIconButton),
+            getSendForwardJiggleTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: .textIconButton),
+            getSendFrontWeightRingTextIconButtonToolNode(neighborTypeLeft: .textIconButton, neighborTypeRight: nil)
+        ]
+        return RowBluePrint(nodes: nodes, configuration: toolRowConfiguration, centerPinnedElement: nil)
+    }
+    
+    func calculateToolConfigurationIdiom() -> ToolConfigurationIdiom {
+        if let jiggleViewModel = jiggleViewModel {
+            if jiggleViewModel.isZoomEnabled {
+                return .zoom
+            } else {
+                switch jiggleViewModel.jiggleDocument.documentMode {
+                case .view:
+                    
+                    switch jiggleViewModel.jiggleDocument.animationMode {
+                        
+                    case .bounce:
+                        return .viewAnimationBounce
+                    case .wobble:
+                        return .viewAnimationWobble
+                    case .twist:
+                        return .viewAnimationTwist
+                    }
+                    
+                case .jiggles:
+                    return .jiggles
+                case .points:
+                    return .points
+                case .weights:
+                    switch jiggleViewModel.jiggleDocument.weightMode {
+                        
+                    case .affine:
+                        switch jiggleViewModel.displayMode {
+                        case .regular:
+                            return .weightsAffineRegular
+                        case .swivel:
+                            return .weightsAffineSwivel
+                        case .split:
+                            return .weightsAffineSplit
+                        }
+                    case .points:
+                        switch jiggleViewModel.displayMode {
+                        case .regular:
+                            return .weightsPointsRegular
+                        case .swivel:
+                            return .weightsPointsSwivel
+                        case .split:
+                            return .weightsPointsSplit
+                        }
+                    case .centers:
+                        switch jiggleViewModel.displayMode {
+                        case .regular:
+                            return .weightsCentersRegular
+                        case .swivel:
+                            return .weightsCentersSwivel
+                        case .split:
+                            return .weightsCentersSplit
+                        }
+                    }
+                }
+            }
+        } else {
+            return .unknown
+        }
+    }
+    
+    func updateRow(slot: ToolRowSlot?, rowBluePrint: RowBluePrint?, reversed: Bool) {
+        
+        guard let slot = slot else {
+            return
+        }
+        guard let row = getRow(slot: slot) else {
+            return
+        }
+        
+        if let rowBluePrint = rowBluePrint {
+            if row.configuration != rowBluePrint.configuration {
+                row.configuration = rowBluePrint.configuration
+                row.setNodes(rowBluePrint.nodes,
+                             animated: true,
+                             reversed: reversed,
+                             width: rowWidth,
+                             height: rowHeight,
+                             layoutStackingCategory: layoutStackingCategory,
+                             sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                             centerPinnedElement: rowBluePrint.centerPinnedElement)
+            }
+        } else {
+            row.configuration = .unknown
+            row.setNodes([], animated: true,
+                         reversed: reversed,
+                         width: rowWidth,
+                         height: rowHeight,
+                         layoutStackingCategory: layoutStackingCategory, 
+                         sliderLayoutSchemeFlavor: layoutSchemeFlavorSliders,
+                         centerPinnedElement: nil)
+        }
+    }
+    
+    
+    var isBlocked: Bool {
+        
+        if isBlockedExceptForHistory {
+            return true
+        }
+        
+        if let jiggleViewController = jiggleViewModel.jiggleViewController {
+            if jiggleViewController.enqueuedHistoryState !== nil {
+                print("Action Blocked - jiggleViewController.enqueuedHistoryState")
+                return true
+            }
+        }
+        return false
+    }
+    
+    var isBlockedExceptForHistory: Bool {
+        
+        switch jiggleViewModel._storedDocumentModeTransitionState {
+        case .pendingRemesh:
+            print("Action Blocked - pendingRemesh")
+            return true
+        case .pendingTransition:
+            print("Action Blocked - pendingTransition")
+            return true
+        default:
+            break
+        }
+        
+        if jiggleViewModel._storedDisplayTransition.isActive {
+            print("Action Blocked - jiggleViewModel._storedDisplayTransition.isActive")
+            return true
+        }
+        
+        if let jiggleViewController = jiggleViewModel.jiggleViewController {
+            
+            if jiggleViewController._storedDocumentModeTransitionTick > 0 {
+                print("Action Blocked - _storedDocumentModeTransitionTick = \(jiggleViewController._storedDocumentModeTransitionTick)")
+                return true
+            }
+            
+            if jiggleViewController._storedInterfaceActionTick > 0 {
+                print("Action Blocked - _storedInterfaceActionTick = \(jiggleViewController._storedInterfaceActionTick)")
+                return true
+            }
+            
+            if jiggleViewController._storedExpandAndCollapsePhoneMenusAction.isActive {
+                print("Action Blocked - _storedExpandAndCollapsePhoneMenusAction.isActive")
+                return true
+            }
+            
+            if jiggleViewController._storedEnterGraphModeDueToDocumentModeAction.isActive {
+                print("Action Blocked - _storedEnterGraphModeDueToDocumentModeAction.isActive")
+                return true
+            }
+            
+            if jiggleViewController._storedExitGraphModeDueToDocumentModeAction.isActive {
+                print("Action Blocked - _storedExitGraphModeDueToDocumentModeAction.isActive")
+                return true
+            }
+            
+            if jiggleViewController._storedPhoneUpdateDisplayFrameAction.isActive {
+                print("Action Blocked - _storedPhoneUpdateDisplayFrameAction.isActive")
+                return true
+            }
+            
+            if jiggleViewController.isEnteringOrExitingGraphMode {
+                print("Action Blocked - jiggleViewController.isEnteringOrExitingGraphMode")
+                return true
+            }
+            if jiggleViewController.isEnteringOrExitingGraphMode {
+                print("Action Blocked - jiggleViewController.isEnteringOrExitingGraphMode")
+                return true
+            }
+            if jiggleViewController.phoneIsExpandOrCollapseAnimationActive {
+                print("Action Blocked - jiggleViewController.phoneIsExpandOrCollapseAnimationActive")
+                return true
+            }
+        }
+        
+        if jiggleViewModel.isDisplayTransitionActive {
+            print("Action Blocked - jiggleViewModel.isDisplayTransitionActive")
+            return true
+        }
+        
+        if jiggleViewModel.isWeightCurveTransitionActive {
+            print("Action Blocked - jiggleViewModel.isWeightCurveTransitionActive")
+            return true
+        }
+        
+        if jiggleViewModel.actionBlocker.isBlocked {
+            print("Action Blocked - jiggleViewModel.actionBlocker.isBlocked")
+            return true
+        }
+        
+        return false
+    }
+    
+    var isBlockedAnyTransition: Bool {
+        
+        switch jiggleViewModel._storedDocumentModeTransitionState {
+        case .pendingRemesh:
+            print("Action Blocked - pendingRemesh")
+            return true
+        case .pendingTransition:
+            print("Action Blocked - pendingTransition")
+            return true
+        default:
+            break
+        }
+        
+        if let jiggleViewController = jiggleViewModel.jiggleViewController {
+            if jiggleViewController.isEnteringOrExitingGraphMode {
+                print("Action Blocked - jiggleViewController.isEnteringOrExitingGraphMode")
+                return true
+            }
+            if jiggleViewController.isEnteringOrExitingGraphMode {
+                print("Action Blocked - jiggleViewController.isEnteringOrExitingGraphMode")
+                return true
+            }
+            if jiggleViewController.phoneIsExpandOrCollapseAnimationActive {
+                print("Action Blocked - jiggleViewController.phoneIsExpandOrCollapseAnimationActive")
+                return true
+            }
+        }
+        
+        if jiggleViewModel.isDisplayTransitionActive {
+            print("Action Blocked - jiggleViewModel.isDisplayTransitionActive")
+            return true
+        }
+        
+        if jiggleViewModel.isWeightCurveTransitionActive {
+            print("Action Blocked - jiggleViewModel.isWeightCurveTransitionActive")
+            return true
+        }
+        
+        return false
     }
     
 }

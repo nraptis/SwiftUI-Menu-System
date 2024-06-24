@@ -43,35 +43,32 @@ import SwiftUI
         print("MagicalIconButtonViewModel => handleClicked()")
     }
     
-    func getTextIcon() -> TextIcon {
-        return ToolInterfaceImageLibrary.getTextIcon(numberOfLines: 1,
-                                                     textIconImagePack: iconButtonConfiguration.textIconImagePack,
-                                                     orientation: orientation,
-                                                     layoutSchemeFlavor: .long)
-    }
-    
     override func refreshLayoutFrame() {
         
-        let textIcon = getTextIcon()
+        let textIcon = iconButtonConfiguration.getTextIcon(orientation: orientation)
         
         let iconWidth = textIcon.iconWidth
         
         let universalPaddingLeftSqueezed = IconButtonLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                     flavor: .long,
                                                                                     squeeze: .squeezed,
-                                                                                    neighborType: neighborTypeLeft)
+                                                                                    neighborTypeLeft: neighborTypeLeft,
+                                                                                    neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStandard = IconButtonLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                     flavor: .long,
                                                                                     squeeze: .standard,
-                                                                                    neighborType: neighborTypeLeft)
+                                                                                    neighborTypeLeft: neighborTypeLeft,
+                                                                                    neighborTypeRight: neighborTypeRight)
         let universalPaddingRightSqueezed = IconButtonLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                       flavor: .long,
                                                                                       squeeze: .squeezed,
-                                                                                      neighborType: neighborTypeLeft)
+                                                                                      neighborTypeLeft: neighborTypeLeft,
+                                                                                      neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStandard = IconButtonLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                       flavor: .long,
                                                                                       squeeze: .standard,
-                                                                                      neighborType: neighborTypeRight)
+                                                                                      neighborTypeLeft: neighborTypeLeft,
+                                                                                      neighborTypeRight: neighborTypeRight)
         
         var _universalPaddingLeft = universalPaddingLeftSqueezed
         var _universalPaddingRight = universalPaddingRightSqueezed

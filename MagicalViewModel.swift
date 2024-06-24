@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import SwiftUI
 
 @Observable class MagicalViewModel {
     
@@ -16,8 +17,12 @@ import Observation
     @ObservationIgnored unowned var toolNode: ToolNode!
     @ObservationIgnored var neighborTypeLeft: ToolInterfaceElementType?
     @ObservationIgnored var neighborTypeRight: ToolInterfaceElementType?
+    @ObservationIgnored var layoutStackingCategory = ToolInterfaceLayoutStackingCategory.allVerticalSmall
+    @ObservationIgnored var layoutSchemeFlavorSliders = LayoutSchemeFlavor.stackedSmall
+    
     
     var isEnabled = true
+    var isHighlighted = false
     
     var layoutX = 0
     var layoutY = 0
@@ -36,7 +41,7 @@ import Observation
     }
     
     func refresh() {
-        print("MagicalViewModel ==> Refresh")
+        
     }
     
     func refreshDisabled() {
@@ -48,19 +53,14 @@ import Observation
     }
     
     func getLayoutSchemeFlavor() -> LayoutSchemeFlavor {
-        if let toolInterfaceViewModel = toolInterfaceViewModel {
-            if let toolNode = toolNode {
-                let type = toolNode.type
-                
-                if type == .slider {
-                    return toolInterfaceViewModel.layoutSchemeFlavorSliders
-                }
-                
-                let layoutStackingCategory = toolInterfaceViewModel.layoutStackingCategory
-                return layoutStackingCategory.getLayoutSchemeFlavor(toolInterfaceElementType: type)
-            } else {
-                return .stackedSmall
+        if let toolNode = toolNode {
+            let type = toolNode.type
+            
+            if type == .slider {
+                return layoutSchemeFlavorSliders
             }
+            
+            return layoutStackingCategory.getLayoutSchemeFlavor(toolInterfaceElementType: type)
         } else {
             return .stackedSmall
         }
@@ -71,6 +71,101 @@ import Observation
         let width1 = textWidth + textPaddingLeft + textPaddingRight
         let width2 = imageWidth + imagePaddingLeft + imagePaddingRight
         return max(width1, width2)
+    }
+    
+    func getTextAndIconColor(isPressed: Bool) -> Color {
+        if isEnabled {
+            if isPressed {
+                if isHighlighted {
+                    return ToolInterfaceTheme.highlightedYellowDown
+                } else {
+                    return ToolInterfaceTheme.enabledGrayDown
+                }
+            } else {
+                if isHighlighted {
+                    return ToolInterfaceTheme.highlightedYellowUp
+                } else {
+                    return ToolInterfaceTheme.enabledGrayUp
+                }
+            }
+        } else {
+            return ToolInterfaceTheme.disabledGray
+        }
+    }
+    
+    func getTextAndIconColor() -> Color {
+        if isEnabled {
+            if isHighlighted {
+                return ToolInterfaceTheme.highlightedYellowUp
+            } else {
+                return ToolInterfaceTheme.enabledGrayUp
+            }
+        } else {
+            return ToolInterfaceTheme.disabledGray
+        }
+    }
+    
+    func finishRefreshEnableCheckForAllCreateModes() {
+        
+        if jiggleViewModel.jiggleDocument.isCreateJiggleStandardEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isCreateJiggleDrawingEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isCreatePointsEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isRemovePointsEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isCreateWeightRingsStandardEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isCreateWeightRingsDrawingEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isCreateWeightRingPointsEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if jiggleViewModel.jiggleDocument.isRemoveWeightRingPointsEnabled {
+            if isEnabled {
+                isEnabled = false
+            }
+            return
+        }
+        
+        if isEnabled == false {
+            isEnabled = true
+        }
     }
     
 }

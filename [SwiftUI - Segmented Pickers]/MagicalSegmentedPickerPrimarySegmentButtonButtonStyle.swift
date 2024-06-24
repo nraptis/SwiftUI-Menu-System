@@ -23,6 +23,9 @@ struct MagicalSegmentedPickerPrimarySegmentButtonButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         return ZStack {
             bodyContent(isPressed: configuration.isPressed)
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
         }
         .frame(width: CGFloat(magicalSegmentedPickerButtonViewModel.width),
                height: CGFloat(magicalSegmentedPickerViewModel.layoutHeight))
@@ -79,19 +82,14 @@ struct MagicalSegmentedPickerPrimarySegmentButtonButtonStyle: ButtonStyle {
         }
         .frame(width: CGFloat(magicalSegmentedPickerButtonViewModel.width),
                height: CGFloat(height))
-        .foregroundStyle(Color.pink)
+        .foregroundStyle(ToolInterfaceTheme.gray500)
     }
     
     func getFillRect(isPressed: Bool) -> some View {
         
         let lineThickness = SegmentedPickerLayout.getLineThickness(orientation: orientation)
-        var lineThickness2 = lineThickness >> 1
-        if lineThickness2 < 1 {
-            lineThickness2 = 1
-        }
         
         let cornerRadius = SegmentedPickerLayout.getCornerRadiusInner(orientation: orientation)
-        
         let unevenRoundedRectangle: UnevenRoundedRectangle
         switch segmentedPickerPosition {
         case .bookendLeft:
@@ -120,14 +118,29 @@ struct MagicalSegmentedPickerPrimarySegmentButtonButtonStyle: ButtonStyle {
         
         switch segmentedPickerPosition {
         case .bookendLeft:
-            spacingLeft = lineThickness
-            spacingRight = lineThickness2
+            if lineThickness == 1 {
+                spacingLeft = 1
+                spacingRight = 0
+            } else {
+                spacingLeft = 2
+                spacingRight = 1
+            }
         case .middle:
-            spacingLeft = lineThickness2
-            spacingRight = lineThickness2
+            if lineThickness == 1 {
+                spacingLeft = 1
+                spacingRight = 0
+            } else {
+                spacingLeft = 1
+                spacingRight = 1
+            }
         case .bookendRight:
-            spacingLeft = lineThickness2
-            spacingRight = lineThickness
+            if lineThickness == 1 {
+                spacingLeft = 1
+                spacingRight = 1
+            } else {
+                spacingLeft = 1
+                spacingRight = 2
+            }
         }
         
         var height = magicalSegmentedPickerViewModel.layoutHeight
@@ -139,15 +152,15 @@ struct MagicalSegmentedPickerPrimarySegmentButtonButtonStyle: ButtonStyle {
         let color: Color
         if isSelected {
             if isPressed {
-                color = Color.orange.opacity(0.5)
+                color = ToolInterfaceTheme.gray100.opacity(0.75)
             } else {
-                color = Color.orange
+                color = ToolInterfaceTheme.gray100
             }
         } else {
             if isPressed {
-                color = Color.purple.opacity(0.5)
+                color = ToolInterfaceTheme.gray400.opacity(0.75)
             } else {
-                color = Color.purple
+                color = ToolInterfaceTheme.gray400
             }
         }
         

@@ -9,7 +9,7 @@ import Foundation
 extension ToolInterfaceViewModel {
     
     func getPhoneCollapseBottomToolNode(neighborTypeLeft: ToolInterfaceElementType?,
-                                     neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
+                                        neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
         let configuration = getPhoneCollapseBottomButtonConfiguration()
         let flex = Self.getIconButtonFlex(orientation: orientation,
                                           configuration: configuration,
@@ -18,6 +18,7 @@ extension ToolInterfaceViewModel {
         let viewModelPhoneCollapseBottom = MagicalIconButtonViewModelPhoneCollapseBottom(jiggleViewModel: jiggleViewModel,
                                                                                    toolInterfaceViewModel: self,
                                                                                    iconButtonConfiguration: configuration)
+        
         let result = ToolNode(id: getToolNodeID(),
                               element: .buttonPhoneCollapseBottom,
                               flex: flex,
@@ -31,8 +32,8 @@ extension ToolInterfaceViewModel {
     
     func getPhoneCollapseBottomButtonConfiguration() -> ToolInterfaceElementIconButtonConfiguration {
         let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementIconButtonConfiguration(textIconImagePack: textIconImagePack,
+        let iconPack = TextIconButtonIconLibrary.box
+        return ToolInterfaceElementIconButtonConfiguration(iconPack: iconPack,
                                                            orientation: orientation)
     }
 }

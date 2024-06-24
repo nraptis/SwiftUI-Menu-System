@@ -11,9 +11,11 @@ import Foundation
     
     override func handleClicked() {
         print("MagicalIconButtonViewModelPhoneCollapseTop => handleClicked()")
+        toolInterfaceViewModel.toolActionPhoneCollapseTopMenu()
     }
     
     deinit {
         print("MagicalIconButtonViewModelPhoneCollapseTop - Dealloc")
     }
+    
 }

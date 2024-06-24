@@ -111,20 +111,42 @@ extension ToolInterfaceLayoutStackingCategory {
         
         var result = [ToolInterfaceLayoutStackingCategory]()
         
-        // Case with 3
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: true)))
+        // Observation: For iPad, we should just do "ever increasing..."
+        //              This will be a little less "accurate" but it will
+        //              make more sense as the user drags to resize the menu...
         
-        // Cases with 2
+        if Device.isPad {
+            
+            // Case with 3
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: true)))
+            
+            // Cases with 2
+            
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: false)))
+            
+            // Cases with 1
+            
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: false, isTextIconButtonLong: false)))
+            
+            
+            
+        } else {
+            // Case with 3
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: true)))
+            
+            // Cases with 2
+            
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: false)))
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: false, isTextIconButtonLong: true)))
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: true, isTextIconButtonLong: true)))
+            
+            // Cases with 1
+            
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: false, isTextIconButtonLong: false)))
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: true, isTextIconButtonLong: false)))
+            result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: false, isTextIconButtonLong: true)))
+        }
         
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: true, isTextIconButtonLong: false)))
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: false, isTextIconButtonLong: true)))
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: true, isTextIconButtonLong: true)))
-        
-        // Cases with 1
-        
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: true, isCheckBoxLong: false, isTextIconButtonLong: false)))
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: true, isTextIconButtonLong: false)))
-        result.append(ToolInterfaceLayoutStackingCategory.large(.init(isSegmentLong: false, isCheckBoxLong: false, isTextIconButtonLong: true)))
         
         // Cases with 0
         

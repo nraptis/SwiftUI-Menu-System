@@ -2,7 +2,7 @@
 //  ToolInterfaceViewModel+TextIconButtons.swift
 //  Jiggle3
 //
-//  Created by Nicky Taylor on 3/26/24.
+//  Created by Nicky Taylor on 5/5/24.
 //
 
 import Foundation
@@ -13,21 +13,19 @@ extension ToolInterfaceViewModel {
                                       configuration: ToolInterfaceElementTextIconButtonConfiguration,
                                       neighborTypeLeft: ToolInterfaceElementType?,
                                       neighborTypeRight: ToolInterfaceElementType?) -> ToolInterfaceElementFlex {
-        
-        let textIconImagePack = configuration.textIconImagePack
-        
+        let iconPack = configuration.iconPack
         let minimumWidthLong = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthLong,
                                                                                                      nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                     textIconImagePack: textIconImagePack,
+                                                                                                     iconPack: iconPack,
                                                                                                      orientation: orientation,
                                                                                                      flavor: .long,
-                                                                                                     squeeze: .squeezed, 
+                                                                                                     squeeze: .squeezed,
                                                                                                      neighborTypeLeft: neighborTypeLeft,
                                                                                                      neighborTypeRight: neighborTypeRight)
         
         let standardWidthLong = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthLong,
                                                                                                       nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                      textIconImagePack: textIconImagePack,
+                                                                                                      iconPack: iconPack,
                                                                                                       orientation: orientation,
                                                                                                       flavor: .long,
                                                                                                       squeeze: .standard,
@@ -35,7 +33,7 @@ extension ToolInterfaceViewModel {
                                                                                                       neighborTypeRight: neighborTypeRight)
         let minimumWidthStackedLarge = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedLarge,
                                                                                                              nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                             textIconImagePack: textIconImagePack,
+                                                                                                             iconPack: iconPack,
                                                                                                              orientation: orientation,
                                                                                                              flavor: .stackedLarge,
                                                                                                              squeeze: .squeezed,
@@ -43,7 +41,7 @@ extension ToolInterfaceViewModel {
                                                                                                              neighborTypeRight: neighborTypeRight)
         let standardWidthStackedLarge = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedLarge,
                                                                                                               nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                              textIconImagePack: textIconImagePack,
+                                                                                                              iconPack: iconPack,
                                                                                                               orientation: orientation,
                                                                                                               flavor: .stackedLarge,
                                                                                                               squeeze: .standard,
@@ -52,7 +50,7 @@ extension ToolInterfaceViewModel {
         
         let minimumWidthStackedMedium = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedMedium,
                                                                                                               nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                              textIconImagePack: textIconImagePack,
+                                                                                                              iconPack: iconPack,
                                                                                                               orientation: orientation,
                                                                                                               flavor: .stackedMedium,
                                                                                                               squeeze: .squeezed,
@@ -60,7 +58,7 @@ extension ToolInterfaceViewModel {
                                                                                                               neighborTypeRight: neighborTypeRight)
         let standardWidthStackedMedium = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedMedium,
                                                                                                                nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                               textIconImagePack: textIconImagePack,
+                                                                                                               iconPack: iconPack,
                                                                                                                orientation: orientation,
                                                                                                                flavor: .stackedMedium,
                                                                                                                squeeze: .standard,
@@ -69,7 +67,7 @@ extension ToolInterfaceViewModel {
         
         let minimumWidthStackedSmall = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedSmall,
                                                                                                              nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                             textIconImagePack: textIconImagePack,
+                                                                                                             iconPack: iconPack,
                                                                                                              orientation: orientation,
                                                                                                              flavor: .stackedSmall,
                                                                                                              squeeze: .squeezed,
@@ -77,7 +75,7 @@ extension ToolInterfaceViewModel {
                                                                                                              neighborTypeRight: neighborTypeRight)
         let standardWidthStackedSmall = TextIconButtonLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedSmall,
                                                                                                               nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                              textIconImagePack: textIconImagePack,
+                                                                                                              iconPack: iconPack,
                                                                                                               orientation: orientation,
                                                                                                               flavor: .stackedSmall,
                                                                                                               squeeze: .standard,

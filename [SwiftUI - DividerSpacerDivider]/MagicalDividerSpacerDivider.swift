@@ -56,7 +56,7 @@ struct MagicalDividerSpacerDivider: View {
                 Capsule()
                     .frame(width: CGFloat(capsuleWidth),
                            height: CGFloat(capsuleHeight))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(ToolInterfaceTheme.gray400)
                 
 #if INTERFACE_HINTS
             Spacer()
@@ -71,13 +71,13 @@ struct MagicalDividerSpacerDivider: View {
                 Capsule()
                     .frame(width: CGFloat(capsuleWidth),
                            height: CGFloat(capsuleHeight))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(ToolInterfaceTheme.gray400)
                 
             } else {
                 Capsule()
                     .frame(width: CGFloat(capsuleWidth),
                            height: CGFloat(capsuleHeight))
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(ToolInterfaceTheme.gray400)
             }
             
             

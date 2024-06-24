@@ -1,8 +1,8 @@
 //
-//  ToolInterfaceViewModel+ZoomEnabled.swift
+//  ORIGINA.swift
 //  Jiggle3
 //
-//  Created by Nicky Taylor on 4/3/24.
+//  Created by Nicky Taylor on 5/9/24.
 //
 
 import Foundation
@@ -10,8 +10,15 @@ import Foundation
 extension ToolInterfaceViewModel {
     
     func getZoomEnabledCheckBoxNode(neighborTypeLeft: ToolInterfaceElementType?,
-                                              neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
-        let configuration = getSZoomEnabledCheckBoxConfiguration()
+                                    neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
+        let orientation = jiggleViewModel.jiggleDocument.orientation
+        let textLine1 = ToolInterfaceStringLibraryCheckBoxes.checkBoxTextZoomEnabledLine1()
+        let textLine2 = ToolInterfaceStringLibraryCheckBoxes.checkBoxTextZoomEnabledLine2()
+        let iconPack = CheckBoxIconLibrary.removePoints
+        let configuration = ToolInterfaceElementCheckBoxConfiguration(iconPack: iconPack,
+                                                                      orientation: orientation,
+                                                                      nameLabelLine1: textLine1,
+                                                                      nameLabelLine2: textLine2)
         let flex = Self.getCheckBoxFlex(orientation: orientation,
                                         configuration: configuration,
                                         neighborTypeLeft: neighborTypeLeft,
@@ -32,16 +39,4 @@ extension ToolInterfaceViewModel {
         
         return result
     }
-    
-    func getSZoomEnabledCheckBoxConfiguration() -> ToolInterfaceElementCheckBoxConfiguration {
-        let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textLine1 = ToolInterfaceStringLibrary.interfaceTextZoomEnabledLine1()
-        let textLine2 = ToolInterfaceStringLibrary.interfaceTextZoomEnabledLine2()
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementCheckBoxConfiguration(textIconImagePack: textIconImagePack,
-                                                         orientation: orientation,
-                                                         nameLabelLine1: textLine1,
-                                                         nameLabelLine2: textLine2)
-    }
-    
 }

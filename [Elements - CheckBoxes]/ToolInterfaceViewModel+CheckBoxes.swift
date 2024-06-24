@@ -14,11 +14,11 @@ extension ToolInterfaceViewModel {
                                 neighborTypeLeft: ToolInterfaceElementType?,
                                 neighborTypeRight: ToolInterfaceElementType?) -> ToolInterfaceElementFlex {
         
-        let textIconImagePack = configuration.textIconImagePack
+        let iconPack = configuration.iconPack
         
         var minimumWidthLong = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthLong,
                                                                                                nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                               textIconImagePack: textIconImagePack,
+                                                                                               iconPack: iconPack,
                                                                                                orientation: orientation,
                                                                                                flavor: .long,
                                                                                                squeeze: .squeezed,
@@ -27,7 +27,7 @@ extension ToolInterfaceViewModel {
         
         var standardWidthLong = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthLong,
                                                                                                 nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                textIconImagePack: textIconImagePack,
+                                                                                                iconPack: iconPack,
                                                                                                 orientation: orientation,
                                                                                                 flavor: .long,
                                                                                                 squeeze: .standard,
@@ -35,7 +35,7 @@ extension ToolInterfaceViewModel {
                                                                                                 neighborTypeRight: neighborTypeRight)
         var minimumWidthStackedLarge = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedLarge,
                                                                                                        nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                       textIconImagePack: textIconImagePack,
+                                                                                                       iconPack: iconPack,
                                                                                                        orientation: orientation,
                                                                                                        flavor: .stackedLarge,
                                                                                                        squeeze: .squeezed,
@@ -43,7 +43,7 @@ extension ToolInterfaceViewModel {
                                                                                                        neighborTypeRight: neighborTypeRight)
         var standardWidthStackedLarge = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedLarge,
                                                                                                         nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                        textIconImagePack: textIconImagePack,
+                                                                                                        iconPack: iconPack,
                                                                                                         orientation: orientation,
                                                                                                         flavor: .stackedLarge,
                                                                                                         squeeze: .standard,
@@ -52,7 +52,7 @@ extension ToolInterfaceViewModel {
         
         var minimumWidthStackedMedium = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedMedium,
                                                                                                         nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                        textIconImagePack: textIconImagePack,
+                                                                                                        iconPack: iconPack,
                                                                                                         orientation: orientation,
                                                                                                         flavor: .stackedMedium,
                                                                                                         squeeze: .squeezed,
@@ -60,7 +60,7 @@ extension ToolInterfaceViewModel {
                                                                                                         neighborTypeRight: neighborTypeRight)
         var standardWidthStackedMedium = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedMedium,
                                                                                                          nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                         textIconImagePack: textIconImagePack,
+                                                                                                         iconPack: iconPack,
                                                                                                          orientation: orientation,
                                                                                                          flavor: .stackedMedium,
                                                                                                          squeeze: .standard,
@@ -69,7 +69,7 @@ extension ToolInterfaceViewModel {
         
         var minimumWidthStackedSmall = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedSmall,
                                                                                                        nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                       textIconImagePack: textIconImagePack,
+                                                                                                       iconPack: iconPack,
                                                                                                        orientation: orientation,
                                                                                                        flavor: .stackedSmall,
                                                                                                        squeeze: .squeezed,
@@ -77,7 +77,7 @@ extension ToolInterfaceViewModel {
                                                                                                        neighborTypeRight: neighborTypeRight)
         var standardWidthStackedSmall = CheckBoxLayout.getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: configuration.nameLabelWidthStackedSmall,
                                                                                                         nameLabelNumberOfLines: configuration.nameLabelNumberOfLines,
-                                                                                                        textIconImagePack: textIconImagePack,
+                                                                                                        iconPack: iconPack,
                                                                                                         orientation: orientation,
                                                                                                         flavor: .stackedSmall,
                                                                                                         squeeze: .standard,

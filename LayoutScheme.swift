@@ -71,11 +71,13 @@ protocol LayoutScheme {
     static func getUniversalPaddingLeft(orientation: Orientation,
                                         flavor: LayoutSchemeFlavor,
                                         squeeze: LayoutSchemeSqueeze,
-                                        neighborType: ToolInterfaceElementType?) -> Int
+                                        neighborTypeLeft: ToolInterfaceElementType?,
+                                        neighborTypeRight: ToolInterfaceElementType?) -> Int
     static func getUniversalPaddingRight(orientation: Orientation,
                                          flavor: LayoutSchemeFlavor,
                                          squeeze: LayoutSchemeSqueeze,
-                                         neighborType: ToolInterfaceElementType?) -> Int
+                                         neighborTypeLeft: ToolInterfaceElementType?,
+                                         neighborTypeRight: ToolInterfaceElementType?) -> Int
     static func getUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int
     static func getUniversalPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int
     
@@ -116,42 +118,43 @@ extension LayoutScheme {
 
     static func getTextIconAndNameLabelWidthWithUniversalPadding(nameLabelWidth: Int,
                                                                  nameLabelNumberOfLines: Int,
-                                                                 textIconImagePack: TextIconImagePack,
+                                                                 iconPack: TextIconPackable,
                                                                  orientation: Orientation,
                                                                  flavor: LayoutSchemeFlavor,
                                                                  squeeze: LayoutSchemeSqueeze,
                                                                  neighborTypeLeft: ToolInterfaceElementType?,
                                                                  neighborTypeRight: ToolInterfaceElementType?) -> Int {
-        let univarsalPaddingLeft = getUniversalPaddingLeft(orientation: orientation,
+        let universalPaddingLeft = getUniversalPaddingLeft(orientation: orientation,
                                                            flavor: flavor,
                                                            squeeze: squeeze,
-                                                           neighborType: neighborTypeLeft)
-        let univarsalPaddingRight = getUniversalPaddingRight(orientation: orientation, 
+                                                           neighborTypeLeft: neighborTypeLeft,
+                                                           neighborTypeRight: neighborTypeRight)
+        let universalPaddingRight = getUniversalPaddingRight(orientation: orientation,
                                                              flavor: flavor,
                                                              squeeze: squeeze,
-                                                             neighborType: neighborTypeRight)
+                                                             neighborTypeLeft: neighborTypeLeft,
+                                                             neighborTypeRight: neighborTypeRight)
         var result = getTextIconAndNameLabelWidth(nameLabelWidth: nameLabelWidth,
                                                   nameLabelNumberOfLines: nameLabelNumberOfLines,
-                                                  textIconImagePack: textIconImagePack,
+                                                  iconPack: iconPack,
                                                   orientation: orientation,
                                                   flavor: flavor,
                                                   squeeze: squeeze)
-        result += univarsalPaddingLeft
-        result += univarsalPaddingRight
+        result += universalPaddingLeft
+        result += universalPaddingRight
         return result
     }
     
     static func getTextIconAndNameLabelWidth(nameLabelWidth: Int,
                                              nameLabelNumberOfLines: Int,
-                                             textIconImagePack: TextIconImagePack,
+                                             iconPack: TextIconPackable,
                                              orientation: Orientation,
                                              flavor: LayoutSchemeFlavor,
                                              squeeze: LayoutSchemeSqueeze) -> Int {
         
-        let icon = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: nameLabelNumberOfLines,
-                                                         textIconImagePack: textIconImagePack,
-                                                         orientation: orientation,
-                                                         layoutSchemeFlavor: flavor)
+        let icon = iconPack.getTextIcon(orientation: orientation,
+                                        layoutSchemeFlavor: flavor,
+                                        numberOfLines: nameLabelNumberOfLines)
         
         let nameLabelPaddingLeft = Self.getNameLabelPaddingLeft(orientation: orientation, flavor: flavor, squeeze: squeeze)
         let nameLabelPaddingRight = Self.getNameLabelPaddingRight(orientation: orientation, flavor: flavor, squeeze: squeeze)

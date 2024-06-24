@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct FlexSegmentData {
     let minimumWidthLong: Int
     let middle1WidthLong: Int
@@ -31,14 +30,6 @@ struct FlexSegmentData {
 }
 
 struct FlexSliderData {
-    //let minimumWidthLong: Int
-    //let standardWidthLong: Int
-    //let minimumWidthStackedLarge: Int
-    //let standardWidthStackedLarge: Int
-    //let minimumWidthStackedMedium: Int
-    //let standardWidthStackedMedium: Int
-    //let minimumWidthStackedSmall: Int
-    //let standardWidthStackedSmall: Int
     let widthCategory: ToolInterfaceElementSliderWidthCategory
 }
 

@@ -1,44 +1,31 @@
 //
-//  ToolInterfaceViewModel+MainMenuNew.swift
+//  ToolInterfaceViewModel+MainMenu.swift
 //  Jiggle3
 //
-//  Created by Nicky Taylor on 3/26/24.
+//  Created by Nicky Taylor on 5/5/24.
 //
 
 import Foundation
 
 extension ToolInterfaceViewModel {
     
-    func getMainMenuButtonToolNode(neighborTypeLeft: ToolInterfaceElementType?,
-                                   neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
-        let configuration = getMainMenuButtonConfiguration()
+    func getMainMenuTextIconButtonToolNode(neighborTypeLeft: ToolInterfaceElementType?,
+                                      neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
+        
+        let orientation = jiggleViewModel.jiggleDocument.orientation
+        let textLine1 = ToolInterfaceStringLibraryButtons.buttonTextMainMenuLine1()
+        let textLine2 = ToolInterfaceStringLibraryButtons.buttonTextMainMenuLine2()
+        let iconPack = TextIconButtonIconLibrary.box
+        
+        let configuration = ToolInterfaceElementTextIconButtonConfiguration(iconPack: iconPack, orientation: orientation, nameLabelLine1: textLine1, nameLabelLine2: textLine2)
         let flex = Self.getTextIconButtonFlex(orientation: orientation,
                                               configuration: configuration,
                                               neighborTypeLeft: neighborTypeLeft,
                                               neighborTypeRight: neighborTypeRight)
         
-        let viewModelCreateJiggle = MagicalTextIconButtonViewModelMainMenu(jiggleViewModel: jiggleViewModel,
-                                                                           toolInterfaceViewModel: self,
-                                                                           textIconButtonConfiguration: configuration)
-        let result = ToolNode(id: getToolNodeID(),
-                              element: .buttonMainMenu,
-                              flex: flex,
-                              toolInterfaceViewModel: self,
-                              magicalViewModel: viewModelCreateJiggle,
-                              neighborTypeLeft: neighborTypeLeft,
-                              neighborTypeRight: neighborTypeRight)
-        viewModelCreateJiggle.refresh()
-        return result
-    }
-    
-    func getMainMenuButtonConfiguration() -> ToolInterfaceElementTextIconButtonConfiguration {
-        let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textLine1 = ToolInterfaceStringLibrary.interfaceTextMainMenuLine1()
-        let textLine2 = ToolInterfaceStringLibrary.interfaceTextMainMenuLine2()
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementTextIconButtonConfiguration(textIconImagePack: textIconImagePack,
-                                                               orientation: orientation,
-                                                               nameLabelLine1: textLine1,
-                                                               nameLabelLine2: textLine2)
+        let viewModelMainMenu = MagicalTextIconButtonViewModelMainMenu(jiggleViewModel: jiggleViewModel, toolInterfaceViewModel: self, textIconButtonConfiguration: configuration)
+        let mainMenuToolNode = ToolNode(id: getToolNodeID(), element: .textIconButtonMainMenu, flex: flex, toolInterfaceViewModel: self, magicalViewModel: viewModelMainMenu, neighborTypeLeft: neighborTypeLeft, neighborTypeRight: neighborTypeRight)
+        viewModelMainMenu.refresh()
+        return mainMenuToolNode
     }
 }

@@ -18,6 +18,9 @@ struct MagicalIconButtonButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         return ZStack {
             bodyContent(isPressed: configuration.isPressed)
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
         }
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalIconButtonViewModel.layoutHeight))

@@ -11,7 +11,7 @@ import SwiftUI
 @Observable class MagicalSliderViewModel: MagicalViewModel {
     
     var percent = CGFloat(0.0)
-    let thumbMinimumX: CGFloat
+    var thumbMinimumX: CGFloat
     var thumbMaximumX: CGFloat
     var thumbOffsetX = CGFloat(0.0)
     
@@ -20,9 +20,6 @@ import SwiftUI
     
     var valueLabelPaddingLeft = 0
     var valueLabelPaddingRight = 0
-    
-    var iconPaddingLeft = 0
-    var iconPaddingRight = 0
     
     var universalPaddingLeft = 0
     var universalPaddingRight = 0
@@ -67,10 +64,16 @@ import SwiftUI
             var _percent = CGFloat((value - sliderConfiguration.minimumValue) / delta)
             if _percent < 0.0 { _percent = 0.0 }
             if _percent > 1.0 { _percent = 1.0 }
+            
+            
             thumbOffsetX = thumbMinimumX + (thumbMaximumX - thumbMinimumX) * _percent
             percent = _percent
         }
         refreshEnabled()
+    }
+    
+    func refreshThumbPosition() {
+        
     }
     
     func getValueString() -> String {
@@ -79,53 +82,44 @@ import SwiftUI
         return String(format: formatString, value)
     }
     
-    func getTextIcon(layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {
-        return ToolInterfaceImageLibrary.getTextIcon(numberOfLines: sliderConfiguration.nameLabelNumberOfLines,
-                                                     textIconImagePack: sliderConfiguration.textIconImagePack,
-                                                     orientation: orientation,
-                                                     layoutSchemeFlavor: layoutSchemeFlavor)
-    }
-    
     override func refreshLayoutFrame() {
         
         let layoutSchemeFlavor = getLayoutSchemeFlavor()
-        let textIcon = getTextIcon(layoutSchemeFlavor: layoutSchemeFlavor)
-        let isStacked = layoutSchemeFlavor.isStacked
-        let iconWidth = textIcon.iconWidth
         
         let nameLabelTextWidth: Int
         let valueLabelTextWidth: Int
         switch layoutSchemeFlavor {
-        case .long:
-            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthLong
-            valueLabelTextWidth = sliderConfiguration.valueLabelWidthLong
-        case .stackedLarge:
-            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthStackedLarge
-            valueLabelTextWidth = sliderConfiguration.valueLabelWidthStackedLarge
+        case .long, .stackedLarge:
+            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthLarge
+            valueLabelTextWidth = sliderConfiguration.valueLabelWidthLarge
         case .stackedMedium:
-            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthStackedMedium
-            valueLabelTextWidth = sliderConfiguration.valueLabelWidthStackedMedium
+            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthMedium
+            valueLabelTextWidth = sliderConfiguration.valueLabelWidthMedium
         case .stackedSmall:
-            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthStackedSmall
-            valueLabelTextWidth = sliderConfiguration.valueLabelWidthStackedSmall
+            nameLabelTextWidth = sliderConfiguration.layoutNameLabelWidthSmall
+            valueLabelTextWidth = sliderConfiguration.valueLabelWidthSmall
         }
         
         let universalPaddingLeftSqueezed = SliderLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                        flavor: layoutSchemeFlavor,
-                                                                                        squeeze: .squeezed,
-                                                                                        neighborType: neighborTypeLeft)
+                                                                                flavor: layoutSchemeFlavor,
+                                                                                squeeze: .squeezed,
+                                                                                neighborTypeLeft: neighborTypeLeft,
+                                                                                neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStandard = SliderLayout.getUniversalPaddingLeft(orientation: orientation,
-                                                                                        flavor: layoutSchemeFlavor,
-                                                                                        squeeze: .standard,
-                                                                                        neighborType: neighborTypeLeft)
+                                                                                flavor: layoutSchemeFlavor,
+                                                                                squeeze: .standard,
+                                                                                neighborTypeLeft: neighborTypeLeft,
+                                                                                neighborTypeRight: neighborTypeRight)
         let universalPaddingRightSqueezed = SliderLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                          flavor: layoutSchemeFlavor,
-                                                                                          squeeze: .squeezed,
-                                                                                          neighborType: neighborTypeLeft)
+                                                                                  flavor: layoutSchemeFlavor,
+                                                                                  squeeze: .squeezed,
+                                                                                  neighborTypeLeft: neighborTypeLeft,
+                                                                                  neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStandard = SliderLayout.getUniversalPaddingRight(orientation: orientation,
-                                                                                          flavor: layoutSchemeFlavor,
-                                                                                          squeeze: .standard,
-                                                                                          neighborType: neighborTypeRight)
+                                                                                  flavor: layoutSchemeFlavor,
+                                                                                  squeeze: .standard,
+                                                                                  neighborTypeLeft: neighborTypeLeft,
+                                                                                  neighborTypeRight: neighborTypeRight)
         var _universalPaddingLeft = universalPaddingLeftSqueezed
         var _universalPaddingRight = universalPaddingRightSqueezed
         
@@ -160,22 +154,6 @@ import SwiftUI
         var _valueLabelPaddingLeft = valueLabelPaddingLeftSqueezed
         var _valueLabelPaddingRight = valueLabelPaddingRightSqueezed
         
-        let iconPaddingLeftSqueezed = SliderLayout.getIconPaddingLeft(orientation: orientation,
-                                                                      flavor: layoutSchemeFlavor,
-                                                                      squeeze: .squeezed)
-        let iconPaddingLeftStandard = SliderLayout.getIconPaddingLeft(orientation: orientation,
-                                                                      flavor: layoutSchemeFlavor,
-                                                                      squeeze: .standard)
-        let iconPaddingRightSqueezed = SliderLayout.getIconPaddingRight(orientation: orientation,
-                                                                        flavor: layoutSchemeFlavor,
-                                                                        squeeze: .squeezed)
-        let iconPaddingRightStandard = SliderLayout.getIconPaddingRight(orientation: orientation,
-                                                                        flavor: layoutSchemeFlavor,
-                                                                        squeeze: .standard)
-        
-        var _iconPaddingLeft = iconPaddingLeftSqueezed
-        var _iconPaddingRight = iconPaddingRightSqueezed
-        
         var _sliderBoxWidth = 0
         
         let totalWidth = layoutWidth
@@ -184,16 +162,13 @@ import SwiftUI
         howMuchSpaceWeAreUsingSoFar += universalPaddingLeftSqueezed
         howMuchSpaceWeAreUsingSoFar += universalPaddingRightSqueezed
         
-        if isStacked {
-            let width1 = iconWidth + iconPaddingLeftSqueezed + iconPaddingRightSqueezed
-            let width2 = nameLabelTextWidth + nameLabelPaddingLeftSqueezed + nameLabelPaddingRightSqueezed
-            howMuchSpaceWeAreUsingSoFar += max(width1, width2)
-        } else {
-            let width1 = iconWidth + iconPaddingLeftSqueezed + iconPaddingRightSqueezed
-            let width2 = nameLabelTextWidth + nameLabelPaddingLeftSqueezed + nameLabelPaddingRightSqueezed
-            howMuchSpaceWeAreUsingSoFar += width1 + width2
-        }
-        howMuchSpaceWeAreUsingSoFar += (valueLabelTextWidth + valueLabelPaddingLeftSqueezed + valueLabelPaddingRightSqueezed)
+        howMuchSpaceWeAreUsingSoFar += nameLabelTextWidth
+        howMuchSpaceWeAreUsingSoFar += nameLabelPaddingLeftSqueezed
+        howMuchSpaceWeAreUsingSoFar += nameLabelPaddingRightSqueezed
+        
+        howMuchSpaceWeAreUsingSoFar += valueLabelTextWidth
+        howMuchSpaceWeAreUsingSoFar += valueLabelPaddingLeftSqueezed
+        howMuchSpaceWeAreUsingSoFar += valueLabelPaddingRightSqueezed
         
         let preferredMinimumBarWidth = SliderLayout.getPreferredMinimumBarWidth(orientation: orientation,
                                                                                 widthCategory: sliderConfiguration.widthCategory)
@@ -205,218 +180,63 @@ import SwiftUI
         }
         
         // Grow all paddings to "standard" size...
+        var consumedWidth = Int(0)
+        consumedWidth += universalPaddingRightSqueezed
+        consumedWidth += universalPaddingLeftSqueezed
         
-        if isStacked {
-            var consumedBaseWidth = Int(0)
-            consumedBaseWidth += universalPaddingRightSqueezed
-            consumedBaseWidth += universalPaddingLeftSqueezed
-            consumedBaseWidth += valueLabelTextWidth
-            consumedBaseWidth += valueLabelPaddingLeftSqueezed
-            consumedBaseWidth += valueLabelPaddingRightSqueezed
-            consumedBaseWidth += preferredMinimumBarWidth
+        consumedWidth += nameLabelTextWidth
+        consumedWidth += nameLabelPaddingLeftSqueezed
+        consumedWidth += nameLabelPaddingRightSqueezed
+        
+        consumedWidth += valueLabelTextWidth
+        consumedWidth += valueLabelPaddingLeftSqueezed
+        consumedWidth += valueLabelPaddingRightSqueezed
+        
+        consumedWidth += preferredMinimumBarWidth
+        
+        
+        while consumedWidth < totalWidth {
             
-            var consumedWidth = 0
+            var didModify = false
             
-            
-            while true {
-                
-                if _universalPaddingLeft >= universalPaddingLeftStandard &&
-                    _universalPaddingRight >= universalPaddingRightStandard &&
-                    _nameLabelPaddingLeft >= nameLabelPaddingLeftStandard &&
-                    _nameLabelPaddingRight >= nameLabelPaddingRightStandard &&
-                    _valueLabelPaddingLeft >= valueLabelPaddingLeftStandard &&
-                    _valueLabelPaddingRight >= valueLabelPaddingRightStandard &&
-                    _iconPaddingLeft >= iconPaddingLeftStandard &&
-                    _iconPaddingRight >= iconPaddingRightStandard {
-                    break
-                }
-                
-                var didModify = false
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
-                    _iconPaddingLeft += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _iconPaddingRight < iconPaddingRightStandard && consumedWidth < totalWidth {
-                    _iconPaddingRight += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
-                    _nameLabelPaddingLeft += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
-                    _nameLabelPaddingRight += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                
-                if _valueLabelPaddingLeft < valueLabelPaddingLeftStandard && consumedWidth < totalWidth {
-                    _valueLabelPaddingLeft += 1
-                    consumedBaseWidth += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _valueLabelPaddingRight < valueLabelPaddingRightStandard && consumedWidth < totalWidth {
-                    _valueLabelPaddingRight += 1
-                    consumedBaseWidth += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _universalPaddingLeft < universalPaddingLeftStandard && consumedWidth < totalWidth {
-                    _universalPaddingLeft += 1
-                    consumedBaseWidth += 1
-                    didModify = true
-                }
-                
-                consumedWidth = consumedBaseWidth + calculateStackedConsumedWidth(textWidth: nameLabelTextWidth,
-                                                                                  textPaddingLeft: _nameLabelPaddingLeft,
-                                                                                  textPaddingRight: _nameLabelPaddingRight,
-                                                                                  imageWidth: iconWidth,
-                                                                                  imagePaddingLeft: _iconPaddingLeft,
-                                                                                  imagePaddingRight: _iconPaddingRight)
-                if _universalPaddingRight < universalPaddingRightStandard && consumedWidth < totalWidth {
-                    _universalPaddingRight += 1
-                    consumedBaseWidth += 1
-                    didModify = true
-                }
-                
-                
-                if didModify == false {
-                    break
-                }
+            if _nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
+                _nameLabelPaddingLeft += 1
+                consumedWidth += 1
+                didModify = true
             }
             
+            if _nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
+                _nameLabelPaddingRight += 1
+                consumedWidth += 1
+                didModify = true
+            }
             
+            if _valueLabelPaddingLeft < valueLabelPaddingLeftStandard && consumedWidth < totalWidth {
+                _valueLabelPaddingLeft += 1
+                consumedWidth += 1
+                didModify = true
+            }
             
-        } else {
+            if _valueLabelPaddingRight < valueLabelPaddingRightStandard && consumedWidth < totalWidth {
+                _valueLabelPaddingRight += 1
+                consumedWidth += 1
+                didModify = true
+            }
             
+            if _universalPaddingLeft < universalPaddingLeftStandard && consumedWidth < totalWidth {
+                _universalPaddingLeft += 1
+                consumedWidth += 1
+                didModify = true
+            }
             
-            var consumedWidth = Int(0)
-            consumedWidth += universalPaddingRightSqueezed
-            consumedWidth += universalPaddingLeftSqueezed
+            if _universalPaddingRight < universalPaddingRightStandard && consumedWidth < totalWidth {
+                _universalPaddingRight += 1
+                consumedWidth += 1
+                didModify = true
+            }
             
-            consumedWidth += nameLabelTextWidth
-            consumedWidth += nameLabelPaddingLeftSqueezed
-            consumedWidth += nameLabelPaddingRightSqueezed
-            
-            consumedWidth += iconWidth
-            consumedWidth += iconPaddingLeftSqueezed
-            consumedWidth += iconPaddingRightSqueezed
-            
-            consumedWidth += valueLabelTextWidth
-            consumedWidth += valueLabelPaddingLeftSqueezed
-            consumedWidth += valueLabelPaddingRightSqueezed
-            
-            consumedWidth += preferredMinimumBarWidth
-            
-            
-            while consumedWidth < totalWidth {
-                
-                var didModify = false
-                
-                if _iconPaddingLeft < iconPaddingLeftStandard && consumedWidth < totalWidth {
-                    _iconPaddingLeft += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _iconPaddingRight < iconPaddingRightStandard && consumedWidth < totalWidth {
-                    _iconPaddingRight += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _nameLabelPaddingLeft < nameLabelPaddingLeftStandard && consumedWidth < totalWidth {
-                    _nameLabelPaddingLeft += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _nameLabelPaddingRight < nameLabelPaddingRightStandard && consumedWidth < totalWidth {
-                    _nameLabelPaddingRight += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _valueLabelPaddingLeft < valueLabelPaddingLeftStandard && consumedWidth < totalWidth {
-                    _valueLabelPaddingLeft += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _valueLabelPaddingRight < valueLabelPaddingRightStandard && consumedWidth < totalWidth {
-                    _valueLabelPaddingRight += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _universalPaddingLeft < universalPaddingLeftStandard && consumedWidth < totalWidth {
-                    _universalPaddingLeft += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if _universalPaddingRight < universalPaddingRightStandard && consumedWidth < totalWidth {
-                    _universalPaddingRight += 1
-                    consumedWidth += 1
-                    didModify = true
-                }
-                
-                if didModify == false {
-                    break
-                }
+            if didModify == false {
+                break
             }
         }
         
@@ -425,18 +245,14 @@ import SwiftUI
         howMuchSpaceWeAreUsingSoFar += _universalPaddingLeft
         howMuchSpaceWeAreUsingSoFar += _universalPaddingRight
         
-        if isStacked {
-            let width1 = iconWidth + _iconPaddingLeft + _iconPaddingRight
-            let width2 = nameLabelTextWidth + _nameLabelPaddingLeft + _nameLabelPaddingRight
-            howMuchSpaceWeAreUsingSoFar += max(width1, width2)
-        } else {
-            let width1 = iconWidth + _iconPaddingLeft + _iconPaddingRight
-            let width2 = nameLabelTextWidth + _nameLabelPaddingLeft + _nameLabelPaddingRight
-            howMuchSpaceWeAreUsingSoFar += width1 + width2
-        }
+        howMuchSpaceWeAreUsingSoFar += nameLabelTextWidth
+        howMuchSpaceWeAreUsingSoFar += _nameLabelPaddingLeft
+        howMuchSpaceWeAreUsingSoFar += _nameLabelPaddingRight
+
         
-        howMuchSpaceWeAreUsingSoFar += (valueLabelTextWidth + _valueLabelPaddingLeft + _valueLabelPaddingRight)
-        
+        howMuchSpaceWeAreUsingSoFar += valueLabelTextWidth
+        howMuchSpaceWeAreUsingSoFar += _valueLabelPaddingLeft
+        howMuchSpaceWeAreUsingSoFar += _valueLabelPaddingRight
         howMuchSpaceWeAreUsingSoFar += _sliderBoxWidth
         
         if howMuchSpaceWeAreUsingSoFar < totalWidth {
@@ -449,15 +265,22 @@ import SwiftUI
         valueLabelPaddingLeft = _valueLabelPaddingLeft
         valueLabelPaddingRight = _valueLabelPaddingRight
         
-        iconPaddingLeft = _iconPaddingLeft
-        iconPaddingRight = _iconPaddingRight
-        
         sliderBoxWidth = _sliderBoxWidth
         
         universalPaddingLeft = _universalPaddingLeft
         universalPaddingRight = _universalPaddingRight
         
-        let thumbCircleSize = SliderLayout.getThumbCircleSize(orientation: orientation)
-        thumbMaximumX = CGFloat(sliderBoxWidth - thumbCircleSize)
+        
+        let thumbWidth = SliderLayout.getThumbWidth(orientation: orientation)
+        
+        let thumbInset = SliderLayout.getThumbInset(orientation: orientation)
+        
+        let bumperWidth = SliderLayout.getBumperWidth(orientation: orientation)
+        
+        thumbMinimumX = CGFloat(thumbInset + bumperWidth)
+        thumbMaximumX = CGFloat(sliderBoxWidth - (thumbWidth + thumbInset + bumperWidth))
+        
+        thumbOffsetX = thumbMinimumX + (thumbMaximumX - thumbMinimumX) * percent
+        
     }
 }

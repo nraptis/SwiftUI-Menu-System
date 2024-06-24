@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct ToolInterfaceElementCheckBoxConfiguration {
-    let textIconImagePack: TextIconImagePack
+    let iconPack: CheckBoxIconPack
     let nameLabelLine1: String?
     let nameLabelLine2: String?
     let nameLabelNumberOfLines: Int
@@ -22,11 +22,11 @@ struct ToolInterfaceElementCheckBoxConfiguration {
     let iconWidthStacked: Int
     let iconHeightStacked: Int
     
-    init(textIconImagePack: TextIconImagePack,
+    init(iconPack: CheckBoxIconPack,
          orientation: Orientation,
          nameLabelLine1: String?,
          nameLabelLine2: String?) {
-        self.textIconImagePack = textIconImagePack
+        self.iconPack = iconPack
         self.nameLabelLine1 = nameLabelLine1
         self.nameLabelLine2 = nameLabelLine2
         
@@ -48,19 +48,24 @@ struct ToolInterfaceElementCheckBoxConfiguration {
                                                                           line2: nameLabelLine2,
                                                                           orientation: orientation,
                                                                           flavor: .stackedSmall) + 2
-        let iconLong = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                             textIconImagePack: textIconImagePack,
-                                                             orientation: orientation,
-                                                             layoutSchemeFlavor: .long)
-        let iconStacked = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                                textIconImagePack: textIconImagePack,
-                                                                orientation: orientation,
-                                                                layoutSchemeFlavor: .stackedLarge)
+        let iconLong = iconPack.getTextIcon(orientation: orientation,
+                                            layoutSchemeFlavor: .long,
+                                            numberOfLines: _nameLabelNumberOfLines)
+        let iconStacked = iconPack.getTextIcon(orientation: orientation,
+                                               layoutSchemeFlavor: .stackedLarge,
+                                               numberOfLines: _nameLabelNumberOfLines)
         self.iconWidthLong = iconLong.iconWidth
         self.iconHeightLong = iconLong.iconHeight
         self.iconWidthStacked = iconStacked.iconWidth
         self.iconHeightStacked = iconStacked.iconHeight
         self.nameLabelNumberOfLines = _nameLabelNumberOfLines
+    }
+    
+    func getTextIcon(orientation: Orientation,
+                     layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIconable {
+        return iconPack.getTextIcon(orientation: orientation,
+                                    layoutSchemeFlavor: layoutSchemeFlavor,
+                                    numberOfLines: nameLabelNumberOfLines)
     }
 }
 
@@ -71,34 +76,26 @@ enum ToolInterfaceElementSliderWidthCategory {
 }
 
 struct ToolInterfaceElementSliderConfiguration {
-    let textIconImagePack: TextIconImagePack
+    let iconPack: SliderIconPack
     let nameLabelLine1: String?
     let nameLabelLine2: String?
     let nameLabelNumberOfLines: Int
     
     // The real text that we use...
-    let realNameLabelWidthLong: Int
-    let realNameLabelWidthStackedLarge: Int
-    let realNameLabelWidthStackedMedium: Int
-    let realNameLabelWidthStackedSmall: Int
+    let realNameLabelWidthLarge: Int
+    let realNameLabelWidthMedium: Int
+    let realNameLabelWidthSmall: Int
     
     // For laying out groups of 2, 3, etc...
     // We are going to have them all "space out"
     // the same as the largest of the bunch...!!!
-    let layoutNameLabelWidthLong: Int
-    let layoutNameLabelWidthStackedLarge: Int
-    let layoutNameLabelWidthStackedMedium: Int
-    let layoutNameLabelWidthStackedSmall: Int
+    let layoutNameLabelWidthLarge: Int
+    let layoutNameLabelWidthMedium: Int
+    let layoutNameLabelWidthSmall: Int
     
-    let valueLabelWidthLong: Int
-    let valueLabelWidthStackedLarge: Int
-    let valueLabelWidthStackedMedium: Int
-    let valueLabelWidthStackedSmall: Int
-    
-    let iconWidthLong: Int
-    let iconHeightLong: Int
-    let iconWidthStacked: Int
-    let iconHeightStacked: Int
+    let valueLabelWidthLarge: Int
+    let valueLabelWidthMedium: Int
+    let valueLabelWidthSmall: Int
     
     // For the slider itself, this is where we control max / min, etc
     let minimumValue: Float
@@ -108,18 +105,18 @@ struct ToolInterfaceElementSliderConfiguration {
     
     let widthCategory: ToolInterfaceElementSliderWidthCategory
     
-    init(textIconImagePack: TextIconImagePack,
+    init(iconPack: SliderIconPack,
          orientation: Orientation,
          nameLabelLine1: String?,
          nameLabelLine2: String?,
-         friend_1_NameLabelLine1: String?,
-         friend_1_NameLabelLine2: String?,
-         friend_2_NameLabelLine1: String?,
-         friend_2_NameLabelLine2: String?,
-         friend_3_NameLabelLine1: String?,
-         friend_3_NameLabelLine2: String?,
-         friend_4_NameLabelLine1: String?,
-         friend_4_NameLabelLine2: String?,
+         friend_1_nameLabelLine1: String?,
+         friend_1_nameLabelLine2: String?,
+         friend_2_nameLabelLine1: String?,
+         friend_2_nameLabelLine2: String?,
+         friend_3_nameLabelLine1: String?,
+         friend_3_nameLabelLine2: String?,
+         friend_4_nameLabelLine1: String?,
+         friend_4_nameLabelLine2: String?,
          minimumValue: Float,
          maximumValue: Float,
          valueWholeNumberCount: Int,
@@ -127,107 +124,83 @@ struct ToolInterfaceElementSliderConfiguration {
          widthCategory: ToolInterfaceElementSliderWidthCategory
     ) {
         
-        self.textIconImagePack = textIconImagePack
+        self.iconPack = iconPack
         self.nameLabelLine1 = nameLabelLine1
         self.nameLabelLine2 = nameLabelLine2
         
         let _nameLabelNumberOfLines = ToolInterfaceTheme.getNumberOfLines(line1: nameLabelLine1,
                                                                           line2: nameLabelLine2)
-        var _nameLabelWidthLong = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
-                                                                     line2: nameLabelLine2,
-                                                                     orientation: orientation,
-                                                                     flavor: .long) + 2
-        var _nameLabelWidthStackedLarge = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
-                                                                             line2: nameLabelLine2,
-                                                                             orientation: orientation,
-                                                                             flavor: .stackedLarge) + 2
-        var _nameLabelWidthStackedMedium = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
-                                                                              line2: nameLabelLine2,
-                                                                              orientation: orientation,
-                                                                              flavor: .stackedMedium) + 2
-        var _nameLabelWidthStackedSmall = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
-                                                                             line2: nameLabelLine2,
-                                                                             orientation: orientation,
-                                                                             flavor: .stackedSmall) + 2
         
-        self.realNameLabelWidthLong = _nameLabelWidthLong
-        self.realNameLabelWidthStackedLarge = _nameLabelWidthStackedLarge
-        self.realNameLabelWidthStackedMedium = _nameLabelWidthStackedMedium
-        self.realNameLabelWidthStackedSmall = _nameLabelWidthStackedSmall
+        var _nameLabelWidthLarge = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
+                                                                      line2: nameLabelLine2,
+                                                                      orientation: orientation,
+                                                                      flavor: .stackedLarge) + 2
+        
+        var _nameLabelWidthMedium = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
+                                                                       line2: nameLabelLine2,
+                                                                       orientation: orientation,
+                                                                       flavor: .stackedMedium) + 2
+        
+        var _nameLabelWidthSmall = SliderLayout.getNameLabelTextWidth(line1: nameLabelLine1,
+                                                                      line2: nameLabelLine2,
+                                                                      orientation: orientation,
+                                                                      flavor: .stackedSmall) + 2
+        
+        self.realNameLabelWidthLarge = _nameLabelWidthLarge
+        self.realNameLabelWidthMedium = _nameLabelWidthMedium
+        self.realNameLabelWidthSmall = _nameLabelWidthSmall
         
         for friendIndex in 0...3 {
             
             var line1: String?
             var line2: String?
             if friendIndex == 0 {
-                line1 = friend_1_NameLabelLine1
-                line2 = friend_1_NameLabelLine2
+                line1 = friend_1_nameLabelLine1
+                line2 = friend_1_nameLabelLine2
             }
             if friendIndex == 1 {
-                line1 = friend_2_NameLabelLine1
-                line2 = friend_2_NameLabelLine2
+                line1 = friend_2_nameLabelLine1
+                line2 = friend_2_nameLabelLine2
             }
             if friendIndex == 2 {
-                line1 = friend_3_NameLabelLine1
-                line2 = friend_3_NameLabelLine2
+                line1 = friend_3_nameLabelLine1
+                line2 = friend_3_nameLabelLine2
             }
             if friendIndex == 3 {
-                line1 = friend_4_NameLabelLine1
-                line2 = friend_4_NameLabelLine2
+                line1 = friend_4_nameLabelLine1
+                line2 = friend_4_nameLabelLine2
             }
             if line1 != nil || line2 != nil {
                 
-                let _friendLabelWidthLong = SliderLayout.getNameLabelTextWidth(line1: line1,
-                                                                               line2: line2,
-                                                                               orientation: orientation,
-                                                                               flavor: .long) + 2
-                let _friendLabelWidthStackedLarge = SliderLayout.getNameLabelTextWidth(line1: line1,
-                                                                                       line2: line2,
-                                                                                       orientation: orientation,
-                                                                                       flavor: .stackedLarge) + 2
-                let _friendLabelWidthStackedMedium = SliderLayout.getNameLabelTextWidth(line1: line1,
-                                                                                        line2: line2,
-                                                                                        orientation: orientation,
-                                                                                        flavor: .stackedMedium) + 2
-                let _friendLabelWidthStackedSmall = SliderLayout.getNameLabelTextWidth(line1: line1,
-                                                                                       line2: line2,
-                                                                                       orientation: orientation,
-                                                                                       flavor: .stackedSmall) + 2
+                let _friendLabelWidthLarge = SliderLayout.getNameLabelTextWidth(line1: line1,
+                                                                                line2: line2,
+                                                                                orientation: orientation,
+                                                                                flavor: .stackedLarge) + 2
+                let _friendLabelWidthMedium = SliderLayout.getNameLabelTextWidth(line1: line1,
+                                                                                 line2: line2,
+                                                                                 orientation: orientation,
+                                                                                 flavor: .stackedMedium) + 2
+                let _friendLabelWidthSmall = SliderLayout.getNameLabelTextWidth(line1: line1,
+                                                                                line2: line2,
+                                                                                orientation: orientation,
+                                                                                flavor: .stackedSmall) + 2
                 
-                if _friendLabelWidthLong > _nameLabelWidthLong {
-                    _nameLabelWidthLong = _friendLabelWidthLong
+                if _friendLabelWidthLarge > _nameLabelWidthLarge {
+                    _nameLabelWidthLarge = _friendLabelWidthLarge
                 }
-                if _friendLabelWidthStackedLarge > _nameLabelWidthStackedLarge {
-                    _nameLabelWidthStackedLarge = _friendLabelWidthStackedLarge
+                if _friendLabelWidthMedium > _nameLabelWidthMedium {
+                    _nameLabelWidthMedium = _friendLabelWidthMedium
                 }
-                if _friendLabelWidthStackedMedium > _nameLabelWidthStackedMedium {
-                    _nameLabelWidthStackedMedium = _friendLabelWidthStackedMedium
-                }
-                if _friendLabelWidthStackedSmall > _nameLabelWidthStackedSmall {
-                    _nameLabelWidthStackedSmall = _friendLabelWidthStackedSmall
+                if _friendLabelWidthSmall > _nameLabelWidthSmall {
+                    _nameLabelWidthSmall = _friendLabelWidthSmall
                 }
             }
         }
         
+        self.layoutNameLabelWidthLarge = _nameLabelWidthLarge
+        self.layoutNameLabelWidthMedium = _nameLabelWidthMedium
+        self.layoutNameLabelWidthSmall = _nameLabelWidthSmall
         
-        
-        self.layoutNameLabelWidthLong = _nameLabelWidthLong
-        self.layoutNameLabelWidthStackedLarge = _nameLabelWidthStackedLarge
-        self.layoutNameLabelWidthStackedMedium = _nameLabelWidthStackedMedium
-        self.layoutNameLabelWidthStackedSmall = _nameLabelWidthStackedSmall
-        
-        let iconLong = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                             textIconImagePack: textIconImagePack,
-                                                             orientation: orientation,
-                                                             layoutSchemeFlavor: .long)
-        let iconStacked = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                                textIconImagePack: textIconImagePack,
-                                                                orientation: orientation,
-                                                                layoutSchemeFlavor: .stackedLarge)
-        self.iconWidthLong = iconLong.iconWidth
-        self.iconHeightLong = iconLong.iconHeight
-        self.iconWidthStacked = iconStacked.iconWidth
-        self.iconHeightStacked = iconStacked.iconHeight
         self.nameLabelNumberOfLines = _nameLabelNumberOfLines
         
         var exampleStringArray = [Character]()
@@ -245,18 +218,15 @@ struct ToolInterfaceElementSliderConfiguration {
         
         let exampleString = String(exampleStringArray)
         
-        valueLabelWidthLong = SliderLayout.getValueLabelTextWidth(line1: exampleString,
-                                                                  orientation: orientation,
-                                                                  flavor: .long) + 2
-        valueLabelWidthStackedLarge = SliderLayout.getValueLabelTextWidth(line1: exampleString,
-                                                                          orientation: orientation,
-                                                                          flavor: .stackedLarge) + 2
-        valueLabelWidthStackedMedium = SliderLayout.getValueLabelTextWidth(line1: exampleString,
-                                                                           orientation: orientation,
-                                                                           flavor: .stackedMedium) + 2
-        valueLabelWidthStackedSmall = SliderLayout.getValueLabelTextWidth(line1: exampleString,
-                                                                          orientation: orientation,
-                                                                          flavor: .stackedSmall) + 2
+        valueLabelWidthLarge = SliderLayout.getValueLabelTextWidth(line1: exampleString,
+                                                                   orientation: orientation,
+                                                                   flavor: .stackedLarge) + 2
+        valueLabelWidthMedium = SliderLayout.getValueLabelTextWidth(line1: exampleString,
+                                                                    orientation: orientation,
+                                                                    flavor: .stackedMedium) + 2
+        valueLabelWidthSmall = SliderLayout.getValueLabelTextWidth(line1: exampleString,
+                                                                   orientation: orientation,
+                                                                   flavor: .stackedSmall) + 2
         
         self.minimumValue = minimumValue
         self.maximumValue = maximumValue
@@ -264,11 +234,18 @@ struct ToolInterfaceElementSliderConfiguration {
         self.valueDecimalCount = valueDecimalCount
         self.widthCategory = widthCategory
     }
+    
+    func getTextIcon(orientation: Orientation,
+                     layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIconable {
+        return iconPack.getTextIcon(orientation: orientation,
+                                    layoutSchemeFlavor: layoutSchemeFlavor,
+                                    numberOfLines: nameLabelNumberOfLines)
+    }
 }
 
 struct ToolInterfaceElementTextIconButtonConfiguration {
     
-    let textIconImagePack: TextIconImagePack
+    let iconPack: TextIconButtonIconPack
     let nameLabelLine1: String?
     let nameLabelLine2: String?
     let nameLabelNumberOfLines: Int
@@ -281,51 +258,57 @@ struct ToolInterfaceElementTextIconButtonConfiguration {
     let iconWidthStacked: Int
     let iconHeightStacked: Int
     
-    init(textIconImagePack: TextIconImagePack,
+    init(iconPack: TextIconButtonIconPack,
          orientation: Orientation,
          nameLabelLine1: String?,
          nameLabelLine2: String?) {
-        self.textIconImagePack = textIconImagePack
+        self.iconPack = iconPack
         self.nameLabelLine1 = nameLabelLine1
         self.nameLabelLine2 = nameLabelLine2
         
         let _nameLabelNumberOfLines = ToolInterfaceTheme.getNumberOfLines(line1: nameLabelLine1,
                                                                           line2: nameLabelLine2)
         nameLabelWidthLong = TextIconButtonLayout.getNameLabelTextWidth(line1: nameLabelLine1,
-                                                                   line2: nameLabelLine2,
-                                                                   orientation: orientation, 
-                                                                   flavor: .long) + 2
+                                                                        line2: nameLabelLine2,
+                                                                        orientation: orientation,
+                                                                        flavor: .long) + 2
         nameLabelWidthStackedLarge = TextIconButtonLayout.getNameLabelTextWidth(line1: nameLabelLine1,
                                                                                 line2: nameLabelLine2,
-                                                                                orientation: orientation, 
+                                                                                orientation: orientation,
                                                                                 flavor: .stackedLarge) + 2
         nameLabelWidthStackedMedium = TextIconButtonLayout.getNameLabelTextWidth(line1: nameLabelLine1,
                                                                                  line2: nameLabelLine2,
-                                                                                 orientation: orientation, 
+                                                                                 orientation: orientation,
                                                                                  flavor: .stackedMedium) + 2
         nameLabelWidthStackedSmall = TextIconButtonLayout.getNameLabelTextWidth(line1: nameLabelLine1,
                                                                                 line2: nameLabelLine2,
-                                                                                orientation: orientation, 
+                                                                                orientation: orientation,
                                                                                 flavor: .stackedSmall) + 2
-        let iconLong = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines, 
-                                                             textIconImagePack: textIconImagePack,
-                                                             orientation: orientation, 
-                                                             layoutSchemeFlavor: .long)
-        let iconStacked = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines, 
-                                                                textIconImagePack: textIconImagePack,
-                                                                orientation: orientation, 
-                                                                layoutSchemeFlavor: .stackedLarge)
+        let iconLong = iconPack.getTextIcon(orientation: orientation,
+                                            layoutSchemeFlavor: .long,
+                                            numberOfLines: _nameLabelNumberOfLines)
+        let iconStacked = iconPack.getTextIcon(orientation: orientation,
+                                               layoutSchemeFlavor: .stackedLarge,
+                                               numberOfLines: _nameLabelNumberOfLines)
+        
         self.iconWidthLong = iconLong.iconWidth
         self.iconHeightLong = iconLong.iconHeight
         self.iconWidthStacked = iconStacked.iconWidth
         self.iconHeightStacked = iconStacked.iconHeight
         self.nameLabelNumberOfLines = _nameLabelNumberOfLines
     }
+    
+    func getTextIcon(orientation: Orientation,
+                     layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIconable {
+        return iconPack.getTextIcon(orientation: orientation,
+                                    layoutSchemeFlavor: layoutSchemeFlavor,
+                                    numberOfLines: nameLabelNumberOfLines)
+    }
 }
 
 struct ToolInterfaceElementSegmentedPickerButtonConfiguration {
     let id: UInt8
-    let textIconImagePack: TextIconImagePack
+    let iconPack: CheckBoxIconPack
     let nameLabelLine1: String?
     let nameLabelLine2: String?
     let nameLabelNumberOfLines: Int
@@ -338,12 +321,12 @@ struct ToolInterfaceElementSegmentedPickerButtonConfiguration {
     let iconWidthStacked: Int
     let iconHeightStacked: Int
     init(id: UInt8,
-         textIconImagePack: TextIconImagePack,
+         iconPack: CheckBoxIconPack,
          orientation: Orientation,
          nameLabelLine1: String?,
          nameLabelLine2: String?) {
         self.id = id
-        self.textIconImagePack = textIconImagePack
+        self.iconPack = iconPack
         self.nameLabelLine1 = nameLabelLine1
         self.nameLabelLine2 = nameLabelLine2
         let _nameLabelNumberOfLines = ToolInterfaceTheme.getNumberOfLines(line1: nameLabelLine1,
@@ -364,19 +347,24 @@ struct ToolInterfaceElementSegmentedPickerButtonConfiguration {
                                                                                  line2: nameLabelLine2,
                                                                                  orientation: orientation,
                                                                                  flavor: .stackedSmall) + 2
-        let iconLong = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                             textIconImagePack: textIconImagePack,
-                                                             orientation: orientation,
-                                                             layoutSchemeFlavor: .long)
-        let iconStacked = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: _nameLabelNumberOfLines,
-                                                                textIconImagePack: textIconImagePack,
-                                                                orientation: orientation,
-                                                                layoutSchemeFlavor: .stackedLarge)
+        let iconLong = iconPack.getTextIcon(orientation: orientation,
+                                            layoutSchemeFlavor: .long,
+                                            numberOfLines: _nameLabelNumberOfLines)
+        let iconStacked = iconPack.getTextIcon(orientation: orientation,
+                                               layoutSchemeFlavor: .stackedLarge,
+                                               numberOfLines: _nameLabelNumberOfLines)
         self.iconWidthLong = iconLong.iconWidth
         self.iconHeightLong = iconLong.iconHeight
         self.iconWidthStacked = iconStacked.iconWidth
         self.iconHeightStacked = iconStacked.iconHeight
         self.nameLabelNumberOfLines = _nameLabelNumberOfLines
+    }
+    
+    func getTextIcon(orientation: Orientation,
+                     layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIconable {
+        return iconPack.getTextIcon(orientation: orientation,
+                                    layoutSchemeFlavor: layoutSchemeFlavor,
+                                    numberOfLines: nameLabelNumberOfLines)
     }
 }
 
@@ -389,16 +377,21 @@ struct ToolInterfaceElementSegmentedPickerConfiguration {
 }
 
 struct ToolInterfaceElementIconButtonConfiguration {
-    let textIconImagePack: TextIconImagePack
+    let iconPack: TextIconButtonIconPack
     let iconWidth: Int
-    init(textIconImagePack: TextIconImagePack,
+    init(iconPack: TextIconButtonIconPack,
          orientation: Orientation) {
-        self.textIconImagePack = textIconImagePack
-        let icon = ToolInterfaceImageLibrary.getTextIcon(numberOfLines: 1,
-                                                         textIconImagePack: textIconImagePack,
-                                                         orientation: orientation,
-                                                         layoutSchemeFlavor: .long)
-        
+        self.iconPack = iconPack
+        let icon = iconPack.getTextIcon(orientation: orientation,
+                                        layoutSchemeFlavor: .long,
+                                        numberOfLines: 1)
         self.iconWidth = icon.iconWidth
     }
+    
+    func getTextIcon(orientation: Orientation) -> TextIconable {
+        return iconPack.getTextIcon(orientation: orientation,
+                                    layoutSchemeFlavor: .long,
+                                    numberOfLines: 1)
+    }
+    
 }

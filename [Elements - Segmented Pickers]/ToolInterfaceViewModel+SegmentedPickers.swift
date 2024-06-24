@@ -35,59 +35,59 @@ extension ToolInterfaceViewModel {
         
         for buttonConfiguration in configuration.buttonConfigurations {
             
-            let textIconImagePack = buttonConfiguration.textIconImagePack
+            let iconPack = buttonConfiguration.iconPack
             
             let numberOfLines = buttonConfiguration.nameLabelNumberOfLines
             
             let minimumWidthLong = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthLong,
                                                                                       nameLabelNumberOfLines: numberOfLines,
-                                                                                      textIconImagePack: textIconImagePack,
+                                                                                      iconPack: iconPack,
                                                                                       orientation: orientation,
                                                                                       flavor: .long,
                                                                                       squeeze: .squeezed)
             
             let standardWidthLong = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthLong,
                                                                                        nameLabelNumberOfLines: numberOfLines,
-                                                                                       textIconImagePack: textIconImagePack,
+                                                                                       iconPack: iconPack,
                                                                                        orientation: orientation,
                                                                                        flavor: .long,
                                                                                        squeeze: .standard)
             let minimumWidthStackedLarge = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedLarge,
                                                                                               nameLabelNumberOfLines: numberOfLines,
-                                                                                              textIconImagePack: textIconImagePack,
+                                                                                              iconPack: iconPack,
                                                                                               orientation: orientation,
                                                                                               flavor: .stackedLarge,
                                                                                               squeeze: .squeezed)
             let standardWidthStackedLarge = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedLarge,
                                                                                                nameLabelNumberOfLines: numberOfLines,
-                                                                                               textIconImagePack: textIconImagePack,
+                                                                                               iconPack: iconPack,
                                                                                                orientation: orientation,
                                                                                                flavor: .stackedLarge,
                                                                                                squeeze: .standard)
             
             let minimumWidthStackedMedium = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedMedium,
                                                                                                nameLabelNumberOfLines: numberOfLines,
-                                                                                               textIconImagePack: textIconImagePack,
+                                                                                               iconPack: iconPack,
                                                                                                orientation: orientation,
                                                                                                flavor: .stackedMedium,
                                                                                                squeeze: .squeezed)
             
             let standardWidthStackedMedium = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedMedium,
                                                                                                 nameLabelNumberOfLines: numberOfLines,
-                                                                                                textIconImagePack: textIconImagePack,
+                                                                                                iconPack: iconPack,
                                                                                                 orientation: orientation,
                                                                                                 flavor: .stackedMedium,
                                                                                                 squeeze: .standard)
             
             let minimumWidthStackedSmall = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedSmall,
                                                                                               nameLabelNumberOfLines: numberOfLines,
-                                                                                              textIconImagePack: textIconImagePack,
+                                                                                              iconPack: iconPack,
                                                                                               orientation: orientation,
                                                                                               flavor: .stackedSmall,
                                                                                               squeeze: .squeezed)
             let standardWidthStackedSmall = SegmentedPickerLayout.getTextIconAndNameLabelWidth(nameLabelWidth: buttonConfiguration.nameLabelWidthStackedSmall,
                                                                                                nameLabelNumberOfLines: numberOfLines,
-                                                                                               textIconImagePack: textIconImagePack,
+                                                                                               iconPack: iconPack,
                                                                                                orientation: orientation,
                                                                                                flavor: .stackedSmall,
                                                                                                squeeze: .standard)
@@ -96,7 +96,7 @@ extension ToolInterfaceViewModel {
             greatestStandardWidthStackedLarge = max(greatestStandardWidthStackedLarge, standardWidthStackedLarge)
             greatestStandardWidthStackedMedium = max(greatestStandardWidthStackedMedium, standardWidthStackedMedium)
             greatestStandardWidthStackedSmall = max(greatestStandardWidthStackedSmall, standardWidthStackedSmall)
-
+            
             sumMinimumWidthLong += minimumWidthLong
             sumStandardWidthLong += standardWidthLong
             
@@ -113,21 +113,24 @@ extension ToolInterfaceViewModel {
         let universalPaddingLeftLongSqueezed = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                              flavor: .long,
                                                                                              squeeze: .squeezed,
-                                                                                             neighborType: neighborTypeLeft)
+                                                                                             neighborTypeLeft: neighborTypeLeft,
+                                                                                             neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftLongStandard = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                              flavor: .long,
                                                                                              squeeze: .standard,
-                                                                                             neighborType: neighborTypeLeft)
+                                                                                             neighborTypeLeft: neighborTypeLeft,
+                                                                                             neighborTypeRight: neighborTypeRight)
         
         let universalPaddingRightLongSqueezed = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                flavor: .long,
                                                                                                squeeze: .squeezed,
-                                                                                               neighborType: neighborTypeRight)
+                                                                                               neighborTypeLeft: neighborTypeLeft,
+                                                                                               neighborTypeRight: neighborTypeRight)
         let universalPaddingRightLongStandard = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                flavor: .long,
                                                                                                squeeze: .standard,
-                                                                                               neighborType: neighborTypeRight)
-        
+                                                                                               neighborTypeLeft: neighborTypeLeft,
+                                                                                               neighborTypeRight: neighborTypeRight)
         
         var buttonUniversalPaddingLeftLongSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                          flavor: .long,
@@ -145,20 +148,24 @@ extension ToolInterfaceViewModel {
         let universalPaddingLeftStackedLargeSqueezed = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: .stackedLarge,
                                                                                                      squeeze: .squeezed,
-                                                                                                     neighborType: neighborTypeLeft)
+                                                                                                     neighborTypeLeft: neighborTypeLeft,
+                                                                                                     neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStackedLargeStandard = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: .stackedLarge,
                                                                                                      squeeze: .standard,
-                                                                                                     neighborType: neighborTypeLeft)
+                                                                                                     neighborTypeLeft: neighborTypeLeft,
+                                                                                                     neighborTypeRight: neighborTypeRight)
         
         let universalPaddingRightStackedLargeSqueezed = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                        flavor: .stackedLarge,
                                                                                                        squeeze: .squeezed,
-                                                                                                       neighborType: neighborTypeRight)
+                                                                                                       neighborTypeLeft: neighborTypeLeft,
+                                                                                                       neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStackedLargeStandard = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                        flavor: .stackedLarge,
                                                                                                        squeeze: .standard,
-                                                                                                       neighborType: neighborTypeRight)
+                                                                                                       neighborTypeLeft: neighborTypeLeft,
+                                                                                                       neighborTypeRight: neighborTypeRight)
         
         var buttonUniversalPaddingLeftStackedLargeSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                                  flavor: .stackedLarge,
@@ -176,20 +183,24 @@ extension ToolInterfaceViewModel {
         let universalPaddingLeftStackedMediumSqueezed = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                       flavor: .stackedMedium,
                                                                                                       squeeze: .squeezed,
-                                                                                                      neighborType: neighborTypeLeft)
+                                                                                                      neighborTypeLeft: neighborTypeLeft,
+                                                                                                      neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStackedMediumStandard = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                       flavor: .stackedMedium,
                                                                                                       squeeze: .standard,
-                                                                                                      neighborType: neighborTypeLeft)
+                                                                                                      neighborTypeLeft: neighborTypeLeft,
+                                                                                                      neighborTypeRight: neighborTypeRight)
         
         let universalPaddingRightStackedMediumSqueezed = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                         flavor: .stackedMedium,
                                                                                                         squeeze: .squeezed,
-                                                                                                        neighborType: neighborTypeRight)
+                                                                                                        neighborTypeLeft: neighborTypeLeft,
+                                                                                                        neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStackedMediumStandard = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                         flavor: .stackedMedium,
                                                                                                         squeeze: .standard,
-                                                                                                        neighborType: neighborTypeRight)
+                                                                                                        neighborTypeLeft: neighborTypeLeft,
+                                                                                                        neighborTypeRight: neighborTypeRight)
         
         var buttonUniversalPaddingLeftStackedMediumSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                                   flavor: .stackedMedium,
@@ -207,20 +218,24 @@ extension ToolInterfaceViewModel {
         let universalPaddingLeftStackedSmallSqueezed = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: .stackedSmall,
                                                                                                      squeeze: .squeezed,
-                                                                                                     neighborType: neighborTypeLeft)
+                                                                                                     neighborTypeLeft: neighborTypeLeft,
+                                                                                                     neighborTypeRight: neighborTypeRight)
         let universalPaddingLeftStackedSmallStandard = SegmentedPickerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                                      flavor: .stackedSmall,
                                                                                                      squeeze: .standard,
-                                                                                                     neighborType: neighborTypeLeft)
+                                                                                                     neighborTypeLeft: neighborTypeLeft,
+                                                                                                     neighborTypeRight: neighborTypeRight)
         
         let universalPaddingRightStackedSmallSqueezed = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                        flavor: .stackedSmall,
                                                                                                        squeeze: .squeezed,
-                                                                                                       neighborType: neighborTypeRight)
+                                                                                                       neighborTypeLeft: neighborTypeLeft,
+                                                                                                       neighborTypeRight: neighborTypeRight)
         let universalPaddingRightStackedSmallStandard = SegmentedPickerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                                        flavor: .stackedSmall,
                                                                                                        squeeze: .standard,
-                                                                                                       neighborType: neighborTypeRight)
+                                                                                                       neighborTypeLeft: neighborTypeLeft,
+                                                                                                       neighborTypeRight: neighborTypeRight)
         
         var buttonUniversalPaddingLeftStackedSmallSqueezed = SegmentedPickerLayout.getButtonUniversalPaddingLeft(orientation: orientation,
                                                                                                                  flavor: .stackedSmall,
@@ -346,17 +361,17 @@ extension ToolInterfaceViewModel {
                                               middle1WidthLong: middle1WidthLong,
                                               middle2WidthLong: middle2WidthLong,
                                               maximumWidthLong: maximumWidthLong,
-                                                 
+                                              
                                               minimumWidthStackedLarge: minimumWidthStackedLarge,
                                               middle1WidthStackedLarge: middle1WidthStackedLarge,
                                               middle2WidthStackedLarge: middle2WidthStackedLarge,
                                               maximumWidthStackedLarge: maximumWidthStackedLarge,
-                                                 
+                                              
                                               minimumWidthStackedMedium: minimumWidthStackedMedium,
                                               middle1WidthStackedMedium: middle1WidthStackedMedium,
                                               middle2WidthStackedMedium: middle2WidthStackedMedium,
                                               maximumWidthStackedMedium: maximumWidthStackedMedium,
-                                                 
+                                              
                                               minimumWidthStackedSmall: minimumWidthStackedSmall,
                                               middle1WidthStackedSmall: middle1WidthStackedSmall,
                                               middle2WidthStackedSmall: middle2WidthStackedSmall,

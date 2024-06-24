@@ -20,6 +20,9 @@ struct MagicalCheckBoxButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         return ZStack {
             bodyContent(isPressed: configuration.isPressed)
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
         }
         .frame(width: CGFloat(layoutWidth),
                height: CGFloat(magicalCheckBoxViewModel.layoutHeight))
@@ -47,7 +50,7 @@ struct MagicalCheckBoxButtonStyle: ButtonStyle {
         let height = magicalCheckBoxViewModel.layoutHeight - (universalPaddingTop + universalPaddingBottom)
         return RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
             .frame(width: CGFloat(width), height: CGFloat(height))
-            .foregroundStyle(Color.white)
+            .foregroundStyle(ToolInterfaceTheme.gray500)
     }
     
     func getFillRect(isPressed: Bool) -> some View {
@@ -57,9 +60,9 @@ struct MagicalCheckBoxButtonStyle: ButtonStyle {
 
         let color: Color
         if isPressed {
-            color = .orange
+            color = ToolInterfaceTheme.gray200.opacity(0.75)
         } else {
-            color = .gray
+            color = ToolInterfaceTheme.gray200
         }
         
         let width = layoutWidth - (lineThickness + lineThickness)

@@ -24,9 +24,7 @@ struct MagicalCheckBoxButton: View {
     
     func bodyContent() -> some View {
         Button {
-            
-            print("Clicked CheckBox!!!")
-            
+            magicalCheckBoxViewModel.handleClicked()
         } label: {
             HStack(spacing: 0.0) {
                 

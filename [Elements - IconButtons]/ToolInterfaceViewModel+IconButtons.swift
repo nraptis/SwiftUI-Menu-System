@@ -13,18 +13,18 @@ extension ToolInterfaceViewModel {
                                   configuration: ToolInterfaceElementIconButtonConfiguration,
                                   neighborTypeLeft: ToolInterfaceElementType?,
                                   neighborTypeRight: ToolInterfaceElementType?) -> ToolInterfaceElementFlex {
-        let textIconImagePack = configuration.textIconImagePack
-        let minimumWidth = IconButtonLayout.getIconWidthWithUniversalPadding(textIconImagePack: textIconImagePack,
+        let iconPack = configuration.iconPack
+        let minimumWidth = IconButtonLayout.getIconWidthWithUniversalPadding(iconPack: iconPack,
                                                                              orientation: orientation, squeeze: .squeezed,
                                                                              neighborTypeLeft: neighborTypeLeft,
                                                                              neighborTypeRight: neighborTypeRight)
-        let standardWidth = IconButtonLayout.getIconWidthWithUniversalPadding(textIconImagePack: textIconImagePack,
+        let standardWidth = IconButtonLayout.getIconWidthWithUniversalPadding(iconPack: iconPack,
                                                                               orientation: orientation, squeeze: .standard,
                                                                               neighborTypeLeft: neighborTypeLeft,
                                                                               neighborTypeRight: neighborTypeRight)
         let flexTextIconButtonData = FlexIconButtonData(minimumWidth: minimumWidth,
                                                         standardWidth: standardWidth,
-                                                        maximumWidth: standardWidth + 4)
+                                                        maximumWidth: standardWidth)
         return ToolInterfaceElementFlex.iconButton(flexTextIconButtonData)
     }
 }

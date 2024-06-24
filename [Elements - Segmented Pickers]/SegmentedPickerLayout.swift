@@ -62,23 +62,68 @@ struct SegmentedPickerLayout: LayoutScheme {
         }
     }
     
-    static func getUniversalPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze, neighborType: ToolInterfaceElementType?) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 12
+    static func getUniversalPaddingLeft(orientation: Orientation,
+                                        flavor: LayoutSchemeFlavor,
+                                        squeeze: LayoutSchemeSqueeze,
+                                        neighborTypeLeft: ToolInterfaceElementType?,
+                                        neighborTypeRight: ToolInterfaceElementType?) -> Int {
+        if Device.isPad {
+            if neighborTypeLeft == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 12
+                }
+            }
+        } else {
+            if neighborTypeLeft == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 8
+                }
+            }
         }
+        return 0
     }
     
-    static func getUniversalPaddingRight(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze, neighborType: ToolInterfaceElementType?) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
+    static func getUniversalPaddingRight(orientation: Orientation,
+                                         flavor: LayoutSchemeFlavor,
+                                         squeeze: LayoutSchemeSqueeze,
+                                         neighborTypeLeft: ToolInterfaceElementType?,
+                                         neighborTypeRight: ToolInterfaceElementType?) -> Int {
+        if Device.isPad {
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 3
+                case .standard:
+                    return 12
+                }
+            }
+            switch squeeze {
+            case .squeezed:
+                return 3
+            case .standard:
+                return 6
+            }
+        } else {
+            if neighborTypeRight == nil {
+                switch squeeze {
+                case .squeezed:
+                    return 2
+                case .standard:
+                    return 8
+                }
+            }
+            switch squeeze {
+            case .squeezed:
+                return 2
+            case .standard:
+                return 4
+            }
         }
     }
     
@@ -91,106 +136,188 @@ struct SegmentedPickerLayout: LayoutScheme {
     }
     
     static func getButtonUniversalPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
+        if Device.isPad {
+            if flavor.isStacked {
+                switch squeeze {
+                case .squeezed:
+                    return 4
+                case .standard:
+                    return 6
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 6
+                case .standard:
+                    return 8
+                }
+            }
+        } else {
+            if flavor.isStacked {
+                if orientation.isLandscape {
+                    switch squeeze {
+                    case .squeezed:
+                        return 3
+                    case .standard:
+                        return 4
+                    }
+                } else {
+                    switch squeeze {
+                    case .squeezed:
+                        return 4
+                    case .standard:
+                        return 5
+                    }
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 4
+                case .standard:
+                    return 6
+                }
+            }
         }
     }
     
     static func getButtonUniversalPaddingRight(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 12
+        if Device.isPad {
+            if flavor.isStacked {
+                switch squeeze {
+                case .squeezed:
+                    return 4
+                case .standard:
+                    return 6
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 6
+                case .standard:
+                    return 8
+                }
+            }
+        } else {
+            if flavor.isStacked {
+                if orientation.isLandscape {
+                    switch squeeze {
+                    case .squeezed:
+                        return 3
+                    case .standard:
+                        return 4
+                    }
+                } else {
+                    switch squeeze {
+                    case .squeezed:
+                        return 4
+                    case .standard:
+                        return 5
+                    }
+                }
+            } else {
+                switch squeeze {
+                case .squeezed:
+                    return 4
+                case .standard:
+                    return 6
+                }
+            }
         }
     }
     
     static func getButtonUniversalPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
-            return 2
-        } else {
-            return 4
-        }
+        0
     }
     
     static func getButtonUniversalPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
-            return 2
-        } else {
-            return 4
-        }
+        0
     }
     
     static func getNameLabelPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
-        }
+        0
     }
     
     static func getNameLabelPaddingRight(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
-        }
+        0
     }
     
     static func getNameLabelPaddingBottom(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
         if Device.isPad {
             return 2
+        } else {
+            return 1
         }
-        
-        return 0
     }
     
     static func getIconPaddingLeft(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
-        }
+        0
     }
     
     static func getIconPaddingRight(orientation: Orientation, flavor: LayoutSchemeFlavor, squeeze: LayoutSchemeSqueeze) -> Int {
-        // TODO: Replace
-        switch squeeze {
-        case .squeezed:
-            return 2
-        case .standard:
-            return 6
+        if Device.isPad {
+            if flavor.isLong {
+                switch squeeze {
+                case .squeezed:
+                    return 6
+                case .standard:
+                    return 8
+                }
+            }
+        } else {
+            if flavor.isLong {
+                switch squeeze {
+                case .squeezed:
+                    return 4
+                case .standard:
+                    return 6
+                }
+            }
         }
+        return 0
     }
     
     static func getIconPaddingTop(orientation: Orientation, flavor: LayoutSchemeFlavor, numberOfLines: Int) -> Int {
-        if numberOfLines == 2 {
-            return 2
+        if Device.isPad {
+            if flavor.isStacked {
+                return 6 // Final, 6
+            }
         } else {
-            return 4
+            if flavor.isStacked {
+                return 4 // Final, 4
+            }
         }
+        return 0
     }
     
     static func getCornerRadiusOuter(orientation: Orientation) -> Int {
-        return 14
+        if Device.isPad {
+            return 12
+        } else {
+            if orientation.isLandscape {
+                return 8
+            } else {
+                return 10
+            }
+        }
     }
     
     static func getCornerRadiusInner(orientation: Orientation) -> Int {
-        return 13
+        if Device.isPad {
+            return 11
+        } else {
+            if orientation.isLandscape {
+                return 7
+            } else {
+                return 9
+            }
+        }
     }
     
     static func getLineThickness(orientation: Orientation) -> Int {
-        return 2
+        if Device.isPad {
+            return 2
+        } else {
+            return 1
+        }
     }
 }

@@ -15,19 +15,23 @@ extension ToolInterfaceViewModel {
         let dividerUniversalPaddingLeftSqueezed = DividerLayout.getUniversalPaddingLeft(orientation: orientation, 
                                                                                         flavor: .long,
                                                                                         squeeze: .squeezed,
-                                                                                        neighborType: nil)
+                                                                                        neighborTypeLeft: nil,
+                                                                                        neighborTypeRight: nil)
         let dividerUniversalPaddingLeftStandard = DividerLayout.getUniversalPaddingLeft(orientation: orientation,
                                                                                         flavor: .long,
                                                                                         squeeze: .standard,
-                                                                                        neighborType: nil)
+                                                                                        neighborTypeLeft: nil,
+                                                                                        neighborTypeRight: nil)
         let dividerUniversalPaddingRightSqueezed = DividerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                           flavor: .long,
                                                                                           squeeze: .squeezed,
-                                                                                          neighborType: nil)
+                                                                                          neighborTypeLeft: nil,
+                                                                                          neighborTypeRight: nil)
         let dividerUniversalPaddingRightStandard = DividerLayout.getUniversalPaddingRight(orientation: orientation,
                                                                                           flavor: .long,
                                                                                           squeeze: .standard,
-                                                                                          neighborType: nil)
+                                                                                          neighborTypeLeft: nil,
+                                                                                          neighborTypeRight: nil)
         
         let capsuleWidth = DividerLayout.getCapsuleWidth(orientation: orientation)
         

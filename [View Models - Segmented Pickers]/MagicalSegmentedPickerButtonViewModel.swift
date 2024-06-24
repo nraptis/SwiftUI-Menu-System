@@ -32,13 +32,6 @@ import Foundation
         self.orientation = orientation
         self.segmentedPickerButtonConfiguration = segmentedPickerButtonConfiguration
     }
-    
-    func getTextIcon(layoutSchemeFlavor: LayoutSchemeFlavor) -> TextIcon {
-        return ToolInterfaceImageLibrary.getTextIcon(numberOfLines: segmentedPickerButtonConfiguration.nameLabelNumberOfLines,
-                                                     textIconImagePack: segmentedPickerButtonConfiguration.textIconImagePack,
-                                                     orientation: orientation,
-                                                     layoutSchemeFlavor: layoutSchemeFlavor)
-    }
 }
 
 class MagicalSegmentedPickerButtonLayoutNode {
@@ -68,7 +61,7 @@ class MagicalSegmentedPickerButtonLayoutNode {
     var nameLabelWidth = 0
     var iconWidth = 0
     var isStacked = false
-    func prepareForLayout(layoutSchemeFlavor: LayoutSchemeFlavor, textIcon: TextIcon) {
+    func prepareForLayout(layoutSchemeFlavor: LayoutSchemeFlavor, textIcon: TextIconable) {
         isStacked = layoutSchemeFlavor.isStacked
         iconWidth = textIcon.iconWidth
         switch layoutSchemeFlavor {

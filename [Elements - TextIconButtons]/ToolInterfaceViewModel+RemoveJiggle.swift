@@ -2,43 +2,30 @@
 //  ToolInterfaceViewModel+RemoveJiggle.swift
 //  Jiggle3
 //
-//  Created by Nicky Taylor on 4/8/24.
+//  Created by Nicky Taylor on 5/5/24.
 //
 
 import Foundation
 
 extension ToolInterfaceViewModel {
     
-    func getRemoveJiggleButtonToolNode(neighborTypeLeft: ToolInterfaceElementType?,
-                                       neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
-        let configuration = getRemoveJiggleButtonConfiguration()
+    func getRemoveJiggleTextIconButtonToolNode(neighborTypeLeft: ToolInterfaceElementType?,
+                                      neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
+        
+        let orientation = jiggleViewModel.jiggleDocument.orientation
+        let textLine1 = ToolInterfaceStringLibraryButtons.buttonTextRemoveJiggleLine1()
+        let textLine2 = ToolInterfaceStringLibraryButtons.buttonTextRemoveJiggleLine2()
+        let iconPack = TextIconButtonIconLibrary.box
+        
+        let configuration = ToolInterfaceElementTextIconButtonConfiguration(iconPack: iconPack, orientation: orientation, nameLabelLine1: textLine1, nameLabelLine2: textLine2)
         let flex = Self.getTextIconButtonFlex(orientation: orientation,
                                               configuration: configuration,
                                               neighborTypeLeft: neighborTypeLeft,
                                               neighborTypeRight: neighborTypeRight)
         
-        let viewModelCreateJiggle = MagicalTextIconButtonViewModelRemoveJiggle(jiggleViewModel: jiggleViewModel,
-                                                                           toolInterfaceViewModel: self,
-                                                                           textIconButtonConfiguration: configuration)
-        let result = ToolNode(id: getToolNodeID(),
-                              element: .buttonRemoveJiggle,
-                              flex: flex,
-                              toolInterfaceViewModel: self,
-                              magicalViewModel: viewModelCreateJiggle,
-                              neighborTypeLeft: neighborTypeLeft,
-                              neighborTypeRight: neighborTypeRight)
-        viewModelCreateJiggle.refresh()
-        return result
-    }
-    
-    func getRemoveJiggleButtonConfiguration() -> ToolInterfaceElementTextIconButtonConfiguration {
-        let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textLine1 = ToolInterfaceStringLibrary.interfaceTextRemoveJiggleLine1()
-        let textLine2 = ToolInterfaceStringLibrary.interfaceTextRemoveJiggleLine2()
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementTextIconButtonConfiguration(textIconImagePack: textIconImagePack,
-                                                               orientation: orientation,
-                                                               nameLabelLine1: textLine1,
-                                                               nameLabelLine2: textLine2)
+        let viewModelRemoveJiggle = MagicalTextIconButtonViewModelRemoveJiggle(jiggleViewModel: jiggleViewModel, toolInterfaceViewModel: self, textIconButtonConfiguration: configuration)
+        let removeJiggleToolNode = ToolNode(id: getToolNodeID(), element: .textIconButtonRemoveJiggle, flex: flex, toolInterfaceViewModel: self, magicalViewModel: viewModelRemoveJiggle, neighborTypeLeft: neighborTypeLeft, neighborTypeRight: neighborTypeRight)
+        viewModelRemoveJiggle.refresh()
+        return removeJiggleToolNode
     }
 }

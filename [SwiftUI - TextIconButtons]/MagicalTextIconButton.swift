@@ -24,10 +24,13 @@ struct MagicalTextIconButton: View {
         .background(Rectangle().foregroundStyle(
             LinearGradient(colors: [Color(red: 0.25, green: 0.98, blue: 0.25, opacity: 0.15),
                                     Color(red: 0.45, green: 0.45, blue: 0.98, opacity: 0.15)], startPoint: .leading, endPoint: .trailing)))
-#endif
+#endif        
         .offset(x: CGFloat(magicalTextIconButtonViewModel.layoutX),
                 y: CGFloat(magicalTextIconButtonViewModel.layoutY))
         .disabled(!magicalTextIconButtonViewModel.isEnabled)
+        .transaction { transaction in
+            transaction.animation = nil
+        }
     }
     
     func bodyContent() -> some View {
@@ -49,6 +52,15 @@ struct MagicalTextIconButton: View {
                                                                                     numberOfLines: numberOfLines)
         
         let layoutWidth = magicalTextIconButtonViewModel.layoutWidth - (universalPaddingLeft + universalPaddingRight)
+        
+        let separatorWidth = TextIconButtonLayout.getSeparatorWidth(orientation: orientation)
+        let separatorHeight = TextIconButtonLayout.getSeparatorHeight(orientation: orientation)
+        
+        var isShowingSeparator = false
+        if (magicalTextIconButtonViewModel.neighborTypeRight == .textIconButton) ||
+            (magicalTextIconButtonViewModel.neighborTypeRight == .iconButton) {
+            isShowingSeparator = true
+        }
         
         return HStack(spacing: 0.0) {
                 
@@ -73,14 +85,47 @@ struct MagicalTextIconButton: View {
             .frame(width: CGFloat(layoutWidth),
                    height: CGFloat(magicalTextIconButtonViewModel.layoutHeight))
             
+            if isShowingSeparator {
+                
+                //let separatorWidth = TextIconButtonLayout.getSeparatorWidth(orientation: orientation)
+                //let separatorHeight = TextIconButtonLayout.getSeparatorHeight(orientation: orientation)
+                
+                HStack(spacing: 0.0) {
 #if INTERFACE_HINTS
-            Spacer()
-                .frame(width: CGFloat(universalPaddingRight), height: 28.0)
-                .background(Color(red: 1.0, green: 0.75, blue: 0.25, opacity: 0.40))
+                    Spacer(minLength: 0.0)
+                        .frame(height: 28.0)
+                        .background(Color(red: 0.65, green: 0.25, blue: 0.97, opacity: 0.40))
 #else
-            Spacer()
-                .frame(width: CGFloat(universalPaddingRight))
+                    Spacer(minLength: 0.0)
 #endif
+      
+                    Capsule()
+                        .frame(width: CGFloat(separatorWidth),
+                               height: CGFloat(separatorHeight))
+                        .foregroundStyle(ToolInterfaceTheme.gray950)
+                    
+#if INTERFACE_HINTS
+                    Spacer(minLength: 0.0)
+                        .frame(height: 28.0)
+                        .background(Color(red: 0.25, green: 0.65, blue: 0.97, opacity: 0.40))
+#else
+                    Spacer(minLength: 0.0)
+#endif
+                }
+                .frame(width: CGFloat(universalPaddingRight))
+                
+            } else {
+                
+#if INTERFACE_HINTS
+                Spacer()
+                    .frame(width: CGFloat(universalPaddingRight), height: 28.0)
+                    .background(Color(red: 1.0, green: 0.75, blue: 0.25, opacity: 0.40))
+#else
+                Spacer()
+                    .frame(width: CGFloat(universalPaddingRight))
+#endif
+                
+            }
             
         }
         .frame(width: CGFloat(magicalTextIconButtonViewModel.layoutWidth),

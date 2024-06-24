@@ -1,8 +1,8 @@
 //
-//  ToolInterfaceViewModel+StereoscopicEnabled.swift
+//  ORIGINA.swift
 //  Jiggle3
 //
-//  Created by Nicky Taylor on 4/3/24.
+//  Created by Nicky Taylor on 5/9/24.
 //
 
 import Foundation
@@ -10,38 +10,34 @@ import Foundation
 extension ToolInterfaceViewModel {
     
     func getStereoscopicEnabledCheckBoxNode(neighborTypeLeft: ToolInterfaceElementType?,
-                                              neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
-        let configuration = getStereoscopicEnabledCheckBoxConfiguration()
+                                            neighborTypeRight: ToolInterfaceElementType?) -> ToolNode {
+        let orientation = jiggleViewModel.jiggleDocument.orientation
+        let textLine1 = ToolInterfaceStringLibraryCheckBoxes.checkBoxTextStereoscopicEnabledLine1()
+        let textLine2 = ToolInterfaceStringLibraryCheckBoxes.checkBoxTextStereoscopicEnabledLine2()
+        let iconPack = CheckBoxIconLibrary.removePoints
+        let configuration = ToolInterfaceElementCheckBoxConfiguration(iconPack: iconPack,
+                                                                      orientation: orientation,
+                                                                      nameLabelLine1: textLine1,
+                                                                      nameLabelLine2: textLine2)
         let flex = Self.getCheckBoxFlex(orientation: orientation,
                                         configuration: configuration,
                                         neighborTypeLeft: neighborTypeLeft,
                                         neighborTypeRight: neighborTypeRight)
-        let viewModelStereoscopic = MagicalCheckBoxViewModelStereoscopicEnabled(jiggleViewModel: jiggleViewModel,
-                                                                         toolInterfaceViewModel: self,
-                                                                         checkBoxConfiguration: configuration)
+        let viewModelStereoscopicEnabled = MagicalCheckBoxViewModelStereoscopicEnabled(jiggleViewModel: jiggleViewModel,
+                                                                                       toolInterfaceViewModel: self,
+                                                                                       checkBoxConfiguration: configuration)
         
         let result = ToolNode(id: getToolNodeID(),
                               element: .checkBoxStereoscopicEnabled,
                               flex: flex,
                               toolInterfaceViewModel: self,
-                              magicalViewModel: viewModelStereoscopic,
+                              magicalViewModel: viewModelStereoscopicEnabled,
                               neighborTypeLeft: neighborTypeLeft,
                               neighborTypeRight: neighborTypeRight)
         
-        viewModelStereoscopic.refresh()
+        viewModelStereoscopicEnabled.refresh()
         
         return result
     }
-    
-    func getStereoscopicEnabledCheckBoxConfiguration() -> ToolInterfaceElementCheckBoxConfiguration {
-        let orientation = jiggleViewModel.jiggleDocument.orientation
-        let textLine1 = ToolInterfaceStringLibrary.interfaceTextStereoscopicEnabledLine1()
-        let textLine2 = ToolInterfaceStringLibrary.interfaceTextStereoscopicEnabledLine2()
-        let textIconImagePack = ToolInterfaceImageLibrary.iconPackMainMenu
-        return ToolInterfaceElementCheckBoxConfiguration(textIconImagePack: textIconImagePack,
-                                                         orientation: orientation,
-                                                         nameLabelLine1: textLine1,
-                                                         nameLabelLine2: textLine2)
-    }
-    
 }
+
